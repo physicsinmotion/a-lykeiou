@@ -210,7 +210,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}button,.tile,.mb,.wcard
 .lgh{margin:12px 2px 0!important;font-size:13px;color:#aab6d3!important;text-align:center}
 .lgt{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:20px 0 0;max-width:420px}
 .lgt span{padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);font-size:13.5px;color:#eef2ff;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-.chb{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 0;padding:14px 16px;border:0;border-radius:18px;background:linear-gradient(135deg,#7a3da8,#e0679a 60%,#f5a742);color:#fff;font:inherit;text-align:left;cursor:pointer;box-shadow:0 8px 22px -8px rgba(224,103,154,.7)}
+.chb{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 14px;padding:14px 16px;border:0;border-radius:18px;background:linear-gradient(135deg,#7a3da8,#e0679a 60%,#f5a742);color:#fff;font:inherit;text-align:left;cursor:pointer;box-shadow:0 8px 22px -8px rgba(224,103,154,.7)}
 .chb span{font-size:30px}.chb b{display:block;font-size:17px}.chb small{opacity:.92;font-size:13px}
 .chr{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.06);margin:6px 0}.chr.me{background:rgba(245,167,66,.22);outline:2px solid #f5a742}
 .chr i{font-style:normal;width:30px;text-align:center;font-weight:700}.chr em{flex:1;font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chr b{font-variant-numeric:tabular-nums}.chr small{color:var(--mute);font-size:12px}
@@ -223,7 +223,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v51";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v53";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
@@ -352,7 +352,7 @@ function drawGame(){
   }
   sceneUI();
 }
-function home(){clearTimer();setBg(pget().bg||"kin");
+function home(){clearTimer();if(!consGet())return consentScreen();setBg(pget().bg||"kin");
   const pr=prog(),mc=mlist().length,xp=Object.values(pr).reduce((s,l)=>s+(l.xp||0),0),tot=LEVELS.length*3,got=LEVELS.reduce((s,l)=>s+(pr[l.id]?pr[l.id].stars:0),0);
   const pp=pget(),rk=pp.ti?"✦ "+pp.ti:RANKS.filter(r=>xp>=r[0]).pop()[1],nx=LEVELS.findIndex(l=>!pr[l.id]||pr[l.id].stars<3);
   $.innerHTML=`<div class="hero"><div class="sun"></div><div class="rd"></div>
@@ -549,9 +549,9 @@ const carC=()=>{const c=COLS.find(x=>x[0]===pget().col);return c&&totXP()>=c[2]?
 const vh=id=>id==="kin"?[CAR(carC()),""]:(VEH[id]||[CAR(carC()),""]);
 function profile(){const p=pget(),xp=totXP(),ti=[];Object.keys(WORLDS).forEach(w=>{const on=cardsOn(w);WORLDS[w].cards.forEach((c,i)=>{if(on[i])ti.push(c[1].replace(/ \(.*\)/,""))})});
  const bgs=["kin","dyn1","dyn2","en"].filter(w=>w==="kin"||cardsOn(w).some(Boolean));setBg(p.bg);
- $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">🎨</span></div><h1>Το προφίλ μου</h1><div class="pv">${CAR(carC())}</div><h3 class="ph">Χρώμα οχήματος</h3><div class="chips">${COLS.map(c=>`<button class="chip${p.col===c[0]?" on":""}" data-col="${c[0]}" ${xp<c[2]?"disabled":""}><i style="background:${c[1]}"></i>${xp<c[2]?"🔒 "+c[2]+" XP":c[3]}</button>`).join("")}</div><h3 class="ph">Σκηνικό αρχικής</h3><div class="chips">${["kin","dyn1","dyn2","en"].map(w=>`<button class="chip${p.bg===w?" on":""}" data-bg="${w}" ${bgs.includes(w)?"":"disabled"}>${bgs.includes(w)?WORLDS[w].e+" "+WORLDS[w].n:"🔒 Κέρδισε μια κάρτα"}</button>`).join("")}</div><h3 class="ph">Χρονόμετρο στην Αποστολή</h3><div class="chips"><button class="chip${!p.nt?" on":""}" data-nt="0">⏱ Με χρονόμετρο</button><button class="chip${p.nt?" on":""}" data-nt="1">🌿 Χωρίς χρόνο</button></div><h3 class="ph">Τίτλος</h3><div class="chips"><button class="chip${!p.ti?" on":""}" data-ti="">Βαθμίδα</button>${ti.map(t=>`<button class="chip${p.ti===t?" on":""}" data-ti="${esc(t)}">✦ ${esc(t)}</button>`).join("")}</div>`;
+ $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">🎨</span></div><h1>Το προφίλ μου</h1><div class="pv">${CAR(carC())}</div><h3 class="ph">Χρώμα οχήματος</h3><div class="chips">${COLS.map(c=>`<button class="chip${p.col===c[0]?" on":""}" data-col="${c[0]}" ${xp<c[2]?"disabled":""}><i style="background:${c[1]}"></i>${xp<c[2]?"🔒 "+c[2]+" XP":c[3]}</button>`).join("")}</div><h3 class="ph">Σκηνικό αρχικής</h3><div class="chips">${["kin","dyn1","dyn2","en"].map(w=>`<button class="chip${p.bg===w?" on":""}" data-bg="${w}" ${bgs.includes(w)?"":"disabled"}>${bgs.includes(w)?WORLDS[w].e+" "+WORLDS[w].n:"🔒 Κέρδισε μια κάρτα"}</button>`).join("")}</div><h3 class="ph">Χρονόμετρο στην Αποστολή</h3><div class="chips"><button class="chip${!p.nt?" on":""}" data-nt="0">⏱ Με χρονόμετρο</button><button class="chip${p.nt?" on":""}" data-nt="1">🌿 Χωρίς χρόνο</button></div><h3 class="ph">Ανώνυμα δεδομένα για έρευνα</h3><div class="chips"><button class="chip${consGet()&&consGet().a?" on":""}" data-cs="1">✅ Συμφωνώ</button><button class="chip${consGet()&&!consGet().a?" on":""}" data-cs="0">Όχι</button></div><h3 class="ph">Τίτλος</h3><div class="chips"><button class="chip${!p.ti?" on":""}" data-ti="">Βαθμίδα</button>${ti.map(t=>`<button class="chip${p.ti===t?" on":""}" data-ti="${esc(t)}">✦ ${esc(t)}</button>`).join("")}</div>`;
  const sv=(k,v)=>{const q=pget();q[k]=v;st.set("prof:"+P.code,q);profile()};
- $.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>sv("col",b.dataset.col));$.querySelectorAll("[data-bg]").forEach(b=>b.onclick=()=>sv("bg",b.dataset.bg));$.querySelectorAll("[data-ti]").forEach(b=>b.onclick=()=>sv("ti",b.dataset.ti));$.querySelectorAll("[data-nt]").forEach(b=>b.onclick=()=>sv("nt",b.dataset.nt==="1"));$$("bk").onclick=home}
+ $.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>sv("col",b.dataset.col));$.querySelectorAll("[data-bg]").forEach(b=>b.onclick=()=>sv("bg",b.dataset.bg));$.querySelectorAll("[data-ti]").forEach(b=>b.onclick=()=>sv("ti",b.dataset.ti));$.querySelectorAll("[data-nt]").forEach(b=>b.onclick=()=>sv("nt",b.dataset.nt==="1"));$.querySelectorAll("[data-cs]").forEach(b=>b.onclick=()=>{consSet(b.dataset.cs==="1");profile()});$$("bk").onclick=home}
 const GUIDE={kin:["🧑‍🔧","Μηχανικός Νίκη"],dyn1:["👨‍🚀","Κυβερνήτης Αρίων"],dyn2:["👷","Λιμενάρχης Βάσω"],en:["👩‍🔬","Δρ. Σπινθήρας"]};
 const OKL=["Έτσι μπράβο!","Τέλεια κίνηση!","Συνέχισε έτσι!"],BADL=["Δεν πειράζει, δες την εξήγηση.","Σχεδόν! Θα το πιάσεις.","Κάθε λάθος διδάσκει."];
 const STORY={
@@ -722,10 +722,10 @@ function chalScreen(){setBg("dyn1");const m=chM(),pp=pget(),r=chRec(m),left=CHAL
   if(st.get("chbchk:"+P.code,"")!==m){const pm=chPrev();chFetch(pm).then(d=>{if(!d)return;st.set("chbchk:"+P.code,m);if(d.me&&d.me.rank>=1&&d.me.rank<=3){const b=st.get("chb:"+P.code,{});b[pm]=d.me.rank;st.set("chb:"+P.code,b);const e=$$("bgs");if(e)e.innerHTML=chBadges()}})}}
 function chNick(){setBg("dyn1");const A=["Γρήγορο","Λαμπρό","Ατρόμητο","Κοσμικό","Φωτεινό","Ανήσυχο"],B=["Φωτόνιο","Ηλεκτρόνιο","Νετρόνιο","Πρωτόνιο","Κβάντο","Άτομο"],pp=pget();
   const def=pp.nick||A[Math.floor(Math.random()*A.length)]+" "+B[Math.floor(Math.random()*B.length)]+" "+(10+Math.floor(Math.random()*90));
-  $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Πίσω</button><span class="xp">🏆</span></div><h1>Διάλεξε ψευδώνυμο</h1><p>Στην κατάταξη βλέπουν όλοι μόνο το ψευδώνυμο, όχι το όνομά σου. Μην γράψεις το πραγματικό σου όνομα ή επώνυμο.</p><input class="chn" id="ni2" maxlength="18" value="${esc(def)}" autocomplete="off" autocapitalize="off" spellcheck="false"><p id="ne" class="bad"></p><button class="btn primary" id="ok">Αποθήκευση</button>`;
+  $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Πίσω</button><span class="xp">🏆</span></div><h1>Διάλεξε ψευδώνυμο</h1><p>Στην κατάταξη βλέπουν όλοι μόνο το ψευδώνυμο, όχι το όνομά σου. Μην γράψεις το πραγματικό σου όνομα ή επώνυμο.</p><input class="chn" id="ni2" maxlength="24" value="${esc(def)}" autocomplete="off" autocapitalize="off" spellcheck="false"><p id="ne" class="bad"></p><button class="btn primary" id="ok">Αποθήκευση</button>`;
   $$("bk").onclick=pp.nick?chalScreen:home;
   $$("ok").onclick=()=>{const v=$$("ni2").value.replace(/\s+/g," ").trim();if(v.length<3){$$("ne").textContent="Τουλάχιστον 3 χαρακτήρες.";return}
-    const q=pget();q.nick=v.slice(0,18);st.set("prof:"+P.code,q);chalScreen()}}
+    const q=pget();q.nick=v.slice(0,24);st.set("prof:"+P.code,q);chalScreen()}}
 function chalStart(){const m=chM(),k="chal:"+P.code+":"+m,r=chRec(m);if(r.tries>=CHAL_TRIES)return chalScreen();
   r.tries++;st.set(k,r);const qs=chQs(m);
   start({id:"chal",title:"Challenge "+chName(m),sc:"const",tip:"Διάβασε ξανά τη θεωρία της ενότητας.",qs:qs},qs);
@@ -737,6 +737,18 @@ function chalFinish(){clearTimer();clearTimeout(S.fto);const c=S.chal,n=S.qs.len
   $.innerHTML=`<h1>Τέλος, ${esc(P.name)}!</h1><div class="big">${S.pts}<small style="font-size:22px;color:var(--mute)"> πόντοι</small></div><p>${S.ok} σωστές από ${n} · ${chFmt(S.csecs)}</p>${S.cbet?`<p class="good">Νέο προσωπικό ρεκόρ του μήνα!</p>`:`<p>Το καλύτερό σου: ${best.pts} πόντοι</p>`}${S.crep?`<p style="color:var(--mute);font-size:14px">${S.crep.replace("στάλθηκε στον καθηγητή","μπήκε στην κατάταξη")}</p>`:""}
    <button class="btn primary" id="bd2">🏆 Δες την κατάταξη</button>${S.wrong.length?`<button class="btn" id="rv">Δες τα λάθη μου (${S.wrong.length})</button>`:""}<button class="btn ghost" id="hm">Αρχική</button>`;
   $$("bd2").onclick=()=>setTimeout(chalScreen,0);if($$("rv"))$$("rv").onclick=()=>review(S.wrong,chalFinish);$$("hm").onclick=home}
+
+/* ---- Συναίνεση για ανώνυμη χρήση σε εκπαιδευτική έρευνα (προαιρετική) ---- */
+const CONS_V=1,consGet=()=>st.get("cons:"+P.code,null);
+function consSet(a){st.set("cons:"+P.code,{v:CONS_V,a:!!a,ts:Date.now()});
+  report({type:"consent",id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:new Date().toISOString(),code:P.code,agree:a?1:0,cv:CONS_V,v:APPV})}
+function consentScreen(){setBg("kin");
+  $.innerHTML=`<div class="top"><span></span><span class="xp">🔬</span></div><h1>Βοήθησέ μας να βελτιώσουμε την εφαρμογή</h1>
+   <p>Η εφαρμογή στέλνει τα αποτελέσματά σου στον καθηγητή σου, για να σε βοηθάει στο μάθημα.</p>
+   <p>Θέλουμε επίσης να χρησιμοποιήσουμε τα αποτελέσματα <b>χωρίς το όνομά σου</b>, μόνο με έναν κρυφό αριθμό, σε μια εκπαιδευτική μελέτη. Έτσι θα καταλάβουμε ποιες ερωτήσεις δυσκολεύουν τα παιδιά. Κανείς δεν θα μπορεί να δει ποιος είσαι.</p>
+   <p>Είναι <b>προαιρετικό</b> και δεν αλλάζει τίποτα στο παιχνίδι. Μπορείς να αλλάξεις γνώμη όποτε θέλεις από το Προφίλ. Αν είσαι κάτω των 15 ετών, ρώτα πρώτα τον γονέα ή κηδεμόνα σου.</p>
+   <button class="btn primary" id="cy">✅ Συμφωνώ</button><button class="btn" id="cn">Όχι, ευχαριστώ</button>`;
+  $$("cy").onclick=()=>{consSet(true);home()};$$("cn").onclick=()=>{consSet(false);home()}}
 flush();
 P?home():login();
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
