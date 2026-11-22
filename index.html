@@ -228,7 +228,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v56";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v59";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
@@ -237,21 +237,30 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(M
 const stars=n=>`<span class="stars" aria-label="${n} από 3 αστέρια">${"★".repeat(n)}<i>${"★".repeat(3-n)}</i></span>`;
 const grade=(c,n)=>n?Math.round(c/n*200)/10:0;
 /* Σχολεία για την προαιρετική επιλογή στην είσοδο. Άφησε την λίστα κενή [] για να κρυφτεί το πεδίο. */
-const SCHOOLS=[];
+const SCHOOLS=[];/* προτάσεις που εμφανίζονται στο πεδίο· ο μαθητής μπορεί πάντα να γράψει ελεύθερα το σχολείο του */
+const schClean=s=>String(s||"").replace(/\s+/g," ").trim().slice(0,30);
+const BADW=["μαλακ","πουτ","γαμ","σκατ","αρχιδ","πουστ","fuck","shit","bitch","nazi","ναζι"],badNick=s=>{const t=String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zα-ω0-9]/g,"");return BADW.some(w=>t.indexOf(w.normalize("NFD").replace(/[\u0300-\u036f]/g,""))>=0)};
 let P=st.get("profile",null),S=null;
 const prog=()=>st.get("prog:"+P.code,{});
 
 function login(){setBg("kin");
   $.innerHTML=`<div class="lg"><div class="lgm"><svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="lb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a2cff"/><stop offset=".55" stop-color="#d11fa8"/><stop offset="1" stop-color="#ff7a18"/></linearGradient><radialGradient id="lq" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#ffe14d"/><stop offset="1" stop-color="#ff9d00"/></radialGradient><linearGradient id="lt" gradientUnits="userSpaceOnUse" x1="330" y1="0" x2="40" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="512" height="512" fill="url(#lb)"/><g stroke-linecap="round" stroke="url(#lt)" stroke-width="22"><line x1="330" y1="190" x2="40" y2="190"/><line x1="320" y1="256" x2="90" y2="256" stroke-width="28"/><line x1="330" y1="322" x2="40" y2="322"/></g><circle cx="350" cy="256" r="150" fill="#fff" opacity=".12"/><circle cx="350" cy="256" r="104" fill="url(#lq)"/><ellipse cx="318" cy="218" rx="30" ry="18" fill="#fff" opacity=".7" transform="rotate(-30 318 218)"/></svg></div><h1 class="sr">Physics in Motion</h1>
-  <div class="lgc"><label for="n">Όνομα</label><input id="n" placeholder="π.χ. Μαρία" autocomplete="given-name" value="${esc(P?P.name:"")}">
-  <label for="c">Κωδικός</label><input id="c" placeholder="π.χ. A07" autocapitalize="characters" autocomplete="off" value="${esc(P?P.code:"")}">
-  ${SCHOOLS.length?`<label for="sc">Σχολείο (προαιρετικά)</label><select id="sc" class="chn"><option value="">— Δεν θέλω να πω —</option>${SCHOOLS.concat(["Άλλο"]).map(s=>`<option${P&&P.school===s?" selected":""}>${esc(s)}</option>`).join("")}</select>`:""}
-  <button class="btn primary" id="go">▶ Ξεκίνα</button>
-  <p class="lgh">Τον κωδικό σου τον δίνει ο καθηγητής σου. Χωρίς εγγραφή.${RESULTS_URL?" 📨 Τα αποτελέσματα στέλνονται στον καθηγητή σου.":""}</p></div>
+  <div class="lgc"><label for="n">Όνομα ή παρατσούκλι</label><input id="n" placeholder="π.χ. Μαρία" autocomplete="given-name" value="${esc(P?P.name:"")}">
+  <label for="c">Κωδικός (δικός σου, 3–16 γράμματα ή αριθμοί)</label><input id="c" placeholder="π.χ. A07" autocapitalize="characters" autocomplete="off" value="${esc(P?P.code:"")}">
+  <label for="sc">Σχολείο (προαιρετικά)</label><input id="sc" list="scl" maxlength="30" placeholder="π.χ. 1ο ΓΕΛ … ή άφησέ το κενό" autocomplete="off" value="${esc(P&&P.school||"")}"><datalist id="scl">${SCHOOLS.map(s=>`<option value="${esc(s)}">`).join("")}</datalist>
+  <p class="bad" id="lge" style="margin:6px 0"></p><button class="btn primary" id="go">▶ Ξεκίνα</button>
+  <p class="lgh">Διάλεξε τον κωδικό που θες (ή αυτόν που σου έδωσε ο καθηγητής σου) και θυμήσου τον: τον ξαναγράφεις αν μπεις από άλλη συσκευή. Αν είσαι κάτω των 15 ετών, ζήτα την άδεια του γονιού σου. Χωρίς εγγραφή.${RESULTS_URL?" 📨 Τα αποτελέσματα στέλνονται στον καθηγητή σου.":""}</p></div>
   <div class="lgt"><span>🧭 Κεφ. 1</span><span>🏎️ Κεφ. 2</span><span>🧲 Κεφ. 3</span><span>⚡ Κεφ. 4</span></div></div>`;
-  $$("go").onclick=()=>{const name=$$("n").value.trim(),code=$$("c").value.trim().toUpperCase();
-    if(!name||!code){$$("go").textContent="Συμπλήρωσε όνομα και κωδικό";return}
-    P={name,code,school:$$("sc")?$$("sc").value:((P&&P.school)||"")};st.set("profile",P);home()};
+  if(RESULTS_URL)Promise.race([fetch(RESULTS_URL+(RESULTS_URL.indexOf("?")<0?"?":"&")+"action=schools").then(r=>r.json()),new Promise((_,j)=>setTimeout(j,3000))]).then(d=>{const dl=$$("scl");if(dl&&d&&d.schools)dl.innerHTML=SCHOOLS.concat(d.schools).map(s=>`<option value="${esc(s)}">`).join("")}).catch(()=>{});
+  $$("go").onclick=async()=>{const name=$$("n").value.trim().slice(0,40),code=$$("c").value.trim().toUpperCase(),sch=$$("sc")?schClean($$("sc").value):((P&&P.school)||""),e=$$("lge"),g=$$("go");e.textContent="";
+    if(!name||!code){e.textContent="Συμπλήρωσε όνομα και κωδικό.";return}
+    if(!/^[\p{L}\p{N}_-]{3,16}$/u.test(code)){e.textContent="Ο κωδικός πρέπει να έχει 3 έως 16 γράμματα ή αριθμούς (χωρίς κενά).";return}
+    if(RESULTS_URL){g.disabled=true;g.textContent="Έλεγχος…";let s=null;
+      try{const d=await Promise.race([fetch(RESULTS_URL+(RESULTS_URL.indexOf("?")<0?"?":"&")+"action=claim&key="+encodeURIComponent(RESULTS_KEY)+"&code="+encodeURIComponent(code)+"&name="+encodeURIComponent(name)+"&school="+encodeURIComponent(sch)).then(r=>r.json()),new Promise((_,j)=>setTimeout(j,7000))]);s=d&&d.status}catch(x){s=null}
+      g.disabled=false;g.textContent="▶ Ξεκίνα";
+      if(s==="taken"){e.textContent="Αυτός ο κωδικός υπάρχει ήδη με άλλο όνομα. Διάλεξε διαφορετικό κωδικό. Αν είναι δικός σου, γράψε το ίδιο όνομα που είχες βάλει την πρώτη φορά.";return}
+      if(s==="badcode"){e.textContent="Έλεγξε το όνομα και τον κωδικό (3–16 γράμματα ή αριθμοί).";return}}
+    P={name,code,school:sch};st.set("profile",P);home()};
 }
 
 const ICONS={kin:"🧭",dyn1:"🏎️",dyn2:"🧲",en:"⚡"},COL={kin:"#6ea8ff",dyn1:"#4cd9a0",dyn2:"#ff7a6b",en:"#FFC857"};
@@ -537,14 +546,16 @@ function dailyDone(){const x=dget(),t=ymd();if(x.last===t)return"";const g=x.las
 const DAY=864e5,SCH=[1,3,7],mget=()=>st.get("msr:"+P.code,{});
 const dueCount=()=>{const m=mget(),n=Date.now();return Object.values(m).filter(e=>e.d<=n).length};
 const UM=()=>{if(!UM.m){UM.m={};LEVELS.forEach(l=>l.qs.forEach(q=>UM.m[hq(q)]=l.id))}return UM.m};
-function mist(q,add){if(q.num)return;const l=mlist(),k=hq(q),i=l.indexOf(k),m=mget(),now=Date.now();
+function mist(q,add,res){if(q.num)return;const l=mlist(),k=hq(q),i=l.indexOf(k),m=mget(),now=Date.now();
  if(add){if(i<0)l.push(k);m[k]={s:0,d:now+SCH[0]*DAY}}
- else if(i>=0){const e=m[k]||{s:0,d:0};if(e.d<=now){e.s++;if(e.s>=3){l.splice(i,1);delete m[k]}else{e.d=now+SCH[e.s]*DAY;m[k]=e}}}
+ else if(res&&i>=0)l.splice(i,1)/* σωστή απάντηση στην «Εξάσκηση στα λάθη μου»: φεύγει αμέσως από τη λίστα (η επανάληψη στον ημερήσιο στόχο συνεχίζεται) */
+ else if(m[k]){const e=m[k];if(e.d<=now){e.s++;if(e.s>=3){if(i>=0)l.splice(i,1);delete m[k]}else{e.d=now+SCH[e.s]*DAY;m[k]=e}}}
  st.set("mist:"+P.code,l);st.set("msr:"+P.code,m);
  const u=UM()[k],s=st.get("stat:"+P.code,{}),e=s[u]||{e:.5,n:0};e.n++;e.e+=((add?0:1)-e.e)*Math.max(1/e.n,.08);s[u]=e;st.set("stat:"+P.code,s)}
 function dailyRound(){const m=mget(),now=Date.now(),all=[];LEVELS.forEach(l=>l.qs.forEach(q=>all.push({q,l})));
  const pool=shuffle(all.filter(x=>m[hq(x.q)]&&m[hq(x.q)].d<=now)).slice(0,3).map(x=>({...x.q,tip:x.l.tip})),ids=new Set(pool.map(hq)),stt=st.get("stat:"+P.code,{});
- const weak=LEVELS.slice().sort((a,b)=>(stt[a.id]||{e:.5}).e-(stt[b.id]||{e:.5}).e)[0];
+/* ο ημερήσιος στόχος διαλέγει θέμα μόνο από κεφάλαια που ο μαθητής έχει ήδη παίξει ή που έχουν ανοίξει στην τάξη (τα κλειδιά του CHAL_Q) */
+ const open=LEVELS.filter(l=>Object.keys(CHAL_Q).indexOf(l.id)>=0||(stt[l.id]&&stt[l.id].n>0)),weak=(open.length?open:LEVELS).slice().sort((a,b)=>(stt[a.id]||{e:.5}).e-(stt[b.id]||{e:.5}).e)[0];
  shuffle(weak.qs).forEach(q=>{if(pool.length<5&&!ids.has(hq(q))){pool.push({...q,tip:weak.tip});ids.add(hq(q))}});
  start({id:"daily",title:"Ημερήσιος γύρος",sc:"const",tip:"Ξαναδιάβασε τη θεωρία της ενότητας.",qs:pool},pool)}
 function dailyPanel(){const x=dget(),t=x.last===ymd();return`<div class="daily"><div class="df">🔥<b>${dailyAlive(x)}</b><small>σερί</small></div><div class="dt"><b>${t?"✅ Στόχος ημέρας έγινε":"Ημερήσιος στόχος"}</b><small>🛡️ πάσο ${x.pass} · 🔁 ${dueCount()}</small></div><button class="btn primary dbtn" id="dr">${t?"＋ Ακόμα":"⚡ Ξεκίνα"}</button></div>`}
@@ -558,9 +569,9 @@ const carC=()=>{const c=COLS.find(x=>x[0]===pget().col);return c&&totXP()>=c[2]?
 const vh=id=>id==="kin"?[CAR(carC()),""]:(VEH[id]||[CAR(carC()),""]);
 function profile(){const p=pget(),xp=totXP(),ti=[];Object.keys(WORLDS).forEach(w=>{const on=cardsOn(w);WORLDS[w].cards.forEach((c,i)=>{if(on[i])ti.push(c[1].replace(/ \(.*\)/,""))})});
  const bgs=["kin","dyn1","dyn2","en"].filter(w=>w==="kin"||cardsOn(w).some(Boolean));setBg(p.bg);
- $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">🎨</span></div><h1>Το προφίλ μου</h1><div class="pv">${CAR(carC())}</div><h3 class="ph">Χρώμα οχήματος</h3><div class="chips">${COLS.map(c=>`<button class="chip${p.col===c[0]?" on":""}" data-col="${c[0]}" ${xp<c[2]?"disabled":""}><i style="background:${c[1]}"></i>${xp<c[2]?"🔒 "+c[2]+" XP":c[3]}</button>`).join("")}</div><h3 class="ph">Σκηνικό αρχικής</h3><div class="chips">${["kin","dyn1","dyn2","en"].map(w=>`<button class="chip${p.bg===w?" on":""}" data-bg="${w}" ${bgs.includes(w)?"":"disabled"}>${bgs.includes(w)?WORLDS[w].e+" "+WORLDS[w].n:"🔒 Κέρδισε μια κάρτα"}</button>`).join("")}</div><h3 class="ph">Χρονόμετρο στην Αποστολή</h3><div class="chips"><button class="chip${!p.nt?" on":""}" data-nt="0">⏱ Με χρονόμετρο</button><button class="chip${p.nt?" on":""}" data-nt="1">🌿 Χωρίς χρόνο</button></div><h3 class="ph">Ανώνυμα δεδομένα για έρευνα</h3><div class="chips"><button class="chip${consGet()&&consGet().a?" on":""}" data-cs="1">✅ Συμφωνώ</button><button class="chip${consGet()&&!consGet().a?" on":""}" data-cs="0">Όχι</button></div><h3 class="ph">Οδηγίες χρήσης</h3><div class="chips"><button class="chip" id="wl">ℹ️ Δες ξανά τις οδηγίες</button></div><h3 class="ph">Τίτλος</h3><div class="chips"><button class="chip${!p.ti?" on":""}" data-ti="">Βαθμίδα</button>${ti.map(t=>`<button class="chip${p.ti===t?" on":""}" data-ti="${esc(t)}">✦ ${esc(t)}</button>`).join("")}</div>`;
+ $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">🎨</span></div><h1>Το προφίλ μου</h1><div class="pv">${CAR(carC())}</div><h3 class="ph">Χρώμα οχήματος</h3><div class="chips">${COLS.map(c=>`<button class="chip${p.col===c[0]?" on":""}" data-col="${c[0]}" ${xp<c[2]?"disabled":""}><i style="background:${c[1]}"></i>${xp<c[2]?"🔒 "+c[2]+" XP":c[3]}</button>`).join("")}</div><h3 class="ph">Σκηνικό αρχικής</h3><div class="chips">${["kin","dyn1","dyn2","en"].map(w=>`<button class="chip${p.bg===w?" on":""}" data-bg="${w}" ${bgs.includes(w)?"":"disabled"}>${bgs.includes(w)?WORLDS[w].e+" "+WORLDS[w].n:"🔒 Κέρδισε μια κάρτα"}</button>`).join("")}</div><h3 class="ph">Χρονόμετρο στην Αποστολή</h3><div class="chips"><button class="chip${!p.nt?" on":""}" data-nt="0">⏱ Με χρονόμετρο</button><button class="chip${p.nt?" on":""}" data-nt="1">🌿 Χωρίς χρόνο</button></div><h3 class="ph">Ανώνυμα δεδομένα για έρευνα</h3><div class="chips"><button class="chip${consGet()&&consGet().a?" on":""}" data-cs="1">✅ Συμφωνώ</button><button class="chip${consGet()&&!consGet().a?" on":""}" data-cs="0">Όχι</button></div><h3 class="ph">Σχολείο (προαιρετικό)</h3><input class="chn" id="psc" list="scl" maxlength="30" placeholder="Γράψε ή άφησε κενό" autocomplete="off" value="${esc(P.school||"")}"><datalist id="scl">${SCHOOLS.map(s=>`<option value="${esc(s)}">`).join("")}</datalist><h3 class="ph">Οδηγίες χρήσης</h3><div class="chips"><button class="chip" id="wl">ℹ️ Δες ξανά τις οδηγίες</button></div><h3 class="ph">Τίτλος</h3><div class="chips"><button class="chip${!p.ti?" on":""}" data-ti="">Βαθμίδα</button>${ti.map(t=>`<button class="chip${p.ti===t?" on":""}" data-ti="${esc(t)}">✦ ${esc(t)}</button>`).join("")}</div>`;
  const sv=(k,v)=>{const q=pget();q[k]=v;st.set("prof:"+P.code,q);profile()};
- $.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>sv("col",b.dataset.col));$.querySelectorAll("[data-bg]").forEach(b=>b.onclick=()=>sv("bg",b.dataset.bg));$.querySelectorAll("[data-ti]").forEach(b=>b.onclick=()=>sv("ti",b.dataset.ti));$.querySelectorAll("[data-nt]").forEach(b=>b.onclick=()=>sv("nt",b.dataset.nt==="1"));$.querySelectorAll("[data-cs]").forEach(b=>b.onclick=()=>{consSet(b.dataset.cs==="1");profile()});$$("wl").onclick=showWelcome;$$("bk").onclick=home}
+ $.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>sv("col",b.dataset.col));$.querySelectorAll("[data-bg]").forEach(b=>b.onclick=()=>sv("bg",b.dataset.bg));$.querySelectorAll("[data-ti]").forEach(b=>b.onclick=()=>sv("ti",b.dataset.ti));$.querySelectorAll("[data-nt]").forEach(b=>b.onclick=()=>sv("nt",b.dataset.nt==="1"));$.querySelectorAll("[data-cs]").forEach(b=>b.onclick=()=>{consSet(b.dataset.cs==="1");profile()});$$("psc").onchange=()=>{P.school=schClean($$("psc").value);$$("psc").value=P.school;st.set("profile",P)};$$("wl").onclick=showWelcome;$$("bk").onclick=home}
 const GUIDE={kin:["🧑‍🔧","Μηχανικός Νίκη"],dyn1:["👨‍🚀","Κυβερνήτης Αρίων"],dyn2:["👷","Λιμενάρχης Βάσω"],en:["👩‍🔬","Δρ. Σπινθήρας"]};
 const OKL=["Έτσι μπράβο!","Τέλεια κίνηση!","Συνέχισε έτσι!"],BADL=["Δεν πειράζει, δες την εξήγηση.","Σχεδόν! Θα το πιάσεις.","Κάθε λάθος διδάσκει."];
 const STORY={
@@ -639,7 +650,7 @@ function quiz(){
     tm?`<div class="why"><b>⏱ Ο χρόνος τελείωσε.</b> ${dead?"Οι ζωές σου τελείωσαν. ":""}Σωστό: ${esc(q.opts[q.ans])}. ${fm(q.why||"")}</div>${dead?"":`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="nx">${S.i+1<n?"Επόμενη":"Δες το αποτέλεσμα"}</button>`}`:
     wr?`<div class="why"><b>Λάθος.</b> ${S.quest?GUIDE[S.quest.w][0]+" "+BADL[S.i%3]+" ":""}${dead?"Οι ζωές σου τελείωσαν!":"Βοήθεια: "+fm(q.tip||S.lv.tip)}</div>${dead?"":`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="rt">Προσπάθησε ξανά</button><button class="btn" id="nx">Επόμενη</button>`}`:"");
   if(!right&&!wr||wr)$.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{const k=+b.dataset.k;
-    if(k===q.ans){if(!S.missed){S.ok++;S.streak++;if(S.chal)cpt();S.xp+=10+Math.min(S.streak-1,5)*2;mist(q,0)}else S.xp+=5;S.state="right";quiz();confetti();sfx.right(S.missed?0:S.streak)}
+    if(k===q.ans){if(!S.missed){S.ok++;S.streak++;if(S.chal)cpt();S.xp+=10+Math.min(S.streak-1,5)*2;mist(q,0,S.lv&&S.lv.id==="mist")}else S.xp+=5;S.state="right";quiz();confetti();sfx.right(S.missed?0:S.streak)}
     else{if(!S.missed){S.missed=true;S.streak=0;mist(q,1);S.wrong.push({q:q.orig,mine:q.opts[k],right:q.opts[q.ans]});loseLife()}
       S.dis.add(k);S.state="wrong";quiz();$$("dot").classList.add("miss");sfx.wrong()}});
   if(q.num&&$$("ck")){const go=()=>{const raw=$$("ni").value.trim(),m=raw.replace("−","-").match(/^(-?\d+(?:[.,]\d+)?)/);if(!raw)return;S.nv=raw;const v=m?parseFloat(m[1].replace(",",".")):NaN;
@@ -728,9 +739,10 @@ function chFetch(m){if(!RESULTS_URL)return Promise.resolve(null);
 function chBoard(d){const el=$$("bd");if(!el)return;
   if(!d||!d.top){el.innerHTML=RESULTS_URL?`<p style="color:var(--mute)">Δεν φορτώθηκε η κατάταξη. Έλεγξε τη σύνδεσή σου και ξαναδοκίμασε.</p>`:`<p style="color:var(--mute)">Η κατάταξη θα εμφανιστεί μόλις συνδεθεί η εφαρμογή με τον καθηγητή σου. Οι πόντοι σου αποθηκεύονται κανονικά.</p>`;return}
   if(!d.top.length){el.innerHTML=`<p style="color:var(--mute)">Κανείς δεν έπαιξε ακόμα. Γίνε ο πρώτος!</p>`;return}
-  const row=(x,i)=>`<div class="chr${x[4]?" me":""}"><i>${chMed(i)}</i><em>${esc(x[0])}</em><b>${x[1]}</b><small>${x[2]}/10 · ${chFmt(x[3])}</small></div>`;
+  const row=(x,i)=>`<div class="chr${x[4]?" me":""}"><i>${chMed(i)}</i><em>${esc(x[0])}${x[5]?` <small>· ${esc(x[5])}</small>`:""}</em><b>${x[1]}</b><small>${x[2]}/10 · ${chFmt(x[3])}</small></div>`;
   let h=d.top.slice(0,10).map(row).join("");
   if(d.me&&d.me.rank>10)h+=`<div class="chr me"><i>${d.me.rank}.</i><em>Εσύ</em><b>${d.me.pts}</b><small>από ${d.total}</small></div>`;
+  if(d.teams&&d.teams.length)h+=`<h3 style="margin:16px 0 4px">Κατάταξη σχολείων</h3><p style="color:var(--mute);font-size:13px;margin:0 0 4px">Μέσος όρος των 5 καλύτερων κάθε σχολείου (τουλάχιστον 3 παίκτες)</p>`+d.teams.map((t,i)=>`<div class="chr"><i>${chMed(i)}</i><em>${esc(t[0])}</em><b>${t[1]}</b><small>${t[2]} παίκτες</small></div>`).join("");
   el.innerHTML=h+`<p style="color:var(--mute);font-size:13px">${d.total} παίκτες συνολικά</p>`}
 function chBadges(){const b=st.get("chb:"+P.code,{}),ks=Object.keys(b).sort();return ks.length?ks.map(k=>chMed(b[k]-1)+" "+chName(k)).join(" · "):""}
 function chalScreen(){setBg("dyn1");const m=chM(),pp=pget(),r=chRec(m),left=CHAL_TRIES-r.tries,n=new Date(),days=Math.ceil((new Date(n.getFullYear(),n.getMonth()+1,1)-n)/864e5);
@@ -747,7 +759,7 @@ function chNick(){setBg("dyn1");const A=["Γρήγορο","Λαμπρό","Ατρ
   const def=pp.nick||A[Math.floor(Math.random()*A.length)]+" "+B[Math.floor(Math.random()*B.length)]+" "+(10+Math.floor(Math.random()*90));
   $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Πίσω</button><span class="xp">🏆</span></div><h1>Διάλεξε ψευδώνυμο</h1><p>Στην κατάταξη βλέπουν όλοι μόνο το ψευδώνυμο, όχι το όνομά σου. Μην γράψεις το πραγματικό σου όνομα ή επώνυμο.</p><input class="chn" id="ni2" maxlength="24" value="${esc(def)}" autocomplete="off" autocapitalize="off" spellcheck="false"><p id="ne" class="bad"></p><button class="btn primary" id="ok">Αποθήκευση</button>`;
   $$("bk").onclick=pp.nick?chalScreen:home;
-  $$("ok").onclick=()=>{const v=$$("ni2").value.replace(/\s+/g," ").trim();if(v.length<3){$$("ne").textContent="Τουλάχιστον 3 χαρακτήρες.";return}
+  $$("ok").onclick=()=>{const v=$$("ni2").value.replace(/\s+/g," ").trim();if(v.length<3){$$("ne").textContent="Τουλάχιστον 3 χαρακτήρες.";return}if(badNick(v)){$$("ne").textContent="Διάλεξε ένα άλλο ψευδώνυμο, κατάλληλο για όλους.";return}
     const q=pget();q.nick=v.slice(0,24);st.set("prof:"+P.code,q);chalScreen()}}
 function chalStart(){const m=chM(),k="chal:"+P.code+":"+m,r=chRec(m);if(r.tries>=CHAL_TRIES)return chalScreen();
   r.tries++;st.set(k,r);const qs=chQs(m);
