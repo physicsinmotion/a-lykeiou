@@ -55,8 +55,8 @@ input{width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--line);
 @media (prefers-reduced-motion:reduce){.dot{transition:none}.dot.miss{animation:none}}
 .sc{position:relative;height:84px;border-radius:12px;background:var(--panel);border:1.5px solid var(--line);overflow:hidden;margin:0 0 12px}
 .road:after{content:"";position:absolute;left:0;right:0;bottom:14px;height:3px;background:repeating-linear-gradient(90deg,var(--line) 0 14px,transparent 14px 26px)}
-.car{position:absolute;bottom:18px;font-size:34px;transform:scaleX(-1);animation:drive var(--d) var(--e) infinite var(--a,normal)}
-@keyframes drive{from{left:2%}to{left:calc(100% - 46px)}}
+.car{position:absolute;white-space:nowrap;bottom:18px;font-size:34px;transform:scaleX(-1);animation:drive var(--d) var(--e) infinite var(--a,normal)}
+@keyframes drive{from{left:2%;translate:0 0}to{left:98%;translate:-100% 0}}
 .fall{height:128px}.ob{position:absolute;font-size:30px;animation:drop 1.8s cubic-bezier(.5,0,1,.6) infinite}
 @keyframes drop{from{top:2px}to{top:calc(100% - 40px)}}
 .ring{height:150px}.ring:before{content:"";position:absolute;left:50%;top:50%;width:104px;height:104px;margin:-52px;border:2px dashed var(--line);border-radius:50%}
@@ -184,6 +184,7 @@ main{flex:1 0 auto;width:100%}
 #app .top h1{font-size:26px}
 .rank{margin:0 0 10px}.daily{padding:8px 12px;margin:0 0 12px;gap:10px}.df{font-size:22px}.df b{font-size:18px}.df small{font-size:10px}.dt b{font-size:15px}.dt small{font-size:13px}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+.tile.lkd{filter:grayscale(.85) brightness(.75);cursor:default;opacity:.8}
 .tgrid .tile{min-height:112px;margin:0;padding:10px 12px;border-radius:18px}.tgrid .tw{font-size:34px;right:8px;top:2px;transform:rotate(-6deg)}.tgrid .tw svg{width:56px!important}.tgrid .tb b{font-size:15px;line-height:1.2}.tgrid .tb small{font-size:12.5px}.tgrid .ts{left:12px;top:8px;font-size:14px}
 .mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 10px}
 .mb{font:inherit;font-size:12.5px;color:var(--text);background:rgba(23,40,63,.78);border:1.5px solid var(--line);border-radius:14px;padding:9px 2px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.15;text-align:center}.mb span{font-size:22px}.mb:active{transform:scale(.96)}.mb:focus-visible{outline:3px solid var(--glow)}
@@ -238,7 +239,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v62";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v64";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
@@ -379,15 +380,17 @@ function drawGame(){
   }
   sceneUI();
 }
+/* Κεφάλαια που έχουν ανοίξει στην τάξη = τα κλειδιά του CHAL_Q. Τα υπόλοιπα εμφανίζονται κλειδωμένα («Σύντομα»). */
+const unitOpen=id=>Object.keys(CHAL_Q).indexOf(id)>=0;
 function home(){clearTimer();if(!consGet())return consentScreen();setBg(pget().bg||"kin");
-  const pr=prog(),mc=mlist().length,xp=Object.values(pr).reduce((s,l)=>s+(l.xp||0),0),tot=LEVELS.length*3,got=LEVELS.reduce((s,l)=>s+(pr[l.id]?pr[l.id].stars:0),0);
-  const pp=pget(),rk=RANKS.filter(r=>xp>=r[0]).pop()[1],nx=LEVELS.findIndex(l=>!pr[l.id]||pr[l.id].stars<3);
+  const pr=prog(),mc=mlist().length,xp=Object.values(pr).reduce((s,l)=>s+(l.xp||0),0),tot=LEVELS.filter(l=>unitOpen(l.id)).length*3,got=LEVELS.filter(l=>unitOpen(l.id)).reduce((s,l)=>s+(pr[l.id]?pr[l.id].stars:0),0);
+  const pp=pget(),rk=RANKS.filter(r=>xp>=r[0]).pop()[1],nx=LEVELS.findIndex(l=>unitOpen(l.id)&&(!pr[l.id]||pr[l.id].stars<3));
   $.innerHTML=`<div class="hero"><div class="sun"></div><div class="rd"></div>
     <span class="car svgc${carSel().a.indexOf("wings")>=0?" fly":""}" style="--d:7s;--e:linear">${CAR(carC(),1)}</span></div>
    <div class="top"><h1>Γεια, ${esc(P.name)}!</h1><div class="xp">${xp} XP</div></div>
    <div class="rank"><span>${rk}</span><div class="pbar"><i style="width:${got/tot*100}%"></i></div><small>${got}/${tot} ★</small></div>${dailyPanel()}`+
   (nx<0?`<p class="good">Πήρες όλα τα αστέρια! Παίξε ξανά για περισσότερα XP.</p>`:"")+
-  `<div class="tgrid">`+LEVELS.map((l,i)=>{const r=pr[l.id];return `<button class="tile${i===nx?" nx":""}" data-i="${i}" style="--g:linear-gradient(135deg,${WORLDS[l.id].g});--i:${i}"><span class="tw">${ICONS[l.id]}</span><span class="ts">${stars(r?r.stars:0)}</span><span class="tb"><b>${esc(l.title)}</b><small>${i===nx?"▶ "+(got?"Συνέχισε":"Ξεκίνα"):(r?"Καλύτερο "+r.best+"/20":"Νέο")}</small></span></button>`}).join("")+`</div>`+
+  `<div class="tgrid">`+LEVELS.map((l,i)=>{const r=pr[l.id],lk=!unitOpen(l.id);return `<button class="tile${i===nx?" nx":""}${lk?" lkd":""}" ${lk?"disabled":`data-i="${i}"`} style="--g:linear-gradient(135deg,${WORLDS[l.id].g});--i:${i}"><span class="tw">${ICONS[l.id]}</span><span class="ts">${lk?"🔒":stars(r?r.stars:0)}</span><span class="tb"><b>${esc(l.title)}</b><small>${lk?"Σύντομα":i===nx?"▶ "+(got?"Συνέχισε":"Ξεκίνα"):(r?"Καλύτερο "+r.best+"/20":"Νέο")}</small></span></button>`}).join("")+`</div>`+
   chBanner()+`<div class="mgrid"><button class="mb" id="qm"><span>🗺️</span>Αποστολή</button><button class="mb" id="cd"><span>🃏</span>Κάρτες ${cardCount()}/16</button><button class="mb" id="pf"><span>🎨</span>Προφίλ</button><button class="mb" id="pg"><span>📊</span>Πρόοδος</button></div>`+
   `<div class="brow">${mc?`<button class="btn ghost" id="ms">🎯 Λάθη μου (${mc})</button>`:""}<button class="btn ghost" id="sn" aria-label="Ήχοι και δόνηση">${sndOn()?"🔊 Ήχοι":"🔇 Ήχοι"}</button><button class="btn ghost" id="out">👤 Αλλαγή</button></div><button class="btn ghost" id="sgx">💬 Πρόταση ή πρόβλημα</button>`;
   $.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const l=LEVELS[+b.dataset.i];enter(b,UG(l.id),()=>l.id==="kin"?kinMenu():start(l,null))});
@@ -530,9 +533,9 @@ function enter(el,bg,cb){if(entering&&Date.now()-enterT<1500)return;entering=1;e
   setTimeout(()=>{z.style.cssText=`left:0;top:0;width:100vw;height:100vh;border-radius:0;background:${bg}`},30);
   setTimeout(()=>{done();z.style.opacity=0;setTimeout(()=>z.remove(),420)},520)}catch(e){done()}}
 const UG=id=>`linear-gradient(135deg,${WORLDS[id].g})`;
-const WK=()=>Object.keys(WORLDS),worldOpen=w=>{const k=WK(),i=k.indexOf(w);return i<=0||!!qc(k[i-1]).b};
+const WK=()=>Object.keys(WORLDS),worldOpen=w=>{const k=WK(),i=k.indexOf(w);return unitOpen(w)&&(i<=0||!!qc(k[i-1]).b)};
 function quest(){setBg("kin");$.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">🃏 ${cardCount()}/16</span></div><h1>Αποστολή</h1><p>Οι κόσμοι ανοίγουν ένας-ένας: νίκησε τον αρχηγό για να περάσεις στον επόμενο. Σε κάθε κόσμο υπάρχουν 3 σημεία ελέγχου (10 ερωτήσεις το καθένα, χρειάζεσαι 2 αστέρια) και ένας αρχηγός.</p>`+
- Object.keys(WORLDS).map((w,i)=>{const W=WORLDS[w],n=cardsOn(w).filter(Boolean).length,op=worldOpen(w),pv=i>0?WORLDS[WK()[i-1]]:null;return `<button class="wcard${op?"":" lk"}" data-w="${w}" ${op?"":"disabled"} style="background:linear-gradient(135deg,${W.g});animation:up .5s both;animation-delay:${i*80}ms"><span class="wb">${op?W.e:"🔒"}</span><span><b>${W.n}</b><br><small>${op?`${"★".repeat(n)}${"☆".repeat(4-n)} · ${n}/4 κάρτες`:"Νίκησε πρώτα: "+esc(pv.boss)}</small></span></button>`}).join("")+`<button class="btn" id="cd">🃏 Οι κάρτες μου</button>`;
+ Object.keys(WORLDS).map((w,i)=>{const W=WORLDS[w],n=cardsOn(w).filter(Boolean).length,op=worldOpen(w),pv=i>0?WORLDS[WK()[i-1]]:null;return `<button class="wcard${op?"":" lk"}" data-w="${w}" ${op?"":"disabled"} style="background:linear-gradient(135deg,${W.g});animation:up .5s both;animation-delay:${i*80}ms"><span class="wb">${op?W.e:"🔒"}</span><span><b>${W.n}</b><br><small>${op?`${"★".repeat(n)}${"☆".repeat(4-n)} · ${n}/4 κάρτες`:(unitOpen(w)?"Νίκησε πρώτα: "+esc(pv.boss):"Σύντομα")}</small></span></button>`}).join("")+`<button class="btn" id="cd">🃏 Οι κάρτες μου</button>`;
  $.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>enter(b,UG(b.dataset.w),()=>world(b.dataset.w)));$$("bk").onclick=home;$$("cd").onclick=cards}
 function world(w){if(!worldOpen(w))return quest();setBg(w);const W=WORLDS[w],c=qc(w),op=[1,c.s[0]>=2,c.s[1]>=2,c.s[2]>=2];
  const nodes=[0,1,2,3].map(k=>{const lock=!op[k],done=k<3?c.s[k]>=2:!!c.b,ic=lock?"🔒":done?"✅":(k===3?"👹":"🚩");return `<div class="nd"><button class="nb" data-k="${k}" ${lock?"disabled":""} style="--c:${W.c}">${ic}</button><div class="nl"><b>${k<3?"Σημείο ελέγχου "+(k+1):W.boss}</b><small>${k<3?["Εκκίνηση · βασικές · "+ruleTxt(0),"Μεσαίο σκέλος · "+ruleTxt(1),"Τελική ευθεία · "+ruleTxt(2)][k]+(c.s[k]?" · "+"★".repeat(c.s[k]):""):ruleTxt(3)+" · ερωτήσεις και από τα λάθη σου"}</small></div></div>`}).join("");
