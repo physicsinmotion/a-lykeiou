@@ -995,3 +995,128 @@ const A=(l,q,o,a,why)=>window.LEVELS[l].qs.push({q,o,a,why,gen:1});
  const hq=q=>{let x=5381,s=q.q+"|"+q.o[q.a];for(let i=0;i<s.length;i++)x=((x<<5)+x+s.charCodeAt(i))|0;return x};
  (window.LEVELS||[]).forEach(l=>(l.qs||[]).forEach(q=>{const w=W[hq(q)];if(w)q.why=w}));
 })();
+
+// ---- Σχήματα φυσικών διατάξεων (Κεφ. 2–4): δικά μας σχέδια, παρόμοια με των βοηθημάτων. Μπαίνουν στο τέλος ώστε να μην αλλάζουν τα κλειδιά των εξηγήσεων ----
+(function(){
+ const RED="#E5484D",YEL="#FFC857";
+ const SV=(inner,h=120,w=240)=>`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="σχήμα" font-family="Arial,sans-serif" font-size="11" fill="currentColor" stroke="none">${inner}</svg>`;
+ const T=(x,y,t,o="")=>`<text x="${x}" y="${y}" ${o}>${t}</text>`;
+ const ln=(x1,y1,x2,y2,o="")=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" ${o}/>`;
+ const AR=(x1,y1,x2,y2,lab,dx=0,dy=0,col=RED)=>{const a=Math.atan2(y2-y1,x2-x1),s=6.5,p=(k)=>[x2-s*Math.cos(a+k),y2-s*Math.sin(a+k)];const [ax,ay]=p(.42),[bx,by]=p(-.42);
+   return `<line x1="${x1}" y1="${y1}" x2="${x2-3*Math.cos(a)}" y2="${y2-3*Math.sin(a)}" stroke="${col}" stroke-width="2" stroke-linecap="round"/><polygon points="${x2},${y2} ${ax},${ay} ${bx},${by}" fill="${col}"/>`+(lab?`<text x="${x2+dx}" y="${y2+dy}" fill="${col}" font-weight="700" text-anchor="middle">${lab}</text>`:"")};
+ const FL=(y,x1=10,x2=230)=>ln(x1,y,x2,y)+`<g stroke="currentColor" stroke-width="1" opacity=".45">`+Array.from({length:Math.floor((x2-x1)/10)},(_,i)=>`<line x1="${x1+i*10+8}" y1="${y}" x2="${x1+i*10}" y2="${y+8}"/>`).join("")+`</g>`;
+ const BX=(x,y,w,h,t="",f=YEL)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="${f}" fill-opacity=".4" stroke="currentColor" stroke-width="1.6"/>`+(t?T(x+w/2,y+h/2+4,t,'text-anchor="middle"'):"");
+ const DOT=(x,y)=>`<circle cx="${x}" cy="${y}" r="3.5"/>`;
+ // κεκλιμένο: κορυφή (x0,y0) -> βάση (x1,y1) , οριζόντια συνέχεια προαιρετικά
+ const INC=(x0,y0,x1,y1)=>`<polygon points="${x0},${y0} ${x1},${y1} ${x0},${y1}" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`;
+ const onInc=(x0,y0,x1,y1,t,w,h,col=YEL,lab="")=>{ // κιβώτιο πάνω στο κεκλιμένο στη θέση t (0..1 από την κορυφή)
+   const a=Math.atan2(y1-y0,x1-x0)*180/Math.PI,cx=x0+(x1-x0)*t,cy=y0+(y1-y0)*t;
+   return `<g transform="translate(${cx} ${cy}) rotate(${a})">${BX(-w/2,-h,w,h,lab,col)}</g>`};
+ const angArc=(x,y,r,a1,a2,t)=>{const p=a=>[x+r*Math.cos(a*Math.PI/180),y-r*Math.sin(a*Math.PI/180)];const [sx,sy]=p(a1),[ex,ey]=p(a2);const mid=(a1+a2)/2,[tx,ty]=[x+(r+9)*Math.cos(mid*Math.PI/180),y-(r+9)*Math.sin(mid*Math.PI/180)];
+   return `<path d="M${sx} ${sy} A${r} ${r} 0 0 ${a2>a1?0:1} ${ex} ${ey}" fill="none" stroke="currentColor" stroke-width="1.2"/>`+T(tx,ty+4,t,'text-anchor="middle"')};
+ const F={};
+ // ---- Δυναμική ----
+ F.col2=(l,r)=>SV(DOT(120,60)+AR(120,60,120+r*10,60,"F₂",0,-8)+AR(120,60,120-l*10,60,"F₁",0,-8)+T(120,92,"ίδιο υλικό σημείο",'text-anchor="middle" opacity=".7"'),100);
+ F.colEq=SV(DOT(120,50)+AR(120,50,185,50,"F₁",0,-8)+AR(120,50,55,50,"F₂",0,-8)+T(120,84,"ΣF = 0",'text-anchor="middle" opacity=".7"'),100);
+ F.col3=SV(DOT(120,50)+AR(115,44,170,44,"F₁",0,-6)+AR(115,56,150,56,"F₂",4,16)+AR(125,50,60,50,"F₃",0,-8),100);
+ F.blockF=(o={})=>SV(BX(90,52,50,34,"m")+FL(86,40,200)+AR(140,69,195,69,o.F||"F",0,-8)+(o.T?AR(90,78,50,78,o.T,0,-6):"")+(o.v?AR(100,40,150,40,"υ",0,-6,"currentColor"):"")+(o.a?AR(100,30,150,30,"α",0,-6,"currentColor"):""),100);
+ F.blockV=SV(BX(90,52,50,34,"m")+FL(86,40,200)+AR(100,40,160,40,"υ",0,-6,"currentColor")+AR(90,78,50,78,"Τ",0,-6)+T(120,108,"τραχύ δάπεδο",'text-anchor="middle" opacity=".7"'),115);
+ F.table=(lab,s)=>SV(BX(125,48,60,34,"")+T(155,70,s||"βιβλίο",'text-anchor="middle"')+`<rect x="60" y="82" width="190" height="9" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.4"/>`+ln(80,91,80,108)+ln(230,91,230,108)+AR(155,48,155,12,"N",10,4)+AR(155,65,155,106,"B",10,2)+"",115,260);
+ F.rope=SV(`<rect x="60" y="8" width="120" height="8" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4"/>`+ln(120,16,120,62)+BX(98,62,44,34,"m")+AR(132,16,132,40,"Τ΄",14,2)+AR(108,62,108,38,"Τ",-10,4)+AR(120,79,120,114,"Β",12,2),125);
+ F.scale=SV(BX(104,44,32,32,"m")+`<rect x="84" y="76" width="72" height="14" rx="3" fill="currentColor" fill-opacity=".2" stroke="currentColor" stroke-width="1.6"/><path d="M104 83h32" stroke="currentColor" opacity=".5"/>`+ln(94,90,94,104)+ln(146,90,146,104)+AR(112,44,112,12,"F",-10,4)+AR(120,60,120,112,"Β",12,2)+AR(132,90,132,112,"F΄",14,2),120);
+ F.racket=SV(`<ellipse cx="70" cy="60" rx="22" ry="30" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.6"/>`+ln(70,90,70,115,'stroke-width="4"')+`<circle cx="108" cy="60" r="8" fill="${YEL}" fill-opacity=".6" stroke="currentColor" stroke-width="1.6"/>`+AR(118,60,175,60,"F₁",0,-8)+AR(92,60,40,60,"F₂",-6,-8),120);
+ F.touch=(F1)=>SV(BX(80,50,60,40,"m₁")+BX(140,62,44,28,"m₂")+FL(90,40,220)+(F1?AR(40,70,80,70,"F",-2,-8):""),105);
+ F.three=SV(DOT(110,75)+AR(110,75,110,20,"F₁",12,4)+AR(110,72,172,72,"F₂",0,-8)+AR(110,80,134,80,"F₃",6,16)+T(120,108,"F₁ = 4 N, F₂ = 3 N, F₃ = 1 N",'text-anchor="middle" opacity=".7"'),115);
+ F.three3=SV(DOT(120,70)+AR(120,70,170,30,"F₁",8,-2)+AR(120,70,70,30,"F₂",-8,-2)+AR(120,70,120,112,"F₃",12,4),120);
+ F.pers=SV(`<circle cx="52" cy="38" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>`+ln(52,47,56,72)+ln(56,72,46,92)+ln(56,72,68,92)+ln(53,54,92,62)+BX(92,50,50,36,"m")+FL(92,20,210)+AR(142,68,196,68,"F",0,-8)+AR(92,80,60,80,"Τ",-4,-6),110);
+ F.incFlat=SV(INC(30,20,150,92)+`<line x1="150" y1="92" x2="228" y2="92" stroke="currentColor" stroke-width="1.6"/>`+onInc(30,20,150,92,.08,26,16,YEL,"m")+angArc(150,92,22,180-31,180,"φ").replace(/./,m=>m)+T(70,100,"μ",'font-style="italic"')+T(190,86,"μ",'font-style="italic"'),112);
+ F.incForces=SV(INC(20,18,200,98)+onInc(20,18,200,98,.45,30,18)+AR(104,74,104,108,"B",12,2)+AR(108,70,122,40,"N",-6,-4)+AR(100,78,78,64,"T",-4,-6)+T(46,86,"φ",'text-anchor="middle"'),115);
+ F.incAngle=(txt)=>SV(INC(30,18,190,96)+onInc(30,18,190,96,.3,28,17)+angArc(190,96,26,180-27,180,"φ")+(txt?T(120,112,txt,'text-anchor="middle" opacity=".7"'):""),118);
+ F.fDown=SV(BX(110,52,50,34,"m")+FL(86,50,210)+AR(70,22,110,52,"F",-6,-4)+angArc(110,52,22,-33,0,"φ").replace(/./,m=>m)+AR(110,68,70,68,"Τ",-4,-6)+AR(185,72,225,72,"υ",0,-6,"currentColor")+AR(135,52,135,14,"N",10,4),105);
+ F.fUp=SV(BX(110,56,50,34,"m")+FL(90,50,210)+AR(160,64,205,36,"F",8,-2)+angArc(160,64,22,0,33,"φ")+AR(110,82,70,82,"Τ",-4,-6)+AR(184,82,224,82,"υ",0,-6,"currentColor"),110);
+ F.hang=SV(`<rect x="70" y="6" width="100" height="8" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4"/>`+ln(120,14,120,28)+`<circle cx="120" cy="36" r="8" fill="${YEL}" fill-opacity=".5" stroke="currentColor" stroke-width="1.5"/>`+T(120,40,"Β",'text-anchor="middle" font-size="9"')+ln(120,44,120,56)+`<circle cx="120" cy="66" r="10" fill="${YEL}" fill-opacity=".5" stroke="currentColor" stroke-width="1.5"/>`+T(120,70,"2Β",'text-anchor="middle" font-size="9"')+ln(120,76,120,88)+`<circle cx="120" cy="100" r="12" fill="${YEL}" fill-opacity=".5" stroke="currentColor" stroke-width="1.5"/>`+T(120,104,"3Β",'text-anchor="middle" font-size="9"')+T(140,22,"Ν₁",'opacity=".8"')+T(140,52,"Ν₂",'opacity=".8"')+T(140,84,"Ν₃",'opacity=".8"'),118);
+ F.manchild=SV(`<circle cx="38" cy="34" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>`+ln(38,43,40,70)+ln(40,70,30,92)+ln(40,70,52,92)+ln(40,50,80,64)+`<circle cx="198" cy="48" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>`+ln(198,55,198,76)+ln(198,76,191,92)+ln(198,76,205,92)+ln(198,62,160,64)+ln(80,64,160,64,'stroke-dasharray="0" stroke-width="2.2"')+FL(92,20,225)+T(38,18,"άνδρας",'text-anchor="middle" opacity=".8"')+T(198,32,"παιδί",'text-anchor="middle" opacity=".8"'),112);
+ // ---- Έργο / ενέργεια ----
+ F.fAngleFxFy=SV(BX(70,56,50,34,"m")+FL(90,30,210)+AR(120,73,175,40,"F",8,-2)+`<line x1="120" y1="73" x2="175" y2="73" stroke="${RED}" stroke-dasharray="3 3"/><line x1="175" y1="73" x2="175" y2="40" stroke="${RED}" stroke-dasharray="3 3"/>`+T(150,86,"Fₓ",'fill="'+RED+'"')+T(186,60,"Fᵧ",'fill="'+RED+'"')+angArc(120,73,20,0,31,"θ")+AR(70,106,170,106,"Δx",0,-6,"currentColor"),118);
+ F.w7=SV(BX(90,44,50,30,"")+FL(74,40,200)+AR(115,44,115,14,"N",-9,6)+AR(115,59,115,98,"Β",10,0)+AR(140,59,190,59,"F₁",0,-8)+AR(90,59,52,59,"F₂",0,-8)+AR(100,30,150,30,"υ",0,-6,"currentColor")+ln(60,104,180,104)+`<text x="120" y="118" text-anchor="middle">s</text>`,125);
+ F.w9=SV(BX(90,44,50,30,"")+FL(74,40,200)+AR(115,44,115,14,"N",-9,6)+AR(115,59,115,98,"Β",10,0)+AR(140,52,185,28,"F₁",8,-2)+angArc(140,52,20,0,28,"60°")+AR(90,59,52,59,"F₂",0,-8)+AR(100,22,150,22,"υ",0,-6,"currentColor")+ln(60,104,180,104)+`<text x="120" y="118" text-anchor="middle">s</text>`,125);
+ F.fFam=(()=>{const row=(x,t,a)=>{const bx=x+8;return BX(bx,50,22,16)+FL(66,x,x+76)+(a==="u"?AR(bx+11,58,bx+36,34,"F",8,0)+angArc(bx+11,58,16,0,36,"φ₁"):a==="h"?AR(bx+22,58,bx+62,58,"F",0,-7):AR(bx+11,58,bx+36,82,"F",8,6)+angArc(bx+11,58,16,-34,0,"φ₂"))+T(x+38,106,t,'text-anchor="middle" font-weight="700"')+ln(x+4,76,x+70,76,'stroke-width="1"')+T(x+38,88,"x",'text-anchor="middle" font-style="italic" font-size="9"')};
+   return SV(row(6,"(α)","u")+row(84,"(β)","h")+row(162,"(γ)","d"),112)})();
+ F.threeBodies=SV(T(30,14,"(α)",'text-anchor="middle" font-weight="700"')+T(92,14,"(β)",'text-anchor="middle" font-weight="700"')+T(150,14,"(γ)",'text-anchor="middle" font-weight="700"')+BX(22,22,16,16)+ln(30,40,30,96,'stroke-dasharray="3 3" stroke-width="1"')+ln(70,96,98,24)+ln(78,96,106,24)+BX(88,16,16,12)+ln(120,96,148,24,'')+ln(128,96,156,24)+BX(140,16,16,12)+ln(8,98,206,98)+T(30,112,"Γ",'text-anchor="middle"')+T(74,112,"Δ",'text-anchor="middle"')+T(124,112,"Ε",'text-anchor="middle"')+T(48,60,"h",'font-style="italic"')+`<path d="M44 24v72M41 27l3 -4 3 4M41 93l3 4 3 -4" fill="none" stroke="currentColor" stroke-width="1"/>`,120);
+ F.hill=SV(`<path d="M10 95H60C80 95 85 40 110 40S140 80 160 80H225V95Z" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`+BX(20,76,18,19,"Σ",YEL)+AR(14,60,44,60,"υ",0,-6,"currentColor")+T(28,108,"Α",'text-anchor="middle"')+T(110,32,"Γ",'text-anchor="middle"')+T(196,70,"Δ",'text-anchor="middle"')+ln(10,95,225,95,'stroke-dasharray="3 3" stroke-width="1" opacity=".6"')+ln(110,40,110,95,'stroke-width="1" opacity=".7"')+T(116,70,"3 m",'font-size="10"')+ln(214,80,214,95,'stroke-width="1" opacity=".7"')+T(210,90,"1 m",'font-size="10" text-anchor="end"'),115);
+ F.twoInc=SV(`<polygon points="20,98 120,24 220,98" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`+`<line x1="40" y1="52" x2="200" y2="52" stroke="currentColor" stroke-dasharray="3 3" stroke-width="1" opacity=".6"/>`+`<g transform="translate(60 70) rotate(-36)"><rect x="-9" y="-13" width="18" height="13" rx="2" fill="${YEL}" fill-opacity=".5" stroke="currentColor" stroke-width="1.5"/></g>`+`<g transform="translate(180 70) rotate(36)"><rect x="-9" y="-13" width="18" height="13" rx="2" fill="${YEL}" fill-opacity=".5" stroke="currentColor" stroke-width="1.5"/></g>`+T(44,48,"Α",'text-anchor="middle"')+T(196,48,"Γ",'text-anchor="middle"')+T(61,62,"(1)",'font-size="9" text-anchor="middle"')+T(179,62,"(2)",'font-size="9" text-anchor="middle"'),112);
+ F.incUp=SV(INC(30,22,210,98)+onInc(30,22,210,98,.72,26,16,YEL,"")+AR(150,66,112,40,"υ₀",-4,-6,"currentColor")+T(176,88,"Α",'text-anchor="middle"')+T(88,34,"Γ",'text-anchor="middle"')+T(200,112,"τραχύ κεκλιμένο",'text-anchor="end" opacity=".7"')+angArc(210,98,26,180-26,180,"φ"),118);
+ F.worker=SV(INC(20,24,200,98)+onInc(20,24,200,98,.55,28,17)+`<circle cx="42" cy="88" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/>`+ln(42,96,50,114)+AR(60,86,95,62,"F",-4,-6)+AR(112,52,90,36,"υ",-6,-4,"currentColor"),118);
+ F.incH=SV(INC(30,18,190,96)+onInc(30,18,190,96,.30,28,17)+`<line x1="30" y1="96" x2="30" y2="18" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3"/>`+T(24,60,"h",'text-anchor="end" font-style="italic"')+angArc(190,96,26,180-27,180,"φ"),118);
+ // ---- Συνδέσεις ----
+ const ATT=[
+  [1,"Δύο συγγραμμικές δυνάμεις με μέτρα F₁ > F₂",F.col2(6,3.5)],
+  [1,"Δύο συγγραμμικές δυνάμεις ασκούνται στο ίδιο σημείο και έχουν",F.colEq],
+  [1,"Τρεις συγγραμμικές δυνάμεις F₁, F₂",F.col3],
+  [1,"Σώμα μάζας m, αρχικά ακίνητο σε λείο",F.blockF({a:1})],
+  [1,"Σώμα κινείται σε λείο οριζόντιο επίπεδο με δύναμη F",F.blockF({v:1})],
+  [1,"Σώμα κινείται ευθύγραμμα με σταθερή δύναμη",F.blockF({v:1})],
+  [2,"Δύο όμοιοι μαγνήτες",SV(BX(40,52,56,34,"m₁ = 2 kg")+BX(144,52,56,34,"m₂ = 4 kg")+`<circle cx="52" cy="90" r="4" fill="currentColor"/><circle cx="84" cy="90" r="4" fill="currentColor"/><circle cx="156" cy="90" r="4" fill="currentColor"/><circle cx="188" cy="90" r="4" fill="currentColor"/>`+ln(30,94,210,94)+T(104,64,"Ν",'text-anchor="middle" font-weight="700"')+T(136,64,"Ν",'text-anchor="middle" font-weight="700"')+T(104,80,"Β",'text-anchor="middle" opacity="0"')+AR(40,69,6,69,"F₁",0,-8)+AR(200,69,234,69,"F₂",0,-8),110)],
+  [2,"Ένα βιβλίο παραμένει ακίνητο",F.table()],
+  [2,"Ένα σώμα ισορροπεί ακίνητο πάνω σε δάπεδο",F.table(0,"σώμα")],
+  [2,"Σώμα κρέμεται ακίνητο από αβαρές",F.rope],
+  [2,"Ένα σώμα κρέμεται από σχοινί",F.rope],
+  [2,"Τρία σώματα Σ₁ (πάνω)",SV(BX(80,8,80,30,"Σ₁ (10 N)")+BX(80,38,80,30,"Σ₂ (20 N)")+BX(80,68,80,30,"Σ₃ (30 N)")+FL(98,40,200),115)],
+  [2,"Σώμα ισορροπεί πάνω σε ζυγαριά",F.scale],
+  [2,"Μπαλάκι χτυπά σε ρακέτα",F.racket],
+  [2,"Δύο σώματα (1) και (2) με μάζες m₁ > m₂ είναι ακίνητα",F.touch(false)],
+  [2,"Δύο σώματα Σ₁ και Σ₂ σε επαφή επιταχύνονται",SV(BX(80,50,60,40,"Σ₁")+BX(140,62,44,28,"Σ₂")+FL(90,40,220)+AR(36,70,80,70,"F",-2,-8)+AR(136,42,104,42,"F₁",0,-6)+AR(144,42,176,42,"F₂",0,-6),105)],
+  [2,"Τρεις δυνάμεις: η F₁ = 4 N",F.three],
+  [2,"Ένα υλικό σημείο ισορροπεί με τη βοήθεια τριών",F.three3],
+  [2,"Ένα σώμα κινείται σε τραχύ οριζόντιο δάπεδο. Η τριβή",F.blockV],
+  [2,"Ένας άνθρωπος ασκεί οριζόντια δύναμη",F.pers],
+  [2,"Ακίνητο σώμα μάζας m σε οριζόντιο τραχύ",F.blockF({T:"Τστ"})],
+  [2,"Σώμα κινείται ευθύγραμμα σε μη λείο οριζόντιο επίπεδο με επιτάχυνση",F.blockF({T:"Τ",a:1})],
+  [2,"Σώμα κινείται σε τραχύ οριζόντιο δάπεδο με τη βοήθεια δύναμης F",F.fDown],
+  [2,"Σώμα κινείται σε οριζόντιο δάπεδο με σταθερή ταχύτητα με δύναμη F που σχηματίζει",F.fUp],
+  [2,"Μικρό σώμα αφήνεται από την κορυφή κεκλιμένου",F.incFlat],
+  [2,"Ένα σώμα κινείται σε λείο κεκλιμένο επίπεδο",F.incAngle()],
+  [2,"Σώμα ολισθαίνει σε κεκλιμένο επίπεδο γωνίας",F.incForces],
+  [2,"Σώμα ολισθαίνει προς τα κάτω σε κεκλιμένο",F.incForces],
+  [2,"Για να κατεβαίνει ένα σώμα σε κεκλιμένο",F.incForces],
+  [2,"Τρεις σφαίρες με βάρη",F.hang],
+  [2,"Ένας άνδρας και ένα παιδί κρατούν",F.manchild],
+  [3,"Σταθερή δύναμη F ασκείται σε σώμα που κινείται ευθύγραμμα χωρίς",F.fAngleFxFy],
+  [3,"Σώμα βάρους 3 N κινείται σε οριζόντιο δάπεδο",F.w7],
+  [3,"Σώμα κινείται σε λείο οριζόντιο δάπεδο με σταθερή ταχύτητα 5 m/s",F.w9],
+  [3,"Η ίδια δύναμη F ασκείται σε σώμα για την ίδια μετατόπιση",F.fFam],
+  [3,"Τρία σώματα α, β, γ",F.threeBodies],
+  [3,"Σώμα Σ μάζας 1 kg κινείται χωρίς τριβές",F.hill],
+  [3,"Αν στη θέση Α το σώμα έχει την ελάχιστη κινητική",F.hill],
+  [3,"Από σημεία Α και Γ λείου κεκλιμένου",F.twoInc],
+  [3,"Σώμα βάλλεται από τη βάση κεκλιμένου",F.incUp],
+  [3,"Σώμα εκτοξεύεται από τη βάση τραχιού",F.incUp],
+  [3,"Εργάτης σπρώχνει με σταθερή ταχύτητα κιβώτιο",F.worker],
+  [3,"Εργάτης σπρώχνει κιβώτιο σε οριζόντιο δάπεδο",F.blockF({T:"Τ",v:1})],
+  [3,"Άνθρωπος σπρώχνει ακίνητο κιβώτιο",F.pers],
+  [3,"Αρχικά ακίνητος κύβος",F.blockF({})],
+  [3,"Σώμα κινείται σε οριζόντιο επίπεδο με οριζόντια δύναμη F και σταθερή",F.blockF({T:"Τ",v:1})],
+  [3,"Σώμα ανεβαίνει με σταθερή ταχύτητα σε κεκλιμένο επίπεδο γωνίας 30°",F.incH],
+  [3,"Σώμα μάζας m αφήνεται από την κορυφή κεκλιμένου",F.incH],
+  [3,"Σώμα μάζας m φτάνει στη βάση κεκλιμένου",F.incH]
+ ];
+ let n=0;const miss=[];
+ ATT.forEach(([li,p,svg])=>{const L=window.LEVELS[li];if(!L)return;let c=0;L.qs.forEach(q=>{if(!q.svg&&q.q.startsWith(p)){q.svg=svg;c++}});n+=c;if(!c)miss.push(p)});
+ window.__figMiss=miss;window.__figN=n;
+})();
+
+// ---- Συνδετικές ερωτήσεις: κάθε ερώτηση φέρει πλήρη εκφώνηση + σχήμα (μπαίνει μετά τις εξηγήσεις) ----
+(function(){
+ const L=window.LEVELS,fig=(li,p)=>L[li].qs.find(q=>q.q.startsWith(p));
+ const SVG=(inner)=>`<svg viewBox="0 0 240 120" role="img" aria-label="σχήμα" font-family="Arial,sans-serif" font-size="11" fill="currentColor"><rect x="70" y="6" width="100" height="8" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4"/>${inner}</svg>`;
+ const arr=(x1,y1,x2,y2,l,dx)=>{const d=y2>y1?1:-1;return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2-3*d}" stroke="#E5484D" stroke-width="2"/><polygon points="${x2},${y2} ${x2-4},${y2-7*d} ${x2+4},${y2-7*d}" fill="#E5484D"/><text x="${x2+dx}" y="${(y1+y2)/2+4}" fill="#E5484D" font-weight="700">${l}</text>`};
+ const thread=SVG(`<line x1="120" y1="14" x2="120" y2="52" stroke="currentColor" stroke-width="1.6"/><rect x="100" y="52" width="40" height="34" rx="3" fill="#FFC857" fill-opacity=".4" stroke="currentColor" stroke-width="1.6"/><text x="120" y="73" text-anchor="middle">10 N</text>${arr(120,52,120,22,"F₁",10)}${arr(120,86,120,114,"Β",10)}`);
+ let q=fig(1,"Σώμα βάρους 10 N ανεβαίνει");if(q)q.svg=thread;
+ q=fig(1,"Το ίδιο σώμα (βάρους 10 N)");if(q){q.q="Σώμα βάρους 10 N κινείται κατακόρυφα με νήμα που ασκεί δύναμη F₁. Θέλουμε να κατεβαίνει με σταθερή ταχύτητα 4 m/s. Το νήμα πρέπει να ασκεί δύναμη:";q.svg=thread}
+ q=fig(2,"Στην ίδια περίπτωση (η F ασκείται στο Σ₁");if(q){q.q="Δύο σώματα Σ₁ και Σ₂ σε επαφή επιταχύνονται προς τα δεξιά με δύναμη F που ασκείται στο Σ₁ (το Σ₁ ωθεί το Σ₂ με δύναμη F₂). Για τα μέτρα F και F₂ ισχύει:";const s=fig(2,"Δύο σώματα Σ₁ και Σ₂ σε επαφή");if(s)q.svg=s.svg}
+ q=fig(3,"Αν στη θέση Α το σώμα έχει την ελάχιστη");if(q)q.q="Σώμα Σ μάζας 1 kg κινείται χωρίς τριβές και το εμπόδιο Γ έχει ύψος 3 m (g = 10 m/s²). Αν στη θέση Α (στο έδαφος) το σώμα έχει την ελάχιστη κινητική ενέργεια που χρειάζεται για να ξεπεράσει το Γ (30 J), πόση κινητική ενέργεια έχει στη θέση Δ, που βρίσκεται 1 m πάνω από το έδαφος;";
+ const f198=L[2].qs.find(x=>x.svg&&x.q.startsWith("Σώμα κινείται σε λείο οριζόντιο επίπεδο"))||L[1].qs.find(x=>x.q.startsWith("Σώμα κινείται σε λείο οριζόντιο επίπεδο με δύναμη F"));
+ q=fig(3,"Σε σώμα που ήταν ακίνητο σε λείο οριζόντιο");const q2=fig(3,"Στην ίδια περίπτωση, η ισχύς");
+ if(q&&f198)q.svg=f198.svg;
+ if(q2){q2.q="Σε σώμα που ήταν ακίνητο σε λείο οριζόντιο επίπεδο ασκείται σταθερή οριζόντια δύναμη F. Η ισχύς της δύναμης σε συνάρτηση με τον χρόνο παριστάνεται από:";if(f198)q2.svg=f198.svg}
+})();
