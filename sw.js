@@ -1,4 +1,4 @@
-const CACHE = "pim-v59";
+const CACHE = "pim-v61";
 const FILES = ["./", "index.html", "questions.js", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", e => {
