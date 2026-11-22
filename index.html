@@ -223,7 +223,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v54";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v55";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
@@ -231,6 +231,8 @@ const fm=s=>esc(s).replace(/_\{([^}]*)\}/g,"<sub>$1</sub>").replace(/(^|[^Α-ω�
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const stars=n=>`<span class="stars" aria-label="${n} από 3 αστέρια">${"★".repeat(n)}<i>${"★".repeat(3-n)}</i></span>`;
 const grade=(c,n)=>n?Math.round(c/n*200)/10:0;
+/* Σχολεία για την προαιρετική επιλογή στην είσοδο. Άφησε την λίστα κενή [] για να κρυφτεί το πεδίο. */
+const SCHOOLS=[];
 let P=st.get("profile",null),S=null;
 const prog=()=>st.get("prog:"+P.code,{});
 
@@ -238,12 +240,13 @@ function login(){setBg("kin");
   $.innerHTML=`<div class="lg"><div class="lgm"><svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="lb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a2cff"/><stop offset=".55" stop-color="#d11fa8"/><stop offset="1" stop-color="#ff7a18"/></linearGradient><radialGradient id="lq" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#ffe14d"/><stop offset="1" stop-color="#ff9d00"/></radialGradient><linearGradient id="lt" gradientUnits="userSpaceOnUse" x1="330" y1="0" x2="40" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="512" height="512" fill="url(#lb)"/><g stroke-linecap="round" stroke="url(#lt)" stroke-width="22"><line x1="330" y1="190" x2="40" y2="190"/><line x1="320" y1="256" x2="90" y2="256" stroke-width="28"/><line x1="330" y1="322" x2="40" y2="322"/></g><circle cx="350" cy="256" r="150" fill="#fff" opacity=".12"/><circle cx="350" cy="256" r="104" fill="url(#lq)"/><ellipse cx="318" cy="218" rx="30" ry="18" fill="#fff" opacity=".7" transform="rotate(-30 318 218)"/></svg></div><h1 class="sr">Physics in Motion</h1>
   <div class="lgc"><label for="n">Όνομα</label><input id="n" placeholder="π.χ. Μαρία" autocomplete="given-name" value="${esc(P?P.name:"")}">
   <label for="c">Κωδικός</label><input id="c" placeholder="π.χ. A07" autocapitalize="characters" autocomplete="off" value="${esc(P?P.code:"")}">
+  ${SCHOOLS.length?`<label for="sc">Σχολείο (προαιρετικά)</label><select id="sc" class="chn"><option value="">— Δεν θέλω να πω —</option>${SCHOOLS.concat(["Άλλο"]).map(s=>`<option${P&&P.school===s?" selected":""}>${esc(s)}</option>`).join("")}</select>`:""}
   <button class="btn primary" id="go">▶ Ξεκίνα</button>
   <p class="lgh">Τον κωδικό σου τον δίνει ο καθηγητής σου. Χωρίς εγγραφή.${RESULTS_URL?" 📨 Τα αποτελέσματα στέλνονται στον καθηγητή σου.":""}</p></div>
   <div class="lgt"><span>🧭 Κεφ. 1</span><span>🏎️ Κεφ. 2</span><span>🧲 Κεφ. 3</span><span>⚡ Κεφ. 4</span></div></div>`;
   $$("go").onclick=()=>{const name=$$("n").value.trim(),code=$$("c").value.trim().toUpperCase();
     if(!name||!code){$$("go").textContent="Συμπλήρωσε όνομα και κωδικό";return}
-    P={name,code};st.set("profile",P);home()};
+    P={name,code,school:$$("sc")?$$("sc").value:((P&&P.school)||"")};st.set("profile",P);home()};
 }
 
 const ICONS={kin:"🧭",dyn1:"🏎️",dyn2:"🧲",en:"⚡"},COL={kin:"#6ea8ff",dyn1:"#4cd9a0",dyn2:"#ff7a6b",en:"#FFC857"};
@@ -375,7 +378,7 @@ const outbox=()=>st.get("outbox",[]);
 function flush(){if(!RESULTS_URL||!navigator.onLine)return;const ob=outbox();if(!ob.length)return;st.set("outbox",[]);
   ob.forEach(p=>{const back=()=>{const o=outbox();o.push(p);st.set("outbox",o.slice(-100))};
     try{fetch(RESULTS_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({key:RESULTS_KEY,...p})}).catch(back)}catch(e){back()}})}
-function report(p){if(!RESULTS_URL)return"";const o=outbox();o.push(p);st.set("outbox",o.slice(-100));flush();return navigator.onLine?"📨 Το αποτέλεσμα στάλθηκε στον καθηγητή.":"📨 Θα σταλεί στον καθηγητή μόλις συνδεθείς."}
+function report(p){if(!RESULTS_URL)return"";p.school=p.school||(P&&P.school)||"";const o=outbox();o.push(p);st.set("outbox",o.slice(-100));flush();return navigator.onLine?"📨 Το αποτέλεσμα στάλθηκε στον καθηγητή.":"📨 Θα σταλεί στον καθηγητή μόλις συνδεθείς."}
 addEventListener("online",flush);
 let gid=0;
 const CAR=c=>{const g="gc"+(++gid);return `<svg viewBox="0 0 120 50"><defs><linearGradient id="${g}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient></defs><ellipse cx="60" cy="46" rx="52" ry="3.5" fill="#000" opacity=".35"/><path d="M6 36C6 28 12 26 22 25L36 12C38 10 41 9 44 9H78C82 9 85 11 88 14L96 25C108 26 114 28 114 34V38H6z" fill="url(#${g})"/><path d="M40 14L30 25H58V12H44C42 12 41 13 40 14zM63 12V25H92L85 15C84 13 82 12 79 12z" fill="#bfe6ff" opacity=".9"/><path d="M6 33H114" stroke="#fff" opacity=".25"/><circle cx="30" cy="38" r="9" fill="#111"/><circle cx="30" cy="38" r="4.5" fill="#c9d2dd"/><circle cx="92" cy="38" r="9" fill="#111"/><circle cx="92" cy="38" r="4.5" fill="#c9d2dd"/><path d="M110 30h6v5h-6z" fill="#fff3b0"/></svg>`};
