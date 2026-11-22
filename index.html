@@ -5,10 +5,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
-<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Phys Motion">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="PiM Α΄">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>Physics in Motion</title>
+<title>Physics in Motion · Α΄ Λυκείου</title>
 <style>
 :root{--bg:#0F1B2D;--panel:#17283f;--line:#2a4163;--text:#F2EEE3;--mute:#9db0c9;--glow:#FFC857;--ok:#4cd9a0;--bad:#ff7a6b}
 *{box-sizing:border-box}html,body{margin:0}
@@ -20,6 +20,7 @@ h1{font-size:30px;margin:6px 0 4px}p{margin:0 0 14px;color:var(--mute)}
 .btn.primary{background:var(--glow);color:#1a1405;border-color:var(--glow);font-weight:700;text-align:center}
 .btn.ghost{background:transparent;text-align:center;color:var(--mute)}
 input{width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);color:var(--text);font:inherit;margin:0 0 12px}
+.brand{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;opacity:.85;margin:2px 0 4px}.brand span{opacity:.7;font-weight:700}
 .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .xp{color:var(--glow);font-weight:800;font-variant-numeric:tabular-nums}
 .lv small{display:block;color:var(--mute);font-size:14px}.lv b{display:flex;justify-content:space-between}
@@ -242,7 +243,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v74";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v75";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
@@ -400,7 +401,7 @@ function home(){clearS();clearTimer();if(!consGet())return consentScreen();setBg
   const pp=pget(),rk=RANKS.filter(r=>xp>=r[0]).pop()[1],nx=LEVELS.findIndex(l=>unitOpen(l.id)&&(!pr[l.id]||pr[l.id].stars<3));
   $.innerHTML=`<div class="hero"><div class="sun"></div><div class="rd"></div>
     <span class="car svgc${carSel().a.indexOf("wings")>=0?" fly":""}" style="--d:7s;--e:linear">${CAR(carC(),1)}</span></div>
-   <div class="top"><h1>Γεια, ${esc(P.name)}!</h1><div class="xp">${xp} XP</div></div>
+   <div class="brand">Physics in Motion <span>· Α΄ Λυκείου</span></div><div class="top"><h1>Γεια, ${esc(P.name)}!</h1><div class="xp">${xp} XP</div></div>
    <div class="rank"><span>${rk}</span><div class="pbar"><i style="width:${got/tot*100}%"></i></div><small>${got}/${tot} ★</small></div>${dailyPanel()}`+
   (nx<0?`<p class="good">Πήρες όλα τα αστέρια! Παίξε ξανά για περισσότερα XP.</p>`:"")+
   `<div class="tgrid">`+LEVELS.map((l,i)=>{const r=pr[l.id],lk=!unitOpen(l.id);return `<button class="tile${i===nx?" nx":""}${lk?" lkd":""}" ${lk?"disabled":`data-i="${i}"`} style="--g:linear-gradient(135deg,${WORLDS[l.id].g});--i:${i}"><span class="tw">${ICONS[l.id]}</span><span class="ts">${lk?"🔒":stars(r?r.stars:0)}</span><span class="tb"><b>${esc(l.title)}</b><small>${lk?"Σύντομα":i===nx?"▶ "+(got?"Συνέχισε":"Ξεκίνα"):(r?"Καλύτερο "+r.best+"/20":"Νέο")}</small></span></button>`}).join("")+`</div>`+
