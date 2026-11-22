@@ -32,6 +32,23 @@ input{width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--line);
 .q{font-size:20px;font-weight:600;margin:6px 0 14px}.fig{color:var(--text);margin:0 0 12px}
 .opt.right{border-color:var(--ok);background:rgba(76,217,160,.14)}.opt.wrong{border-color:var(--bad);background:rgba(255,122,107,.14)}
 .why{border-left:4px solid var(--glow);padding:4px 12px;margin:4px 0 14px}
+.why sub{font-size:.72em;line-height:0}
+.dz{background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:6px;margin:0 0 10px;color:var(--text)}
+.dz svg{width:100%;height:auto;display:block;-webkit-user-select:none;user-select:none}
+.dz .slot{fill:rgba(255,200,87,.07);stroke:var(--glow);stroke-width:1.6;stroke-dasharray:5 4;cursor:pointer}
+.dz .slot.fill{fill:rgba(255,255,255,.04);stroke-dasharray:none;stroke:var(--line)}
+.dz .slot.ok{stroke:var(--ok);stroke-dasharray:none;fill:rgba(76,217,160,.14)}
+.dz .slot.bad{stroke:var(--bad);stroke-dasharray:none;fill:rgba(255,122,107,.14)}
+.dz [data-slot]:focus-visible .slot{stroke:#fff;stroke-width:2.4}
+.dz.pick .slot:not(.fill){animation:dzp 1s ease-in-out infinite}
+@keyframes dzp{50%{fill:rgba(255,200,87,.24)}}
+.dz .cap{fill:var(--mute);font:600 12px Arial;text-anchor:middle;pointer-events:none}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.pc{min-width:84px;min-height:48px;padding:0 6px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);color:var(--text);cursor:grab;touch-action:none;display:inline-flex;align-items:center;justify-content:center;font:inherit}
+.pc.sel{border-color:var(--glow);box-shadow:0 0 0 3px rgba(255,200,87,.35)}
+.pc.ghost{position:fixed;z-index:99;transform:translate(-50%,-50%);pointer-events:none;opacity:.92;background:#223a5a}
+.btn:disabled{opacity:.45}
+@media (prefers-reduced-motion:reduce){.dz.pick .slot:not(.fill){animation:none}}
 .big{font-size:60px;font-weight:800;color:var(--glow);line-height:1}
 .card{background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:14px;margin:0 0 12px}
 .bad{color:var(--bad)}.good{color:var(--ok)}
@@ -107,7 +124,7 @@ main{position:relative}
 .bolt{position:absolute;right:12%;top:14%;font-size:44px;opacity:0;animation:fl2 7s infinite}
 @keyframes fl2{0%,92%,100%{opacity:0}94%,98%{opacity:.85}}
 .btn{background:rgba(23,40,63,.74);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
-.btn.primary{background:var(--glow)}.btn.ghost{background:transparent}
+.btn.primary{background:var(--glow)}.btn.ghost{background:rgba(14,22,42,.55);color:#e8eefc;border-color:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
 .sc{background:rgba(23,40,63,.55)!important;height:112px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .sc.fall,.sc.inc,.sc.ring{height:150px}.car{font-size:44px;bottom:24px}.hero .car{bottom:6px;font-size:32px}
 .dot{width:auto;height:auto;background:none;box-shadow:none;font-size:28px;top:2px;filter:drop-shadow(0 0 10px rgba(255,200,87,.9))}
@@ -152,7 +169,7 @@ h1{text-shadow:0 2px 10px rgba(0,0,0,.55)}
 .fm{font-size:18px;font-weight:700;background:rgba(255,200,87,.12);border:1px solid rgba(255,200,87,.5);border-radius:10px;padding:8px 12px;display:inline-block}
 body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
 main{flex:1 0 auto;width:100%}
-.cr{flex:none;text-align:center;padding:10px 12px 18px}.cr span{display:inline-block;white-space:nowrap;max-width:100%;font-size:13.5px;letter-spacing:.1px;color:#cfd9e8;background:rgba(15,27,45,.8);border:1px solid rgba(255,200,87,.38);border-radius:999px;padding:7px 14px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.35)}.cr b{color:var(--glow);font-weight:700}.tmr{position:relative;height:10px;border-radius:8px;background:var(--panel);margin:24px 0 10px}.tmr i{display:block;height:100%;border-radius:8px;background:var(--ok);transition:width .25s linear}.tmr i.low{background:var(--bad)}.tmr b{position:absolute;right:0;top:-21px;font-size:14px;color:var(--mute);font-variant-numeric:tabular-nums}
+.cr{flex:none;text-align:center;padding:2px 12px 12px}.cr span{display:inline-block;white-space:nowrap;max-width:100%;font-size:13.5px;letter-spacing:.1px;color:#cfd9e8;background:rgba(15,27,45,.8);border:1px solid rgba(255,200,87,.38);border-radius:999px;padding:7px 14px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.35)}.cr b{color:var(--glow);font-weight:700}.tmr{position:relative;height:10px;border-radius:8px;background:var(--panel);margin:24px 0 10px}.tmr i{display:block;height:100%;border-radius:8px;background:var(--ok);transition:width .25s linear}.tmr i.low{background:var(--bad)}.tmr b{position:absolute;right:0;top:-21px;font-size:14px;color:var(--mute);font-variant-numeric:tabular-nums}
 .dlg{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px}.av{flex:none;font-size:50px;line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
 .bub{background:rgba(15,27,45,.74);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,.18);padding:10px 14px;border-radius:16px 16px 16px 4px}.bub b{color:var(--glow);font-size:13px;text-transform:uppercase;letter-spacing:.5px}.bub p{margin:4px 0 0;color:var(--text)}
 .daily{display:flex;align-items:center;gap:12px;background:rgba(15,27,45,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:10px 12px;margin:0 0 12px}
@@ -193,6 +210,11 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}button,.tile,.mb,.wcard
 .lgh{margin:12px 2px 0!important;font-size:13px;color:#aab6d3!important;text-align:center}
 .lgt{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:20px 0 0;max-width:420px}
 .lgt span{padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);font-size:13.5px;color:#eef2ff;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.chb{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 0;padding:14px 16px;border:0;border-radius:18px;background:linear-gradient(135deg,#7a3da8,#e0679a 60%,#f5a742);color:#fff;font:inherit;text-align:left;cursor:pointer;box-shadow:0 8px 22px -8px rgba(224,103,154,.7)}
+.chb span{font-size:30px}.chb b{display:block;font-size:17px}.chb small{opacity:.92;font-size:13px}
+.chr{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.06);margin:6px 0}.chr.me{background:rgba(245,167,66,.22);outline:2px solid #f5a742}
+.chr i{font-style:normal;width:30px;text-align:center;font-weight:700}.chr em{flex:1;font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chr b{font-variant-numeric:tabular-nums}.chr small{color:var(--mute);font-size:12px}
+.chn{width:100%;padding:12px;border-radius:12px;border:2px solid rgba(255,255,255,.25);background:rgba(0,0,0,.25);color:inherit;font:inherit;font-size:18px;box-sizing:border-box;margin:8px 0}
 </style></head><body><main id="app"></main>
 <footer class="cr"><span>Created &amp; developed by <b>Spiros Voikopoulos</b> · 2026</span></footer>
 <script src="questions.js"></script>
@@ -201,9 +223,11 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="",RESULTS_KEY="",APPV="pim-v37";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v51";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
+const fm=s=>esc(s).replace(/_\{([^}]*)\}/g,"<sub>$1</sub>").replace(/(^|[^Α-ωά-ώ])(uμ|Sολ|tολ)(?![Α-ωά-ώ])/g,(m,a,b)=>a+b[0]+"<sub>"+b.slice(1)+"</sub>");
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const stars=n=>`<span class="stars" aria-label="${n} από 3 αστέρια">${"★".repeat(n)}<i>${"★".repeat(3-n)}</i></span>`;
 const grade=(c,n)=>n?Math.round(c/n*200)/10:0;
@@ -216,7 +240,7 @@ function login(){setBg("kin");
   <label for="c">Κωδικός</label><input id="c" placeholder="π.χ. A07" autocapitalize="characters" autocomplete="off" value="${esc(P?P.code:"")}">
   <button class="btn primary" id="go">▶ Ξεκίνα</button>
   <p class="lgh">Τον κωδικό σου τον δίνει ο καθηγητής σου. Χωρίς εγγραφή.${RESULTS_URL?" 📨 Τα αποτελέσματα στέλνονται στον καθηγητή σου.":""}</p></div>
-  <div class="lgt"><span>🧭 Κινηματική</span><span>🏎️ Δυναμική 1D</span><span>🧲 Δυναμική 2D</span><span>⚡ Ενέργεια</span></div></div>`;
+  <div class="lgt"><span>🧭 Κεφ. 1</span><span>🏎️ Κεφ. 2</span><span>🧲 Κεφ. 3</span><span>⚡ Κεφ. 4</span></div></div>`;
   $$("go").onclick=()=>{const name=$$("n").value.trim(),code=$$("c").value.trim().toUpperCase();
     if(!name||!code){$$("go").textContent="Συμπλήρωσε όνομα και κωδικό";return}
     P={name,code};st.set("profile",P);home()};
@@ -228,6 +252,106 @@ const hq=q=>{let x=5381,s=q.q+"|"+q.o[q.a];for(let i=0;i<s.length;i++)x=((x<<5)+
 const mlist=()=>st.get("mist:"+P.code,[]);
 function practice(){const l=mlist(),pool=[];LEVELS.forEach(lv=>lv.qs.forEach(q=>{if(l.indexOf(hq(q))>=0)pool.push({...q,tip:lv.tip})}));
   if(!pool.length){home();return}start({id:"mist",title:"Εξάσκηση στα λάθη μου",sc:"const",tip:"Ξαναδιάβασε τη θεωρία της ενότητας.",qs:pool},pool)}
+const KSUB=[{k:"eok",n:"Ε.Ο.Κ.",d:"Μετατόπιση, ταχύτητα, x–t",e:"🚗",g:"#2f6fdc,#4cd9a0",nn:2},{k:"meet",n:"Ασκήσεις συνάντησης",d:"Πότε και πού συναντώνται",e:"🤝",g:"#d11fa8,#ff7a18",nn:4},{k:"eomk",n:"Ε.Ο.Μ.Κ.",d:"Επιτάχυνση, u–t",e:"🚀",g:"#6a2cff,#2f6fdc",nn:2},{k:"draw",n:"Σχεδίασε",d:"Σύρε και τοποθέτησε",e:"✏️",g:"#12b886,#2f6fdc",dr:1},{k:"all",n:"Συνδυαστικές",d:"Όλα μαζί",e:"🎯",g:"#ff7a18,#ffc857"}];
+function kinMenu(){clearTimer();setBg("kin");const kin=LEVELS.find(l=>l.id==="kin"),pr=prog();
+  $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">${ICONS.kin}</span></div><h1>Κινηματική</h1><p>Διάλεξε τι θέλεις να δουλέψεις. Στις Συνδυαστικές παίζουν όλα μαζί.</p><div class="tgrid">`+
+  KSUB.map((c,i)=>{const r=pr[c.k==="all"?"kin":"kin:"+c.k],n=c.k==="all"?kin.qs.length:kin.qs.filter(q=>q.sub===c.k).length;return `<button class="tile" data-k="${c.k}" style="--g:linear-gradient(135deg,${c.g});--i:${i}"><span class="tw">${c.e}</span><span class="ts">${stars(r?r.stars:0)}</span><span class="tb"><b>${esc(c.n)}</b><small>${esc(c.d)} · ${c.dr?"3 σκηνές":n+" ερωτήσεις"}${r?" · Καλύτερο "+r.best+"/20":""}</small></span></button>`}).join("")+`</div>`;
+  $$("bk").onclick=home;
+  $.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{const c=KSUB.find(x=>x.k===b.dataset.k);enter(b,UG("kin"),()=>{
+    if(c.dr)return drawGame();
+    if(c.k==="all")return start(kin,null);
+    start({...kin,title:"Κινηματική · "+c.n,qs:kin.qs.filter(q=>q.sub===c.k),pk:"kin:"+c.k,sub:c.k,numId:"kin_"+c.k,nn:c.nn},null)})});
+}
+/* ===== Σχεδίασε: τοποθέτηση κομματιών σε σκηνές (πρωτότυπο) ===== */
+const DCOL={v:"#FFC857",a:"#7fd1ff"},DF='font-family="Arial"',DM='style="fill:var(--mute)"';
+const dCarG=(d,k)=>`<g transform="scale(${d*k},${k})"><rect x="-22" y="-3" width="44" height="12" rx="4" fill="#e0453a"/><path d="M-12 -3L-7 -11H8L14 -3z" fill="#e0453a"/><path d="M-9.5 -4L-6.2 -9H-1V-4zM1 -4V-9H7L10.5 -4z" fill="#bfe3ff"/><circle cx="-12" cy="9" r="4.6" fill="#1b1b1b"/><circle cx="12" cy="9" r="4.6" fill="#1b1b1b"/><circle cx="-12" cy="9" r="1.8" fill="#bbb"/><circle cx="12" cy="9" r="1.8" fill="#bbb"/><rect x="19" y="0" width="3.4" height="3.6" rx="1" fill="#ffe27a"/></g>`;
+function dGlyph(c,w,h){ /* κομμάτι κεντραρισμένο στο (0,0) */
+  if(c.t==="arr"){const d=c.d,col=DCOL[c.k],a=w/2-8;
+    return `<g fill="${col}" stroke="${col}"><path d="M${-d*a} 6H${d*(a-4)}" stroke-width="3.4" stroke-linecap="round" fill="none"/><path d="M${d*a} 6l${-d*9} -6v12z" stroke="none"/><text x="0" y="-4" text-anchor="middle" font-size="15" font-weight="700" ${DF} stroke="none">${c.l}</text></g>`}
+  if(c.t==="car")return dCarG(c.d,Math.max(.6,h/36));
+  if(c.t==="br"){const a=w/2-6;
+    return `<g stroke="currentColor" fill="currentColor"><path d="M${-a} 8H${a}M${-a} 0v16M${a} 0v16" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="0" y="-1" text-anchor="middle" font-size="16" font-weight="700" ${DF} stroke="none">${c.l}</text></g>`}
+  return `<text text-anchor="middle" dy=".35em" font-size="${c.fs||14}" font-weight="700" fill="currentColor" ${DF}>${c.l}</text>`;
+}
+function dTrain(c,w,h){const b=h-8,y0=-h/2+1;
+  return `<g><rect x="${-w/2+1}" y="${y0}" width="${w-2}" height="${b}" rx="5" fill="#FFC857"/><path d="M${w/2-1} ${y0+3}l7 ${b/2-3}l-7 ${b/2-3}z" fill="#e0a22f"/><circle cx="${-w/2+12}" cy="${h/2-5}" r="4" fill="currentColor"/><circle cx="${w/2-12}" cy="${h/2-5}" r="4" fill="currentColor"/><text x="0" y="${y0+b/2+4}" text-anchor="middle" font-size="12" font-weight="700" ${DF} fill="#1a1405">${c.s}</text></g>`}
+const dDraw=(s,c)=>s.k==="train"?dTrain(c,s.w,s.h):dGlyph(c,s.w,s.h);
+const dRoad=(y)=>`<path d="M8 ${y}H312" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" opacity=".6"/><path d="M8 ${y+4}H312" stroke="currentColor" stroke-dasharray="10 8" opacity=".25"/>`;
+const DSCENES=[
+ {t:"Γκάζι ή φρένο",task:"Σε κάθε λωρίδα το αυτοκίνητο κάνει ευθύγραμμη κίνηση. Βάλε την ταχύτητα u και την επιτάχυνση α.",
+  chips:{vr:{t:"arr",d:1,k:"v",l:"u",al:"u προς τα δεξιά"},vl:{t:"arr",d:-1,k:"v",l:"u",al:"u προς τα αριστερά"},ar:{t:"arr",d:1,k:"a",l:"α",al:"α προς τα δεξιά"},al:{t:"arr",d:-1,k:"a",l:"α",al:"α προς τα αριστερά"}},
+  bg:()=>[0,1,2].map(i=>{const y=8+i*60,d=i<2?1:-1,t=["① Κινείται προς τα δεξιά και πατά γκάζι","② Κινείται προς τα δεξιά και φρενάρει","③ Κινείται προς τα αριστερά και φρενάρει"][i];
+    return `<text x="8" y="${y+11}" font-size="11" ${DF} ${DM}>${t}</text>${dRoad(y+54)}<g transform="translate(50,${y+40})">${dCarG(d,1.15)}</g>`}).join(""),
+  slots:[0,1,2].flatMap(i=>{const y=8+i*60+16;return [{id:"v"+i,x:98,y,w:104,h:34,k:"arr",cap:"u",n:"ταχύτητα, λωρίδα "+(i+1)},{id:"a"+i,x:208,y,w:104,h:34,k:"arr",cap:"α",n:"επιτάχυνση, λωρίδα "+(i+1)}]}),
+  ok:{v0:"vr",a0:"ar",v1:"vr",a1:"al",v2:"vl",a2:"ar"},
+  hint:"Κοίτα τι κάνει το αυτοκίνητο: στο γκάζι η α έχει την ίδια κατεύθυνση με την u, στο φρένο αντίθετη.",
+  why:"Γκάζι: η α έχει την ίδια κατεύθυνση με την u και το μέτρο της u αυξάνεται. Φρένο: η α είναι αντίθετη της u και το μέτρο της u μειώνεται. Δεν έχει σημασία προς τα πού πηγαίνει το αυτοκίνητο, μόνο αν τα δύο βέλη είναι ομόρροπα ή αντίρροπα."},
+ {t:"Τρένο και γέφυρα",task:"Τρένο μήκους l περνά με σταθερή ταχύτητα γέφυρα μήκους s. Βάλε την αρχή και το τέλος της διέλευσης και την απόσταση που διανύει το μπροστινό άκρο του τρένου.",
+  chips:{t0:{t:"tag",l:"Αρχή διέλευσης",s:"t = 0",w:132,fs:12,al:"Αρχή της διέλευσης"},te:{t:"tag",l:"Τέλος διέλευσης",s:"τέλος",w:132,fs:12,al:"Τέλος της διέλευσης"},s:{t:"br",l:"s",al:"απόσταση s"},l:{t:"br",l:"l",al:"απόσταση l"},sl:{t:"br",l:"s + l",al:"απόσταση s + l"},smn:{t:"br",l:"s − l",al:"απόσταση s − l"}},
+  bg:()=>`<rect x="110" y="142" width="100" height="36" fill="#2f6fdc" opacity=".3"/><path d="M110 140V178M210 140V178" stroke="currentColor" stroke-width="3" opacity=".7"/>${dRoad(140)}<text x="160" y="166" text-anchor="middle" font-size="11" ${DF} ${DM}>γέφυρα · μήκος s</text><text x="160" y="20" text-anchor="middle" font-size="11" ${DF} ${DM}>τρένο μήκους l · κινείται προς τα δεξιά →</text>`,
+  slots:[{id:"A",x:50,y:110,w:60,h:28,k:"train",cap:"τρένο",n:"τρένο αριστερά της γέφυρας"},{id:"B",x:130,y:110,w:60,h:28,k:"train",cap:"τρένο",n:"τρένο πάνω στη γέφυρα"},{id:"C",x:210,y:110,w:60,h:28,k:"train",cap:"τρένο",n:"τρένο δεξιά της γέφυρας"},{id:"D",x:110,y:52,w:160,h:40,k:"brace",cap:"απόσταση",n:"απόσταση που διανύει το μπροστινό άκρο"}],
+  ok:{A:"t0",B:null,C:"te",D:"sl"},
+  hint:"Η διέλευση αρχίζει όταν το μπροστινό άκρο ακουμπά τη γέφυρα και τελειώνει όταν η ουρά την αφήσει.",
+  why:"Η διέλευση αρχίζει όταν το μπροστινό άκρο μπαίνει στη γέφυρα και τελειώνει όταν βγαίνει η ουρά. Το μπροστινό άκρο διανύει s για να περάσει τη γέφυρα και άλλα l μέχρι να βγει και η ουρά: S = s + l. Από την ΕΟΚ, x = u·t, άρα t = (s + l)/u."},
+ {t:"Συνάντηση",task:"Δύο αυτοκίνητα ξεκινούν ταυτόχρονα, το ένα από το Α προς το Β και το άλλο από το Β προς το Α. Θέσε τον άξονα x με αρχή το Α, προς τα δεξιά, και συμπλήρωσε τα αυτοκίνητα, τις αρχικές θέσεις και τα πρόσημα των ταχυτήτων.",
+  chips:{cr:{t:"car",d:1,w:64,al:"αυτοκίνητο προς τα δεξιά"},cl:{t:"car",d:-1,w:64,al:"αυτοκίνητο προς τα αριστερά"},x0:{t:"tag",l:"x₀ = 0",al:"αρχική θέση 0"},xd:{t:"tag",l:"x₀ = d",al:"αρχική θέση d"},vp:{t:"tag",l:"u > 0",al:"ταχύτητα θετική"},vn:{t:"tag",l:"u < 0",al:"ταχύτητα αρνητική"}},
+  bg:()=>`${dRoad(100)}<path d="M62 100V130M258 100V130" stroke="currentColor" stroke-dasharray="3 3" opacity=".55"/><path d="M62 130H258M62 124v12M258 124v12" stroke="currentColor" stroke-width="1.6" fill="none"/><text x="160" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor" ${DF}>d</text><text x="50" y="116" font-size="13" font-weight="700" fill="currentColor" ${DF}>Α</text><text x="268" y="116" font-size="13" font-weight="700" fill="currentColor" ${DF}>Β</text><text x="160" y="52" text-anchor="middle" font-size="11" ${DF} ${DM}>Ξεκινούν ταυτόχρονα</text><text x="160" y="66" text-anchor="middle" font-size="11" ${DF} ${DM}>και συναντιούνται</text>`,
+  slots:[{id:"vA",x:30,y:6,w:64,h:34,k:"tag",cap:"u",n:"ταχύτητα στο Α"},{id:"cA",x:30,y:48,w:64,h:50,k:"car",cap:"αυτοκίνητο",n:"αυτοκίνητο στο Α"},{id:"xA",x:30,y:146,w:64,h:30,k:"tag",cap:"x₀",n:"αρχική θέση στο Α"},{id:"vB",x:226,y:6,w:64,h:34,k:"tag",cap:"u",n:"ταχύτητα στο Β"},{id:"cB",x:226,y:48,w:64,h:50,k:"car",cap:"αυτοκίνητο",n:"αυτοκίνητο στο Β"},{id:"xB",x:226,y:146,w:64,h:30,k:"tag",cap:"x₀",n:"αρχική θέση στο Β"}],
+  ok:{vA:"vp",cA:"cr",xA:"x0",vB:"vn",cB:"cl",xB:"xd"},
+  hint:"Η αρχή του άξονα είναι στο Α και ο άξονας δείχνει προς τα δεξιά. Προς τα πού κινείται κάθε αυτοκίνητο ως προς τον άξονα;",
+  why:"Με αρχή το Α: x₀₁ = 0 και x₀₂ = d. Το (1) κινείται προς τα θετικά, άρα u₁ > 0. Το (2) κινείται προς τα αρνητικά, άρα u₂ < 0. Εξισώσεις κίνησης: x₁ = u₁·t και x₂ = d + u₂·t. Στη συνάντηση ισχύει x₁ = x₂."}
+];
+function drawGame(){
+  clearTimer();setBg("kin");
+  let k=0,okT=0,xp=0;const N=DSCENES.length,tot=DSCENES.reduce((a,s)=>a+Object.values(s.ok).filter(Boolean).length,0);
+  const sceneUI=()=>{
+    const sc=DSCENES[k];let placed={},res={},sel=null,att=0,solved=false,drag=null,gh=null;
+    $.innerHTML=`<div class="top"><button class="ex" id="dex">✕ Έξοδος</button><span class="xp" id="dxp">${xp} XP</span></div><h1 style="font-size:24px">Σκηνή ${k+1}/${N} · ${esc(sc.t)}</h1><p>${esc(sc.task)}</p><div class="dz"><svg id="dz" viewBox="0 0 320 190" role="group" aria-label="${esc(sc.t)}"></svg></div><div class="tray" id="dtr">${Object.keys(sc.chips).map(id=>{const c=sc.chips[id],w=c.w||84;return `<button class="pc" data-c="${id}" aria-label="${esc(c.al||c.l||id)}"><svg viewBox="${-w/2} -20 ${w} 40" width="${w}" height="40" aria-hidden="true">${dGlyph(c,w,40)}</svg></button>`}).join("")}</div><div id="dfb" aria-live="polite"></div><button class="btn primary" id="dck">Έλεγχος</button>`;
+    const svg=$$("dz"),tray=$$("dtr");
+    const paint=()=>{
+      svg.innerHTML=sc.bg()+sc.slots.map(s=>{const c=placed[s.id],cx=s.x+s.w/2,cy=s.y+s.h/2;
+        return `<g data-slot="${s.id}" tabindex="0" role="button" aria-label="${esc(s.n)}"><rect class="slot${c?" fill":""}${res[s.id]?" "+res[s.id]:""}" x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" rx="9"/>${c?`<g transform="translate(${cx},${cy})" pointer-events="none">${dDraw(s,sc.chips[c])}</g>`:`<text class="cap" x="${cx}" y="${cy+4}">${s.cap}</text>`}</g>`}).join("");
+      tray.querySelectorAll(".pc").forEach(b=>b.classList.toggle("sel",b.dataset.c===sel));
+      svg.parentNode.classList.toggle("pick",!!sel);
+      if(!solved)$$("dck").disabled=!sc.slots.every(s=>!sc.ok[s.id]||placed[s.id]);
+    };
+    const place=(id,c)=>{placed[id]=c;res={};tone(660,0,.08,"triangle",.07);paint()};
+    const slotAct=id=>{if(solved)return;if(sel){const c=sel;sel=null;place(id,c)}else if(placed[id]){delete placed[id];res={};paint()}};
+    svg.addEventListener("click",e=>{const g=e.target.closest("[data-slot]");if(g)slotAct(g.dataset.slot)});
+    svg.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){const g=e.target.closest&&e.target.closest("[data-slot]");if(g){e.preventDefault();slotAct(g.dataset.slot)}}});
+    const endDrag=()=>{if(gh){gh.remove();gh=null}drag=null};
+    tray.addEventListener("pointerdown",e=>{const b=e.target.closest(".pc");if(!b||solved)return;drag={id:b.dataset.c,x:e.clientX,y:e.clientY,on:0,b};try{b.setPointerCapture(e.pointerId)}catch(_){}});
+    tray.addEventListener("pointermove",e=>{if(!drag)return;
+      if(!drag.on&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>8){drag.on=1;gh=document.createElement("div");gh.className="pc ghost";gh.innerHTML=drag.b.innerHTML;document.body.appendChild(gh)}
+      if(gh){gh.style.left=e.clientX+"px";gh.style.top=e.clientY+"px"}});
+    tray.addEventListener("pointerup",e=>{if(!drag)return;const d=drag;endDrag();
+      if(d.on){const el=document.elementFromPoint(e.clientX,e.clientY),sl=el&&el.closest&&el.closest("[data-slot]");if(sl&&!solved){sel=null;place(sl.dataset.slot,d.id)}else paint()}
+      else{sel=sel===d.id?null:d.id;paint()}});
+    tray.addEventListener("pointercancel",endDrag);
+    tray.addEventListener("click",e=>{const b=e.target.closest(".pc");if(b&&e.detail===0&&!solved){sel=sel===b.dataset.c?null:b.dataset.c;paint()}});
+    $$("dex").onclick=()=>{endDrag();kinMenu()};
+    const fb=h=>{$$("dfb").innerHTML=h};
+    $$("dck").onclick=()=>{if(solved)return;
+      const r={};let ok=0,n=0,all=true;
+      sc.slots.forEach(s=>{const w=sc.ok[s.id]||null,g=placed[s.id]||null,good=w===g;r[s.id]=good?"ok":"bad";if(w){n++;if(good)ok++}if(!good)all=false});
+      if(att===0){okT+=ok;xp+=ok*10;$$("dxp").textContent=xp+" XP"}
+      att++;res=r;
+      const nextBtn=()=>{solved=true;const b=$$("dck");b.disabled=false;b.textContent=k+1<N?"Επόμενη σκηνή":"Τέλος";b.onclick=()=>{k++;if(k<N)sceneUI();else finishDraw()}};
+      if(all){sfx.right(0);paint();fb(`<div class="why"><b>Σωστό!</b> ${fm(sc.why)}</div>`);nextBtn()}
+      else if(att>=3){placed={};res={};sc.slots.forEach(s=>{if(sc.ok[s.id]){placed[s.id]=sc.ok[s.id]}res[s.id]="ok"});sfx.wrong();paint();fb(`<div class="why"><b>Η σωστή τοποθέτηση φαίνεται πάνω.</b> ${fm(sc.why)}</div>`);nextBtn()}
+      else{sfx.wrong();paint();fb(`<div class="why"><b>Όχι ακόμα.</b> ${fm(sc.hint)} Οι κόκκινες θέσεις θέλουν διόρθωση.</div>`)}
+    };
+    paint();
+  };
+  function finishDraw(){
+    const g=grade(okT,tot),s=okT/tot>=.9?3:okT/tot>=.7?2:okT/tot>=.4?1:0;sfx.done(s);if(s===3)confetti();
+    const pr=prog(),o=pr["kin:draw"]||{best:0,stars:0,xp:0};pr["kin:draw"]={best:Math.max(o.best,g),stars:Math.max(o.stars,s),xp:Math.max(o.xp,xp)};st.set("prog:"+P.code,pr);
+    const rp=report({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:new Date().toISOString(),name:P.name,code:P.code,unit:"kin",sub:"draw",mode:"draw",stage:0,g,ok:okT,n:tot,xp,stars:s,failed:false,wrong:[],v:APPV});
+    $.innerHTML=`<h1>${s===3?"Τέλειο":"Τελείωσες"}, ${esc(P.name)}!</h1><div class="big">${g}<small style="font-size:22px;color:var(--mute)"> /20</small></div><p>${stars(s)} · ${okT} σωστά από ${tot} (με την πρώτη) · ${xp} XP</p>${rp?`<p style="color:var(--mute);font-size:14px">${rp}</p>`:""}<button class="btn primary" id="dag">Παίξε ξανά τις σκηνές</button><button class="btn ghost" id="dkm">Άλλη καρτέλα Κινηματικής</button><button class="btn ghost" id="dhm">Αρχική</button>`;
+    $$("dag").onclick=drawGame;$$("dkm").onclick=kinMenu;$$("dhm").onclick=home;
+  }
+  sceneUI();
+}
 function home(){clearTimer();setBg(pget().bg||"kin");
   const pr=prog(),mc=mlist().length,xp=Object.values(pr).reduce((s,l)=>s+(l.xp||0),0),tot=LEVELS.length*3,got=LEVELS.reduce((s,l)=>s+(pr[l.id]?pr[l.id].stars:0),0);
   const pp=pget(),rk=pp.ti?"✦ "+pp.ti:RANKS.filter(r=>xp>=r[0]).pop()[1],nx=LEVELS.findIndex(l=>!pr[l.id]||pr[l.id].stars<3);
@@ -237,11 +361,12 @@ function home(){clearTimer();setBg(pget().bg||"kin");
    <div class="rank"><span>${rk}</span><div class="pbar"><i style="width:${got/tot*100}%"></i></div><small>${got}/${tot} ★</small></div>${dailyPanel()}`+
   (nx<0?`<p class="good">Πήρες όλα τα αστέρια! Παίξε ξανά για περισσότερα XP.</p>`:"")+
   `<div class="tgrid">`+LEVELS.map((l,i)=>{const r=pr[l.id];return `<button class="tile${i===nx?" nx":""}" data-i="${i}" style="--g:linear-gradient(135deg,${WORLDS[l.id].g});--i:${i}"><span class="tw">${ICONS[l.id]}</span><span class="ts">${stars(r?r.stars:0)}</span><span class="tb"><b>${esc(l.title)}</b><small>${i===nx?"▶ "+(got?"Συνέχισε":"Ξεκίνα"):(r?"Καλύτερο "+r.best+"/20":"Νέο")}</small></span></button>`}).join("")+`</div>`+
-  `<div class="mgrid"><button class="mb" id="qm"><span>🗺️</span>Αποστολή</button><button class="mb" id="cd"><span>🃏</span>Κάρτες ${cardCount()}/16</button><button class="mb" id="pf"><span>🎨</span>Προφίλ</button><button class="mb" id="pg"><span>📊</span>Πρόοδος</button></div>`+
+  chBanner()+`<div class="mgrid"><button class="mb" id="qm"><span>🗺️</span>Αποστολή</button><button class="mb" id="cd"><span>🃏</span>Κάρτες ${cardCount()}/16</button><button class="mb" id="pf"><span>🎨</span>Προφίλ</button><button class="mb" id="pg"><span>📊</span>Πρόοδος</button></div>`+
   `<div class="brow">${mc?`<button class="btn ghost" id="ms">🎯 Λάθη μου (${mc})</button>`:""}<button class="btn ghost" id="sn" aria-label="Ήχοι και δόνηση">${sndOn()?"🔊 Ήχοι":"🔇 Ήχοι"}</button><button class="btn ghost" id="out">👤 Αλλαγή</button></div><button class="btn ghost" id="sgx">💬 Πρόταση ή πρόβλημα</button>`;
-  $.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const l=LEVELS[+b.dataset.i];enter(b,UG(l.id),()=>start(l,null))});
-  if($$("go"))$$("go").onclick=()=>enter($$("go"),UG(LEVELS[nx].id),()=>start(LEVELS[nx],null));
+  $.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const l=LEVELS[+b.dataset.i];enter(b,UG(l.id),()=>l.id==="kin"?kinMenu():start(l,null))});
+  if($$("go"))$$("go").onclick=()=>enter($$("go"),UG(LEVELS[nx].id),()=>LEVELS[nx].id==="kin"?kinMenu():start(LEVELS[nx],null));
   if($$("ms"))$$("ms").onclick=practice;if($$("dr"))$$("dr").onclick=dailyRound;if($$("pf"))$$("pf").onclick=profile;if($$("pg"))$$("pg").onclick=progressScreen;if($$("sgx"))$$("sgx").onclick=suggest;if($$("qm"))$$("qm").onclick=()=>enter($$("qm"),"linear-gradient(135deg,#2a1b5a,#7a3da8)",quest);if($$("cd"))$$("cd").onclick=()=>enter($$("cd"),"linear-gradient(135deg,#4a2c8a,#c9a227)",cards);
+  if($$("ch"))$$("ch").onclick=()=>enter($$("ch"),"linear-gradient(135deg,#7a3da8,#e0679a)",chalScreen);
   if($$("sn"))$$("sn").onclick=()=>{st.set("snd",!sndOn());home()};
   $$("out").onclick=login;
 }
@@ -336,8 +461,8 @@ const BADGE=e=>`<svg viewBox="0 0 100 100" role="img" aria-hidden="true"><polygo
 const art=(w,i,c)=>PORT[w+i]?face(PORT[w+i]):BADGE(c);
 
 const cardHTML=(c,fresh,w,i)=>`<div class="qcard${fresh?" pop":""}"><div class="ce">${w?art(w,i,c[0]):c[0]}</div><b>${esc(c[1])}</b><small>${esc(c[2])}</small></div>`;
-let entering=0;
-function enter(el,bg,cb){if(entering)return;entering=1;const done=()=>{entering=0;cb()};
+let entering=0,enterT=0;
+function enter(el,bg,cb){if(entering&&Date.now()-enterT<1500)return;entering=1;enterT=Date.now();let fired=0;const done=()=>{if(fired)return;fired=1;entering=0;cb()};setTimeout(done,1200);
  try{if(matchMedia("(prefers-reduced-motion:reduce)").matches)return done();const r=el.getBoundingClientRect(),z=document.createElement("div");z.className="zoom";z.style.cssText=`left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;background:${bg}`;document.body.appendChild(z);buzz(15);
   setTimeout(()=>{z.style.cssText=`left:0;top:0;width:100vw;height:100vh;border-radius:0;background:${bg}`},30);
   setTimeout(()=>{done();z.style.opacity=0;setTimeout(()=>z.remove(),420)},520)}catch(e){done()}}
@@ -370,7 +495,7 @@ const CARDX={
  kin1:["Ιταλός φυσικός και αστρονόμος. Με πειράματα σε κεκλιμένα επίπεδα μελέτησε την επιταχυνόμενη κίνηση και έδειξε ότι το διάστημα ενός σώματος που ξεκινά από ηρεμία αυξάνεται με το τετράγωνο του χρόνου.","Με το τηλεσκόπιό του ανακάλυψε τους τέσσερις μεγαλύτερους δορυφόρους του Δία (1610).","x = ½·α·t²"],
  kin2:["Γερμανός αστρονόμος. Με βάση τις παρατηρήσεις του Τύχο Μπράχε βρήκε ότι οι πλανήτες κινούνται σε ελλείψεις με τον Ήλιο σε μία εστία και ότι σαρώνουν ίσα εμβαδά σε ίσους χρόνους.","Ένας πλανήτης κινείται ταχύτερα όταν είναι κοντά στον Ήλιο και πιο αργά όταν είναι μακριά.","Αλλάζει η ταχύτητα (μέτρο ή κατεύθυνση) ⇒ υπάρχει επιτάχυνση"],
  kin0:["Αρχαίος Έλληνας φιλόσοφος. Θεωρούσε ότι ένα σώμα κινείται μόνο όσο το σπρώχνει κάτι και ότι τα βαρύτερα πέφτουν ταχύτερα. Οι ιδέες του κυριάρχησαν για πάνω από 1.500 χρόνια, μέχρι να τις αμφισβητήσουν τα πειράματα του Γαλιλαίου.","Χωρίς αντίσταση αέρα, σφυρί και πούπουλο πέφτουν μαζί. Το έδειξε ο αστροναύτης David Scott στη Σελήνη το 1971.","α = g ≈ 10 m/s² για όλα τα σώματα"],
- kin3:["Απέδειξες ότι διαβάζεις διαγράμματα x–t και υ–t και ξέρεις να βρίσκεις ταχύτητα, επιτάχυνση και μετατόπιση.","Το εμβαδόν κάτω από τη γραφική υ–t είναι η μετατόπιση. Η κλίση της είναι η επιτάχυνση.","α = Δυ/Δt  ·  υ = Δx/Δt"],
+ kin3:["Απέδειξες ότι διαβάζεις διαγράμματα x–t και u–t και ξέρεις να βρίσκεις ταχύτητα, επιτάχυνση και μετατόπιση.","Το εμβαδόν κάτω από τη γραφική u–t είναι η μετατόπιση. Η κλίση της είναι η επιτάχυνση.","α = Δu/Δt  ·  u = Δx/Δt"],
  dyn10:["Άγγλος φυσικός και μαθηματικός. Στο έργο «Principia» (1687) διατύπωσε τον νόμο της αδράνειας, τον θεμελιώδη νόμο της μηχανικής και τον νόμο δράσης–αντίδρασης, καθώς και τον νόμο της παγκόσμιας έλξης.","Η μονάδα της δύναμης, το 1 N, πήρε το όνομά του.","ΣF = m·α"],
  dyn11:["Γερμανοελβετός φυσικός. Με τη Γενική Σχετικότητα (1915) εξήγησε τη βαρύτητα ως καμπύλωση του χωροχρόνου. Στην καθημερινή κλίμακα οι προβλέψεις συμφωνούν με τη βαρύτητα του Νεύτωνα.","Πήρε το βραβείο Νόμπελ Φυσικής το 1921 για την εξήγηση του φωτοηλεκτρικού φαινομένου.","B = m·g"],
  dyn12:["Στις 20 Ιουλίου 1969 ο Νιλ Άρμστρονγκ και ο Μπαζ Όλντριν περπάτησαν στη Σελήνη. Εκεί η επιτάχυνση βαρύτητας είναι περίπου 1,6 m/s², το 1/6 της γήινης, γι' αυτό τα βήματά τους έμοιαζαν με πηδήματα.","Η μάζα τους δεν άλλαξε στη Σελήνη, άλλαξε μόνο το βάρος τους.","B = m·g, με g(Σελήνη) ≈ 1,6 m/s²"],
@@ -380,7 +505,7 @@ const CARDX={
  dyn20:["Μεγάλος μαθηματικός και μηχανικός των Συρακουσών. Διατύπωσε την αρχή της άνωσης και μελέτησε τον μοχλό και τις τροχαλίες.","Λέγεται ότι είπε «Δος μοι πα στω και ταν γαν κινάσω» για τη δύναμη του μοχλού.","Άνωση = βάρος του εκτοπιζόμενου υγρού"],
  dyn23:["Έμαθες να συνθέτεις και να αναλύεις δυνάμεις και να βρίσκεις τριβές και κάθετες αντιδράσεις.","Η τριβή ολίσθησης δεν εξαρτάται από το εμβαδόν επαφής.","Τ = μ·Ν  ·  Ν = m·g·συνφ στο κεκλιμένο"],
  en1:["Άγγλος φυσικός. Με πειράματα όπου ένα βαρίδι γύριζε πτερύγια μέσα σε νερό έδειξε ότι το μηχανικό έργο μετατρέπεται σε θερμότητα με σταθερή αναλογία.","1 J είναι το έργο δύναμης 1 N σε μετατόπιση 1 m.","W = F·Δx·συνθ"],
- en0:["Σκωτσέζος μηχανικός. Βελτίωσε σημαντικά την ατμομηχανή, κάνοντάς την πολύ πιο αποδοτική, και συνέβαλε στη Βιομηχανική Επανάσταση. Εισήγαγε τον όρο «ιπποδύναμη».","1 W είναι 1 J ανά δευτερόλεπτο.","P = W/Δt = F·υ"],
+ en0:["Σκωτσέζος μηχανικός. Βελτίωσε σημαντικά την ατμομηχανή, κάνοντάς την πολύ πιο αποδοτική, και συνέβαλε στη Βιομηχανική Επανάσταση. Εισήγαγε τον όρο «ιπποδύναμη».","1 W είναι 1 J ανά δευτερόλεπτο.","P = W/Δt = F·u"],
  en2:["Γερμανίδα μαθηματικός. Το θεώρημά της (1918) δείχνει ότι κάθε συμμετρία της φύσης αντιστοιχεί σε νόμο διατήρησης. Η διατήρηση της ενέργειας συνδέεται με το ότι οι νόμοι της φυσικής δεν αλλάζουν με τον χρόνο.","Το θεώρημά της είναι θεμέλιο της σύγχρονης θεωρητικής φυσικής.","Ε_μηχ = Κ + U"],
  en3:["Ξέρεις να υπολογίζεις έργο, κινητική και δυναμική ενέργεια, ισχύ, και να εφαρμόζεις τη διατήρηση της μηχανικής ενέργειας.","Η διατήρηση ισχύει μόνο όταν δεν υπάρχουν μη συντηρητικές δυνάμεις, όπως η τριβή.","ΔΚ = ΣW"]};
 function cardView(w,i){setBg(w);const W=WORLDS[w],on=cardsOn(w)[i],c=W.cards[i],x=CARDX[w+i]||["","",""];
@@ -438,7 +563,7 @@ const gd=(w,t)=>`<div class="dlg"><div class="av">${GUIDE[w][0]}</div><div class
 function qstart(w,k){setBg(w);$.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Πίσω</button><span class="xp">${WORLDS[w].e}</span></div>${gd(w,STORY[w].i[k])}<button class="btn primary" id="sg">▶ ${k<3?"Ξεκίνα το σημείο ελέγχου":"Αντιμετώπισε τον αρχηγό"}</button>${k>0?`<button class="btn ghost" id="nt">${pget().nt?"🌿 Χωρίς χρόνο · πάτα για να βάλεις χρονόμετρο":"⏱ "+RULES[k].t+"″ ανά ερώτηση · πάτα για να το κλείσεις"}</button>`:""}`;$$("bk").onclick=()=>world(w);$$("sg").onclick=()=>qgo(w,k);if($$("nt"))$$("nt").onclick=()=>{const q=pget();q.nt=!q.nt;st.set("prof:"+P.code,q);qstart(w,k)}}
 function start(lv,subset){
   clearTimer();
-  const base=subset||(window.NUMQ?shuffle(lv.qs).slice(0,8).concat(NUMQ(lv.id,2,0)):lv.qs);
+  const nn=lv.nn||2,base=subset||(window.NUMQ?shuffle(lv.qs).slice(0,10-nn).concat(NUMQ(lv.numId||lv.id,nn,0)):lv.qs);
   const qs=shuffle(base).slice(0,10).map(q=>{const ord=q.tf||q.num?q.o.map((_,i)=>i):shuffle(q.o.map((_,i)=>i));const uid=LEVELS.some(l=>l.id===lv.id)?lv.id:(typeof UM==="function"?UM()[hq(q)]:null);return{...q,tip:q.tip||(window.TIPFOR&&TIPFOR(uid,q))||undefined,opts:ord.map(i=>q.o[i]),ans:ord.indexOf(q.a),orig:q}});
   S={lv,qs,i:0,ok:0,streak:0,xp:0,wrong:[],state:null,dis:new Set(),missed:false,retry:!!subset};quiz();
 }
@@ -501,15 +626,15 @@ function quiz(){
    <div class="combo">${S.hearts!=null?(S.quest&&S.quest.boss?"👹 ":"")+"❤️".repeat(Math.max(S.hearts,0))+"🖤".repeat(Math.max(S.hmax-Math.max(S.hearts,0),0))+(S.streak>1?"  🔥 "+S.streak:""):(S.streak>1?"🔥 Σερί "+S.streak:"")}</div>${scene(q,S.lv)}
    ${S.tl?`<div class="tmr"><i id="tf" class="${S.left<=10?"low":""}" style="width:${S.left/S.tl*100}%"></i><b id="tt">${Math.ceil(S.left)}″</b></div>`:""}${q.tr?`<div class="tr">Τράπεζα Θεμάτων · ${esc(q.tr)}</div>`:""}<div class="q">${esc(q.q)}</div>${q.svg?`<div class="fig">${q.svg}</div>`:""}`+
    (q.num?NUMUI(q,right,wr,tm):q.opts.map((o,k)=>`<button class="btn opt${(right||tm)&&k===q.ans?" right":S.dis.has(k)?" wrong":""}" data-k="${k}" ${right||tm||S.dis.has(k)?"disabled":""}>${esc(o)}</button>`).join(""))+
-   (right?`<div class="why"><b>Σωστό!</b> ${S.quest?GUIDE[S.quest.w][0]+" "+OKL[S.i%3]+" ":""}${esc(q.why||"")}</div><button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="nx">${S.i+1<n?"Επόμενη":"Δες το αποτέλεσμα"}</button>`:
-    tm?`<div class="why"><b>⏱ Ο χρόνος τελείωσε.</b> ${dead?"Οι ζωές σου τελείωσαν. ":""}Σωστό: ${esc(q.opts[q.ans])}. ${esc(q.why||"")}</div>${dead?"":`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="nx">${S.i+1<n?"Επόμενη":"Δες το αποτέλεσμα"}</button>`}`:
-    wr?`<div class="why"><b>Λάθος.</b> ${S.quest?GUIDE[S.quest.w][0]+" "+BADL[S.i%3]+" ":""}${dead?"Οι ζωές σου τελείωσαν!":"Βοήθεια: "+esc(q.tip||S.lv.tip)}</div>${dead?"":`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="rt">Προσπάθησε ξανά</button><button class="btn" id="nx">Επόμενη</button>`}`:"");
+   (right?`<div class="why"><b>Σωστό!</b> ${S.quest?GUIDE[S.quest.w][0]+" "+OKL[S.i%3]+" ":""}${fm(q.why||"")}</div><button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="nx">${S.i+1<n?"Επόμενη":"Δες το αποτέλεσμα"}</button>`:
+    tm?`<div class="why"><b>⏱ Ο χρόνος τελείωσε.</b> ${dead?"Οι ζωές σου τελείωσαν. ":""}Σωστό: ${esc(q.opts[q.ans])}. ${fm(q.why||"")}</div>${dead?"":`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="nx">${S.i+1<n?"Επόμενη":"Δες το αποτέλεσμα"}</button>`}`:
+    wr?`<div class="why"><b>Λάθος.</b> ${S.quest?GUIDE[S.quest.w][0]+" "+BADL[S.i%3]+" ":""}${dead?"Οι ζωές σου τελείωσαν!":"Βοήθεια: "+fm(q.tip||S.lv.tip)}</div>${dead?"":`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="rt">Προσπάθησε ξανά</button><button class="btn" id="nx">Επόμενη</button>`}`:"");
   if(!right&&!wr||wr)$.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{const k=+b.dataset.k;
-    if(k===q.ans){if(!S.missed){S.ok++;S.streak++;S.xp+=10+Math.min(S.streak-1,5)*2;mist(q,0)}else S.xp+=5;S.state="right";quiz();confetti();sfx.right(S.missed?0:S.streak)}
+    if(k===q.ans){if(!S.missed){S.ok++;S.streak++;if(S.chal)cpt();S.xp+=10+Math.min(S.streak-1,5)*2;mist(q,0)}else S.xp+=5;S.state="right";quiz();confetti();sfx.right(S.missed?0:S.streak)}
     else{if(!S.missed){S.missed=true;S.streak=0;mist(q,1);S.wrong.push({q:q.orig,mine:q.opts[k],right:q.opts[q.ans]});loseLife()}
       S.dis.add(k);S.state="wrong";quiz();$$("dot").classList.add("miss");sfx.wrong()}});
   if(q.num&&$$("ck")){const go=()=>{const raw=$$("ni").value.trim(),m=raw.replace("−","-").match(/^(-?\d+(?:[.,]\d+)?)/);if(!raw)return;S.nv=raw;const v=m?parseFloat(m[1].replace(",",".")):NaN;
-    if(!isNaN(v)&&Math.abs(v-q.ansv)<=Math.max(1e-6,Math.abs(q.ansv)*.01)){if(!S.missed){S.ok++;S.streak++;S.xp+=10+Math.min(S.streak-1,5)*2}else S.xp+=5;S.state="right";quiz();confetti();sfx.right(S.missed?0:S.streak)}
+    if(!isNaN(v)&&Math.abs(v-q.ansv)<=Math.max(1e-6,Math.abs(q.ansv)*.01)){if(!S.missed){S.ok++;S.streak++;if(S.chal)cpt();S.xp+=10+Math.min(S.streak-1,5)*2}else S.xp+=5;S.state="right";quiz();confetti();sfx.right(S.missed?0:S.streak)}
     else{if(!S.missed){S.missed=true;S.streak=0;S.wrong.push({q:q.orig,mine:raw+" "+(q.unit||""),right:q.opts[q.ans]});loseLife()}S.state="wrong";quiz();const d=$$("dot");if(d)d.classList.add("miss");sfx.wrong()}};
    $$("ck").onclick=go;$$("ni").onkeydown=e=>{if(e.key==="Enter")go()};try{$$("ni").focus()}catch(e){}}
   if($$("rt"))$$("rt").onclick=()=>{S.state=null;quiz()};
@@ -534,29 +659,84 @@ function suggest(){setBg("kin");$.innerHTML=`<div class="top"><button class="ex"
     try{if(navigator.share)await navigator.share({text:t});else{await navigator.clipboard.writeText(t);$$("sd").textContent="Αντιγράφηκε! Στείλ' το στον καθηγητή"}}catch(e){}}}
 function exitAsk(){clearTimer();$.innerHTML=`<h1>Θέλεις να σταματήσεις;</h1><p>Η πρόοδος αυτής της προσπάθειας δεν θα αποθηκευτεί.</p><button class="btn primary" id="kp">Συνέχισε το παιχνίδι</button><button class="btn" id="qt">Έξοδος στην αρχική</button>`;$$("kp").onclick=quiz;$$("qt").onclick=home}
 function finish(){
-  clearTimer();clearTimeout(S.fto);
+  clearTimer();clearTimeout(S.fto);if(S.chal)return chalFinish();
   const n=S.qs.length,g=grade(S.ok,n),s=S.ok/n>=.9?3:S.ok/n>=.7?2:S.ok/n>=.4?1:0,lv=S.lv;sfx.done(s);
-  if(!S.retry){const pr=prog(),o=pr[lv.id]||{best:0,stars:0,xp:0};
-    pr[lv.id]={best:Math.max(o.best,g),stars:Math.max(o.stars,s),xp:Math.max(o.xp,S.xp)};st.set("prog:"+P.code,pr);
-    st.set("wrong:"+P.code+":"+lv.id,S.wrong.map(w=>w.q))}
-  const qrew=S.quest?(S.qrew||(S.qrew=questReward(s))):"";S.rep=S.rep??report({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:new Date().toISOString(),name:P.name,code:P.code,unit:lv.id,mode:S.quest?"quest":lv.id==="daily"?"daily":S.retry?"mistakes":"round",stage:S.quest?S.quest.i+1:0,g,ok:S.ok,n,xp:S.xp,stars:s,failed:!!S.failed,wrong:S.wrong.map(w=>w.q&&!w.q.num?hq(w.q):"num").slice(0,20),v:APPV});S.dm=S.dm??((S.qs.length>=5&&S.i>=4)?dailyDone():"");$.innerHTML=`<h1>${s===3?"Τέλειο":"Τελείωσες"}, ${esc(P.name)}!</h1><div class="big">${g}<small style="font-size:22px;color:var(--mute)"> /20</small></div>
+  if(!S.retry){const pk=lv.pk||lv.id,pr=prog(),o=pr[pk]||{best:0,stars:0,xp:0};
+    pr[pk]={best:Math.max(o.best,g),stars:Math.max(o.stars,s),xp:Math.max(o.xp,S.xp)};st.set("prog:"+P.code,pr);
+    st.set("wrong:"+P.code+":"+pk,S.wrong.map(w=>w.q))}
+  const qrew=S.quest?(S.qrew||(S.qrew=questReward(s))):"";S.rep=S.rep??report({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:new Date().toISOString(),name:P.name,code:P.code,unit:lv.id,sub:lv.sub||undefined,mode:S.quest?"quest":lv.id==="daily"?"daily":S.retry?"mistakes":"round",stage:S.quest?S.quest.i+1:0,g,ok:S.ok,n,xp:S.xp,stars:s,failed:!!S.failed,wrong:S.wrong.map(w=>w.q&&!w.q.num?hq(w.q):"num").slice(0,20),v:APPV});S.dm=S.dm??((S.qs.length>=5&&S.i>=4)?dailyDone():"");$.innerHTML=`<h1>${s===3?"Τέλειο":"Τελείωσες"}, ${esc(P.name)}!</h1><div class="big">${g}<small style="font-size:22px;color:var(--mute)"> /20</small></div>
    <p>${stars(s)} · ${S.ok} σωστές από ${n} · ${S.xp} XP</p>${S.dm?`<p class="good">${S.dm}</p>`:""}${S.rep?`<p style="color:var(--mute);font-size:14px">${S.rep}</p>`:""}${qrew}
    <button class="btn primary" id="sh">Στείλε το αποτέλεσμα στον καθηγητή</button>
    ${S.wrong.length?`<button class="btn" id="rv">Δες τα λάθη μου (${S.wrong.length})</button><button class="btn" id="ag">Ξαναπαίξε μόνο τα λάθη</button>`:""}
-   <button class="btn ghost" id="rd">Παίξε ξανά την ενότητα</button><button class="btn ghost" id="hm">Αρχική</button>`;
+   <button class="btn ghost" id="rd">Παίξε ξανά ${lv.pk?"την καρτέλα":"την ενότητα"}</button>${lv.pk?`<button class="btn ghost" id="km">Άλλη καρτέλα Κινηματικής</button>`:""}<button class="btn ghost" id="hm">Αρχική</button>`;
   $$("sh").onclick=async()=>{const t=`${P.name} | ${P.code} | ${lv.title} | ${g}/20 | ${S.xp} XP`;
     try{if(navigator.share)await navigator.share({text:t});else{await navigator.clipboard.writeText(t);$$("sh").textContent="Αντιγράφηκε!"}}catch(e){}};
   if($$("rv"))$$("rv").onclick=()=>review(S.wrong,finish);
   if($$("ag"))$$("ag").onclick=()=>start(lv,S.wrong.map(w=>w.q));
-  if($$("bw"))$$("bw").onclick=()=>world(S.quest.w);$$("rd").onclick=()=>start(lv,null);$$("hm").onclick=home;
+  if($$("bw"))$$("bw").onclick=()=>world(S.quest.w);$$("rd").onclick=()=>start(lv,null);if($$("km"))$$("km").onclick=kinMenu;$$("hm").onclick=home;
 }
 
 function review(items,back){
   $.innerHTML=`<h1>Τα λάθη μου</h1>`+items.map(w=>`<div class="card"><b>${esc(w.q.q)}</b>
    ${w.mine?`<div class="bad">Η απάντησή σου: ${esc(w.mine)}</div>`:""}<div class="good">Σωστό: ${esc(w.right||w.q.o[w.q.a])}</div>
-   <div class="why">${esc(w.q.why)}</div></div>`).join("")+`<button class="btn ghost" id="bk">Πίσω</button>`;
+   <div class="why">${fm(w.q.why)}</div></div>`).join("")+`<button class="btn ghost" id="bk">Πίσω</button>`;
   $$("bk").onclick=back;
 }
+
+/* ---- Challenge μήνα: ίδιες 10 ερωτήσεις για όλους, κατάταξη με ψευδώνυμα, νέο σετ κάθε μήνα ---- */
+const CHAL_TRIES=3,CHAL_T=30,CHAL_Q={kin:10}/* μόνο ύλη που έχουν κάνει: πρόσθεσε dyn1/dyn2/en όταν μπουν στα επόμενα κεφάλαια, π.χ. {kin:4,dyn1:3,dyn2:2,en:1} */;
+const MONTHS_GR=["Ιανουάριος","Φεβρουάριος","Μάρτιος","Απρίλιος","Μάιος","Ιούνιος","Ιούλιος","Αύγουστος","Σεπτέμβριος","Οκτώβριος","Νοέμβριος","Δεκέμβριος"];
+const chM=d=>{d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
+const chPrev=()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return chM(d)};
+const chName=m=>MONTHS_GR[+m.slice(5)-1]+" "+m.slice(0,4);
+const chH=s=>{let x=5381;for(let i=0;i<s.length;i++)x=((x<<5)+x+s.charCodeAt(i))|0;x^=x>>>16;x=Math.imul(x,0x45d9f3b);x^=x>>>16;x=Math.imul(x,0x45d9f3b);x^=x>>>16;return x>>>0};
+const chMed=i=>["🥇","🥈","🥉"][i]||(i+1)+".";
+const chFmt=s=>Math.floor(s/60)+"′"+String(s%60).padStart(2,"0")+"″";
+function chQs(m){const out=[];LEVELS.forEach(l=>{const n=CHAL_Q[l.id]||0;if(!n)return;
+  let c=l.qs.filter(q=>q.diff>=2&&!q.tf&&!q.num);if(c.length<n)c=l.qs.filter(q=>!q.num);
+  c.map(q=>({q:q,k:chH(m+"|"+hq(q))})).sort((a,b)=>a.k-b.k).slice(0,n).forEach(x=>out.push({...x.q,tip:l.tip}))});return out}
+const cpt=()=>{S.pts=(S.pts||0)+100+Math.round(50*Math.max(S.left||0,0)/(S.tl||1))};
+const chRec=m=>st.get("chal:"+P.code+":"+m,{tries:0,best:null});
+function chBanner(){const m=chM(),r=chRec(m),left=CHAL_TRIES-r.tries;
+  return `<button class="chb" id="ch"><span>🏆</span><div><b>Challenge ${MONTHS_GR[+m.slice(5)-1]}</b><small>${r.best?"Καλύτερό σου: "+r.best.pts+" πόντοι · ":""}${left>0?left+" προσπάθειες":"Ολοκλήρωσες τις προσπάθειες"}</small></div></button>`}
+function chFetch(m){if(!RESULTS_URL)return Promise.resolve(null);
+  const u=RESULTS_URL+(RESULTS_URL.indexOf("?")<0?"?":"&")+"action=board&month="+m+"&code="+encodeURIComponent(P.code);
+  return Promise.race([fetch(u).then(r=>r.json()),new Promise((_,j)=>setTimeout(j,7000))]).catch(()=>null)}
+function chBoard(d){const el=$$("bd");if(!el)return;
+  if(!d||!d.top){el.innerHTML=RESULTS_URL?`<p style="color:var(--mute)">Δεν φορτώθηκε η κατάταξη. Έλεγξε τη σύνδεσή σου και ξαναδοκίμασε.</p>`:`<p style="color:var(--mute)">Η κατάταξη θα εμφανιστεί μόλις συνδεθεί η εφαρμογή με τον καθηγητή σου. Οι πόντοι σου αποθηκεύονται κανονικά.</p>`;return}
+  if(!d.top.length){el.innerHTML=`<p style="color:var(--mute)">Κανείς δεν έπαιξε ακόμα. Γίνε ο πρώτος!</p>`;return}
+  const row=(x,i)=>`<div class="chr${x[4]?" me":""}"><i>${chMed(i)}</i><em>${esc(x[0])}</em><b>${x[1]}</b><small>${x[2]}/10 · ${chFmt(x[3])}</small></div>`;
+  let h=d.top.slice(0,10).map(row).join("");
+  if(d.me&&d.me.rank>10)h+=`<div class="chr me"><i>${d.me.rank}.</i><em>Εσύ</em><b>${d.me.pts}</b><small>από ${d.total}</small></div>`;
+  el.innerHTML=h+`<p style="color:var(--mute);font-size:13px">${d.total} παίκτες συνολικά</p>`}
+function chBadges(){const b=st.get("chb:"+P.code,{}),ks=Object.keys(b).sort();return ks.length?ks.map(k=>chMed(b[k]-1)+" "+chName(k)).join(" · "):""}
+function chalScreen(){setBg("dyn1");const m=chM(),pp=pget(),r=chRec(m),left=CHAL_TRIES-r.tries,n=new Date(),days=Math.ceil((new Date(n.getFullYear(),n.getMonth()+1,1)-n)/864e5);
+  if(!pp.nick)return chNick();
+  $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">🏆</span></div><h1>Challenge ${chName(m)}</h1>
+   <p>Οι ίδιες 10 ερωτήσεις για όλους, ${CHAL_T}″ ανά ερώτηση. Κάθε σωστή με την πρώτη δίνει 100 πόντους και μέχρι 50 μπόνους ταχύτητας. Έχεις ${CHAL_TRIES} προσπάθειες και μετράει η καλύτερη. Νέο σετ κάθε μήνα (σε ${days} ${days===1?"ημέρα":"ημέρες"}).</p>
+   <div class="card">Το ψευδώνυμό σου: <b>${esc(pp.nick)}</b> <button class="ex" id="nk">Αλλαγή</button>${r.best?`<br><small>Καλύτερό σου: ${r.best.pts} πόντοι · ${r.best.ok}/10 · ${chFmt(r.best.secs)}</small>`:""}<div id="bgs" style="margin-top:6px">${chBadges()}</div></div>
+   <button class="btn primary" id="cp" ${left<=0?"disabled":""}>${left>0?"▶ Παίξε ("+left+(left===1?" προσπάθεια":" προσπάθειες")+")":"Ολοκλήρωσες τις προσπάθειές σου"}</button>
+   <h3>Κατάταξη μήνα</h3><div id="bd"><p style="color:var(--mute)">Φόρτωση…</p></div>`;
+  $$("bk").onclick=home;$$("nk").onclick=chNick;if(left>0)$$("cp").onclick=chalStart;
+  chFetch(m).then(chBoard);
+  if(st.get("chbchk:"+P.code,"")!==m){const pm=chPrev();chFetch(pm).then(d=>{if(!d)return;st.set("chbchk:"+P.code,m);if(d.me&&d.me.rank>=1&&d.me.rank<=3){const b=st.get("chb:"+P.code,{});b[pm]=d.me.rank;st.set("chb:"+P.code,b);const e=$$("bgs");if(e)e.innerHTML=chBadges()}})}}
+function chNick(){setBg("dyn1");const A=["Γρήγορο","Λαμπρό","Ατρόμητο","Κοσμικό","Φωτεινό","Ανήσυχο"],B=["Φωτόνιο","Ηλεκτρόνιο","Νετρόνιο","Πρωτόνιο","Κβάντο","Άτομο"],pp=pget();
+  const def=pp.nick||A[Math.floor(Math.random()*A.length)]+" "+B[Math.floor(Math.random()*B.length)]+" "+(10+Math.floor(Math.random()*90));
+  $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Πίσω</button><span class="xp">🏆</span></div><h1>Διάλεξε ψευδώνυμο</h1><p>Στην κατάταξη βλέπουν όλοι μόνο το ψευδώνυμο, όχι το όνομά σου. Μην γράψεις το πραγματικό σου όνομα ή επώνυμο.</p><input class="chn" id="ni2" maxlength="18" value="${esc(def)}" autocomplete="off" autocapitalize="off" spellcheck="false"><p id="ne" class="bad"></p><button class="btn primary" id="ok">Αποθήκευση</button>`;
+  $$("bk").onclick=pp.nick?chalScreen:home;
+  $$("ok").onclick=()=>{const v=$$("ni2").value.replace(/\s+/g," ").trim();if(v.length<3){$$("ne").textContent="Τουλάχιστον 3 χαρακτήρες.";return}
+    const q=pget();q.nick=v.slice(0,18);st.set("prof:"+P.code,q);chalScreen()}}
+function chalStart(){const m=chM(),k="chal:"+P.code+":"+m,r=chRec(m);if(r.tries>=CHAL_TRIES)return chalScreen();
+  r.tries++;st.set(k,r);const qs=chQs(m);
+  start({id:"chal",title:"Challenge "+chName(m),sc:"const",tip:"Διάβασε ξανά τη θεωρία της ενότητας.",qs:qs},qs);
+  S.chal={m:m,t0:Date.now()};S.pts=0;S.retry=false;S.tl=CHAL_T;S.left=CHAL_T;S.tqi=-1;quiz()}
+function chalFinish(){clearTimer();clearTimeout(S.fto);const c=S.chal,n=S.qs.length,k="chal:"+P.code+":"+c.m,r=chRec(c.m);
+  if(S.csecs==null){S.csecs=Math.round((Date.now()-c.t0)/1000);const b=r.best;S.cbet=!b||S.pts>b.pts||(S.pts===b.pts&&S.csecs<b.secs);if(S.cbet){r.best={pts:S.pts,ok:S.ok,secs:S.csecs};st.set(k,r)}
+    S.crep=report({type:"challenge",id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:new Date().toISOString(),name:P.name,code:P.code,nick:pget().nick||"",month:c.m,pts:S.pts,ok:S.ok,n:n,secs:S.csecs,v:APPV});sfx.done(S.ok/n>=.9?3:S.ok/n>=.7?2:S.ok/n>=.4?1:0)}
+  const best=r.best||{pts:S.pts};
+  $.innerHTML=`<h1>Τέλος, ${esc(P.name)}!</h1><div class="big">${S.pts}<small style="font-size:22px;color:var(--mute)"> πόντοι</small></div><p>${S.ok} σωστές από ${n} · ${chFmt(S.csecs)}</p>${S.cbet?`<p class="good">Νέο προσωπικό ρεκόρ του μήνα!</p>`:`<p>Το καλύτερό σου: ${best.pts} πόντοι</p>`}${S.crep?`<p style="color:var(--mute);font-size:14px">${S.crep.replace("στάλθηκε στον καθηγητή","μπήκε στην κατάταξη")}</p>`:""}
+   <button class="btn primary" id="bd2">🏆 Δες την κατάταξη</button>${S.wrong.length?`<button class="btn" id="rv">Δες τα λάθη μου (${S.wrong.length})</button>`:""}<button class="btn ghost" id="hm">Αρχική</button>`;
+  $$("bd2").onclick=()=>setTimeout(chalScreen,0);if($$("rv"))$$("rv").onclick=()=>review(S.wrong,chalFinish);$$("hm").onclick=home}
 flush();
 P?home():login();
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
