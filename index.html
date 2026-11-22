@@ -223,7 +223,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v53";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v54";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
@@ -684,7 +684,7 @@ function review(items,back){
 }
 
 /* ---- Challenge μήνα: ίδιες 10 ερωτήσεις για όλους, κατάταξη με ψευδώνυμα, νέο σετ κάθε μήνα ---- */
-const CHAL_TRIES=3,CHAL_T=30,CHAL_Q={kin:10}/* μόνο ύλη που έχουν κάνει: πρόσθεσε dyn1/dyn2/en όταν μπουν στα επόμενα κεφάλαια, π.χ. {kin:4,dyn1:3,dyn2:2,en:1} */;
+const CHAL_TRIES=5,CHAL_T=30,CHAL_Q={kin:10}/* μόνο ύλη που έχουν κάνει: πρόσθεσε dyn1/dyn2/en όταν μπουν στα επόμενα κεφάλαια, π.χ. {kin:4,dyn1:3,dyn2:2,en:1} */;
 const MONTHS_GR=["Ιανουάριος","Φεβρουάριος","Μάρτιος","Απρίλιος","Μάιος","Ιούνιος","Ιούλιος","Αύγουστος","Σεπτέμβριος","Οκτώβριος","Νοέμβριος","Δεκέμβριος"];
 const chM=d=>{d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
 const chPrev=()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return chM(d)};
