@@ -152,7 +152,7 @@ main{position:relative}
 .tw{position:absolute;right:12px;top:6px;font-size:84px;line-height:1;filter:drop-shadow(0 8px 14px rgba(0,0,0,.55));transform:rotate(-8deg)}
 .tb{position:relative;display:block}.tb b{display:block;font-size:21px;text-shadow:0 2px 8px rgba(0,0,0,.65)}.tb small{opacity:.92}
 .ts{position:absolute;left:16px;top:12px;z-index:1}.ts .stars i{color:rgba(255,255,255,.4)}
-.tile.ph{background:linear-gradient(180deg,rgba(8,12,30,.15),rgba(8,12,30,.72)),var(--p) center/cover,var(--g)}
+.tile.pho{background:linear-gradient(180deg,rgba(8,12,30,.15),rgba(8,12,30,.72)),var(--p) center/cover,var(--g)}
 .tile.nx{box-shadow:0 0 0 2px var(--glow),0 14px 28px -12px rgba(0,0,0,.7),0 0 26px rgba(255,200,87,.5)}
 .zoom{position:fixed;z-index:60;border-radius:20px;pointer-events:none;transition:all .48s cubic-bezier(.7,0,.2,1),opacity .4s;box-shadow:0 0 60px rgba(0,0,0,.5)}
 .rank{background:rgba(15,27,45,.55);padding:9px 12px;border-radius:14px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12)}
@@ -244,7 +244,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v87";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v88";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
@@ -406,7 +406,7 @@ function home(){clearS();clearTimer();if(!consGet())return consentScreen();setBg
    <div class="brand">Physics in Motion <span>· Α΄ Λυκείου</span></div><div class="top"><h1>Γεια, ${esc(P.name)}!</h1><div class="xp">${xp} XP</div></div>
    <div class="rank"><span>${rk}</span><div class="pbar"><i style="width:${got/tot*100}%"></i></div><small>${got}/${tot} ★</small></div>${dailyPanel()}`+
   (nx<0?`<p class="good">Πήρες όλα τα αστέρια! Παίξε ξανά για περισσότερα XP.</p>`:"")+
-  `<div class="tgrid">`+LEVELS.map((l,i)=>{const r=pr[l.id],lk=!unitOpen(l.id);return `<button class="tile${PHOTOS.includes(l.id)?" ph":""}${i===nx?" nx":""}${lk?" lkd":""}" ${lk?"disabled":`data-i="${i}"`} style="--g:linear-gradient(135deg,${WORLDS[l.id].g});--i:${i};--p:url(img/${l.id}.webp)"><span class="tw">${ICONS[l.id]}</span><span class="ts">${lk?"🔒":stars(r?r.stars:0)}</span><span class="tb"><b>${esc(l.title)}</b><small>${lk?"Σύντομα":i===nx?"▶ "+(got?"Συνέχισε":"Ξεκίνα"):(r?"Καλύτερο "+r.best+"/20":"Νέο")}</small></span></button>`}).join("")+`</div>`+
+  `<div class="tgrid">`+LEVELS.map((l,i)=>{const r=pr[l.id],lk=!unitOpen(l.id);return `<button class="tile${PHOTOS.includes(l.id)?" pho":""}${i===nx?" nx":""}${lk?" lkd":""}" ${lk?"disabled":`data-i="${i}"`} style="--g:linear-gradient(135deg,${WORLDS[l.id].g});--i:${i};--p:url(img/${l.id}.webp)"><span class="tw">${ICONS[l.id]}</span><span class="ts">${lk?"🔒":stars(r?r.stars:0)}</span><span class="tb"><b>${esc(l.title)}</b><small>${lk?"Σύντομα":i===nx?"▶ "+(got?"Συνέχισε":"Ξεκίνα"):(r?"Καλύτερο "+r.best+"/20":"Νέο")}</small></span></button>`}).join("")+`</div>`+
   chBanner()+`<div class="mgrid"><button class="mb" id="qm"><span>🗺️</span>Αποστολή</button><button class="mb" id="cd"><span>🃏</span>Κάρτες ${cardCount()}/16</button><button class="mb" id="pf"><span>🎨</span>Προφίλ</button><button class="mb" id="pg"><span>📊</span>Πρόοδος</button></div>`+
   `<div class="brow">${mc?`<button class="btn ghost" id="ms">🎯 Λάθη μου (${mc})</button>`:""}<button class="btn ghost" id="sn" aria-label="Ήχοι και δόνηση">${sndOn()?"🔊 Ήχοι":"🔇 Ήχοι"}</button><button class="btn ghost" id="out">👤 Αλλαγή</button></div><button class="btn ghost" id="sgx">💬 Πρόταση ή πρόβλημα</button>`;
   $.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const l=LEVELS[+b.dataset.i];enter(b,UG(l.id),()=>l.id==="kin"?kinMenu():start(l,null))});
