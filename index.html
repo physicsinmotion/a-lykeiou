@@ -244,7 +244,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v88";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v89";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
@@ -398,7 +398,7 @@ function drawGame(){
 }
 /* Κεφάλαια που έχουν ανοίξει στην τάξη = τα κλειδιά του CHAL_Q. Τα υπόλοιπα εμφανίζονται κλειδωμένα («Σύντομα»). */
 const unitOpen=id=>Object.keys(CHAL_Q).indexOf(id)>=0;
-function home(){clearS();clearTimer();if(!consGet())return consentScreen();setBg(pget().bg||"kin");document.body.classList.add("sg");
+function home(){clearS();clearTimer();{const c=consGet();if(!c||(c.a&&c.v<CONS_V))return consentScreen()}setBg(pget().bg||"kin");document.body.classList.add("sg");
   const pr=prog(),mc=mlist().length,xp=Object.values(pr).reduce((s,l)=>s+(l.xp||0),0),tot=LEVELS.filter(l=>unitOpen(l.id)).length*3,got=LEVELS.filter(l=>unitOpen(l.id)).reduce((s,l)=>s+(pr[l.id]?pr[l.id].stars:0),0);
   const pp=pget(),rk=RANKS.filter(r=>xp>=r[0]).pop()[1],nx=LEVELS.findIndex(l=>unitOpen(l.id)&&(!pr[l.id]||pr[l.id].stars<3));
   $.innerHTML=`<div class="hero"><div class="sun"></div><div class="rd"></div>
@@ -674,7 +674,7 @@ const STORY={
 const gd=(w,t)=>`<div class="dlg"><div class="av">${GUIDE[w][0]}</div><div class="bub"><b>${GUIDE[w][1]}</b><p>${esc(t)}</p></div></div>`;
 function qstart(w,k){setBg(w);$.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Πίσω</button><span class="xp">${WORLDS[w].e}</span></div>${gd(w,STORY[w].i[k])}<button class="btn primary" id="sg">▶ ${k<3?"Ξεκίνα το σημείο ελέγχου":"Αντιμετώπισε τον αρχηγό"}</button>${k>0?`<button class="btn ghost" id="nt">${pget().nt?"🌿 Χωρίς χρόνο · πάτα για να βάλεις χρονόμετρο":"⏱ "+RULES[k].t+"″ ανά ερώτηση · πάτα για να το κλείσεις"}</button>`:""}`;$$("bk").onclick=()=>world(w);$$("sg").onclick=()=>qgo(w,k);if($$("nt"))$$("nt").onclick=()=>{const q=pget();q.nt=!q.nt;st.set("prof:"+P.code,q);qstart(w,k)}}
 function start(lv,subset){
-  clearTimer();
+  clearTimer();U.s++;U.u[lv.id]=1;
   const nn=lv.nn||2,base=subset||(window.NUMQ?shuffle(lv.qs).slice(0,10-nn).concat(NUMQ(lv.numId||lv.id,nn,0)):lv.qs);
   const qs=shuffle(base).slice(0,10).map(q=>{const ord=q.tf||q.num?q.o.map((_,i)=>i):shuffle(q.o.map((_,i)=>i));const uid=LEVELS.some(l=>l.id===lv.id)?lv.id:(typeof UM==="function"?UM()[hq(q)]:null);return{...q,tip:q.tip||(window.TIPFOR&&TIPFOR(uid,q))||undefined,opts:ord.map(i=>q.o[i]),ans:ord.indexOf(q.a),orig:q}});
   S={lv,qs,i:0,ok:0,streak:0,xp:0,wrong:[],state:null,dis:new Set(),missed:false,retry:!!subset};quiz();
@@ -778,7 +778,7 @@ function suggest(){setBg("kin");$.innerHTML=`<div class="top"><button class="ex"
     try{if(navigator.share)await navigator.share({text:t});else{await navigator.clipboard.writeText(t);$$("sd").textContent="Αντιγράφηκε! Στείλ' το στον καθηγητή"}}catch(e){}}}
 function exitAsk(){clearTimer();$.innerHTML=`<h1>Θέλεις να σταματήσεις;</h1><p>Η πρόοδος αυτής της προσπάθειας δεν θα αποθηκευτεί.</p><button class="btn primary" id="kp">Συνέχισε το παιχνίδι</button><button class="btn" id="qt">Έξοδος στην αρχική</button>`;$$("kp").onclick=quiz;$$("qt").onclick=home}
 function finish(){
-  clearS();clearTimer();clearTimeout(S.fto);if(S.chal)return chalFinish();
+  U.f++;clearS();clearTimer();clearTimeout(S.fto);if(S.chal)return chalFinish();
   const n=S.qs.length,g=grade(S.ok,n),s=S.ok/n>=.9?3:S.ok/n>=.7?2:S.ok/n>=.4?1:0,lv=S.lv;sfx.done(s);
   if(!S.retry){const pk=lv.pk||lv.id,pr=prog(),o=pr[pk]||{best:0,stars:0,xp:0};
     if(S.cmp===undefined)S.cmp=(S.quest||lv.id==="daily")?"":!pr[pk]?`Πρώτη φορά εδώ και ξεκίνησες με ${g}/20. Από εδώ και πέρα ανεβαίνεις!`:g>o.best?`🏅 Νέο προσωπικό ρεκόρ! ${g}/20 (πριν ${o.best}/20, δηλαδή +${g-o.best}).`:g===o.best?`Ίσο με το καλύτερό σου (${o.best}/20). Μια ακόμα και το ξεπερνάς!`:`Το καλύτερό σου εδώ είναι ${o.best}/20. Δες τα λάθη και ξαναδοκίμασε, είσαι κοντά!`;
@@ -874,16 +874,29 @@ function chalFinish(){clearTimer();clearTimeout(S.fto);const c=S.chal,n=S.qs.len
    <button class="btn primary" id="bd2">🏆 Δες την κατάταξη</button>${S.wrong.length?`<button class="btn" id="rv">Δες τα λάθη μου (${S.wrong.length})</button>`:""}<button class="btn ghost" id="hm">Αρχική</button>`;
   $$("bd2").onclick=()=>setTimeout(chalScreen,0);if($$("rv"))$$("rv").onclick=()=>review(S.wrong,chalFinish);$$("hm").onclick=home}
 
+/* ---- Στατιστικά χρήσης: μόνο αν ο μαθητής έχει πει «ναι» (συναίνεση v2) ---- */
+const U={sid:Date.now().toString(36)+Math.random().toString(36).slice(2,5),t:0,s:0,f:0,u:{},act:Date.now()};
+const uOn=()=>{try{const c=P&&consGet();return !!(c&&c.a&&c.v>=2)}catch(e){return false}};
+["pointerdown","keydown","touchstart"].forEach(e=>addEventListener(e,()=>{U.act=Date.now()},{passive:true}));
+setInterval(()=>{if(document.visibilityState==="visible"&&Date.now()-U.act<60000)U.t+=5000},5000);
+function uSend(){try{if(!uOn()){U.t=0;U.s=0;U.f=0;U.u={};return}
+  const secs=Math.round(U.t/1000);if(secs<3&&!U.s&&!U.f)return;
+  const ua=navigator.userAgent,dev=/iPhone|iPad|iPod/.test(ua)?"iOS":/Android/.test(ua)?"Android":"Άλλο",
+   pwa=(matchMedia("(display-mode: standalone)").matches||navigator.standalone)?1:0;
+  report({type:"session",id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:new Date().toISOString(),code:P.code,sid:U.sid,secs:secs,starts:U.s,fin:U.f,units:Object.keys(U.u).join(","),pwa:pwa,dev:dev,v:APPV});
+  U.t=0;U.s=0;U.f=0;U.u={}}catch(e){}}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")uSend()});
+addEventListener("pagehide",uSend);
 /* ---- Συναίνεση για ανώνυμη χρήση σε εκπαιδευτική έρευνα (προαιρετική) ---- */
-const CONS_V=1,consGet=()=>st.get("cons:"+P.code,null);
+const CONS_V=2,consGet=()=>st.get("cons:"+P.code,null);
 function consSet(a){st.set("cons:"+P.code,{v:CONS_V,a:!!a,ts:Date.now()});
   report({type:"consent",id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:new Date().toISOString(),code:P.code,agree:a?1:0,cv:CONS_V,v:APPV})}
 function consentScreen(){setBg("kin");
-  $.innerHTML=`<div class="top"><span></span><span class="xp">🔬</span></div><h1>Βοήθησέ μας να βελτιώσουμε την εφαρμογή</h1>
-   <p>Η εφαρμογή αποθηκεύει τα αποτελέσματά σου και τα βλέπει μόνο ο δημιουργός της εφαρμογής, για να τη βελτιώνει.</p>
-   <p>Θέλουμε επίσης να χρησιμοποιήσουμε τα αποτελέσματα <b>χωρίς το όνομά σου</b>, μόνο με έναν κρυφό αριθμό, σε μια εκπαιδευτική μελέτη. Έτσι θα καταλάβουμε ποιες ερωτήσεις δυσκολεύουν τα παιδιά. Κανείς δεν θα μπορεί να δει ποιος είσαι.</p>
-   <p>Είναι <b>προαιρετικό</b> και δεν αλλάζει τίποτα στο παιχνίδι. Μπορείς να αλλάξεις γνώμη όποτε θέλεις από το Προφίλ. Αν είσαι κάτω των 15 ετών, ρώτα πρώτα τον γονέα ή κηδεμόνα σου.</p>
-   <button class="btn primary" id="cy">✅ Συμφωνώ</button><button class="btn" id="cn">Όχι, ευχαριστώ</button>`;
+  $.innerHTML=`<div class="top"><span></span><span class="xp">🔬</span></div><h1>Βοήθησέ μας να γίνει καλύτερη η εφαρμογή</h1>
+   <p>Αποθηκεύουμε τα αποτελέσματά σου και τα βλέπει μόνο ο δημιουργός της εφαρμογής.</p>
+   <p>Αν πεις ναι, θα βλέπουμε <b>χωρίς το όνομά σου</b> ποιες ερωτήσεις δυσκολεύουν και πόση ώρα παίζετε, για να φτιάξουμε την εφαρμογή πιο ωραία. Δεν βλέπουμε τίποτα άλλο από το κινητό σου.</p>
+   <p>Είναι <b>προαιρετικό</b> και το παιχνίδι είναι ίδιο και στις δύο περιπτώσεις. Αλλάζεις γνώμη όποτε θες από το Προφίλ. Αν είσαι κάτω των 15, ρώτα πρώτα έναν γονέα ή κηδεμόνα.</p>
+   <button class="btn primary" id="cy">✅ Ναι, βοηθάω</button><button class="btn" id="cn">Όχι, ευχαριστώ</button>`;
   $$("cy").onclick=()=>{consSet(true);home()};$$("cn").onclick=()=>{consSet(false);home()}}
 flush();
 P?(restoreS()||home()):login();
