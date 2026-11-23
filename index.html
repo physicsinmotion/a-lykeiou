@@ -152,6 +152,7 @@ main{position:relative}
 .tw{position:absolute;right:12px;top:6px;font-size:84px;line-height:1;filter:drop-shadow(0 8px 14px rgba(0,0,0,.55));transform:rotate(-8deg)}
 .tb{position:relative;display:block}.tb b{display:block;font-size:21px;text-shadow:0 2px 8px rgba(0,0,0,.65)}.tb small{opacity:.92}
 .ts{position:absolute;left:16px;top:12px;z-index:1}.ts .stars i{color:rgba(255,255,255,.4)}
+.tile.ph{background:linear-gradient(180deg,rgba(8,12,30,.15),rgba(8,12,30,.72)),var(--p) center/cover,var(--g)}
 .tile.nx{box-shadow:0 0 0 2px var(--glow),0 14px 28px -12px rgba(0,0,0,.7),0 0 26px rgba(255,200,87,.5)}
 .zoom{position:fixed;z-index:60;border-radius:20px;pointer-events:none;transition:all .48s cubic-bezier(.7,0,.2,1),opacity .4s;box-shadow:0 0 60px rgba(0,0,0,.5)}
 .rank{background:rgba(15,27,45,.55);padding:9px 12px;border-radius:14px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12)}
@@ -243,7 +244,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v75";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v87";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* fm: escape + δείκτες. _{τελ} ⇒ δείκτης· uμ, Sολ, tολ ⇒ u_μ, S_ολ, t_ολ */
@@ -288,6 +289,7 @@ function login(){setBg("kin");document.body.classList.add("sg");
     P={name,code,school:sch};st.set("profile",P);home()};
 }
 
+const PHOTOS=["kin","dyn1"];
 const ICONS={kin:"🧭",dyn1:"🏎️",dyn2:"🧲",en:"⚡"},COL={kin:"#6ea8ff",dyn1:"#4cd9a0",dyn2:"#ff7a6b",en:"#FFC857"};
 const RANKS=[[0,"Μαθητευόμενος"],[100,"Οδηγός"],[250,"Πιλότος"],[400,"Φυσικός"]];
 const hq=q=>{let x=5381,s=q.q+"|"+q.o[q.a];for(let i=0;i<s.length;i++)x=((x<<5)+x+s.charCodeAt(i))|0;return x};
@@ -404,7 +406,7 @@ function home(){clearS();clearTimer();if(!consGet())return consentScreen();setBg
    <div class="brand">Physics in Motion <span>· Α΄ Λυκείου</span></div><div class="top"><h1>Γεια, ${esc(P.name)}!</h1><div class="xp">${xp} XP</div></div>
    <div class="rank"><span>${rk}</span><div class="pbar"><i style="width:${got/tot*100}%"></i></div><small>${got}/${tot} ★</small></div>${dailyPanel()}`+
   (nx<0?`<p class="good">Πήρες όλα τα αστέρια! Παίξε ξανά για περισσότερα XP.</p>`:"")+
-  `<div class="tgrid">`+LEVELS.map((l,i)=>{const r=pr[l.id],lk=!unitOpen(l.id);return `<button class="tile${i===nx?" nx":""}${lk?" lkd":""}" ${lk?"disabled":`data-i="${i}"`} style="--g:linear-gradient(135deg,${WORLDS[l.id].g});--i:${i}"><span class="tw">${ICONS[l.id]}</span><span class="ts">${lk?"🔒":stars(r?r.stars:0)}</span><span class="tb"><b>${esc(l.title)}</b><small>${lk?"Σύντομα":i===nx?"▶ "+(got?"Συνέχισε":"Ξεκίνα"):(r?"Καλύτερο "+r.best+"/20":"Νέο")}</small></span></button>`}).join("")+`</div>`+
+  `<div class="tgrid">`+LEVELS.map((l,i)=>{const r=pr[l.id],lk=!unitOpen(l.id);return `<button class="tile${PHOTOS.includes(l.id)?" ph":""}${i===nx?" nx":""}${lk?" lkd":""}" ${lk?"disabled":`data-i="${i}"`} style="--g:linear-gradient(135deg,${WORLDS[l.id].g});--i:${i};--p:url(img/${l.id}.webp)"><span class="tw">${ICONS[l.id]}</span><span class="ts">${lk?"🔒":stars(r?r.stars:0)}</span><span class="tb"><b>${esc(l.title)}</b><small>${lk?"Σύντομα":i===nx?"▶ "+(got?"Συνέχισε":"Ξεκίνα"):(r?"Καλύτερο "+r.best+"/20":"Νέο")}</small></span></button>`}).join("")+`</div>`+
   chBanner()+`<div class="mgrid"><button class="mb" id="qm"><span>🗺️</span>Αποστολή</button><button class="mb" id="cd"><span>🃏</span>Κάρτες ${cardCount()}/16</button><button class="mb" id="pf"><span>🎨</span>Προφίλ</button><button class="mb" id="pg"><span>📊</span>Πρόοδος</button></div>`+
   `<div class="brow">${mc?`<button class="btn ghost" id="ms">🎯 Λάθη μου (${mc})</button>`:""}<button class="btn ghost" id="sn" aria-label="Ήχοι και δόνηση">${sndOn()?"🔊 Ήχοι":"🔇 Ήχοι"}</button><button class="btn ghost" id="out">👤 Αλλαγή</button></div><button class="btn ghost" id="sgx">💬 Πρόταση ή πρόβλημα</button>`;
   $.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const l=LEVELS[+b.dataset.i];enter(b,UG(l.id),()=>l.id==="kin"?kinMenu():start(l,null))});
@@ -622,7 +624,7 @@ function dailyRound(){const m=mget(),now=Date.now(),all=[];LEVELS.forEach(l=>l.q
  const open=LEVELS.filter(l=>Object.keys(CHAL_Q).indexOf(l.id)>=0||(stt[l.id]&&stt[l.id].n>0)),weak=(open.length?open:LEVELS).slice().sort((a,b)=>(stt[a.id]||{e:.5}).e-(stt[b.id]||{e:.5}).e)[0];
  shuffle(weak.qs).forEach(q=>{if(pool.length<5&&!ids.has(hq(q))){pool.push({...q,tip:weak.tip});ids.add(hq(q))}});
  start({id:"daily",title:"Ημερήσιος γύρος",sc:"const",tip:"Ξαναδιάβασε τη θεωρία της ενότητας.",qs:pool},pool)}
-function dailyPanel(){const x=dget(),t=x.last===ymd();return`<div class="daily"><div class="df">🔥<b>${dailyAlive(x)}</b><small>σερί</small></div><div class="dt"><b>${t?"✅ Στόχος ημέρας έγινε":"Ημερήσιος στόχος"}</b><small>🛡️ ${x.pass} πάσο · 🔁 ${dueCount()} ${dueCount()===1?"επανάληψη":"επαναλήψεις"}</small></div><button class="btn primary dbtn" id="dr">${t?"＋ Ακόμα":"⚡ Ξεκίνα"}</button></div>`}
+function dailyPanel(){const x=dget(),t=x.last===ymd();return`<div class="daily"><div class="df">🔥<b>${dailyAlive(x)}</b><small>σερί</small></div><div class="dt"><b>${t?"✅ Στόχος ημέρας έγινε":"Ημερήσιος στόχος"}</b><small>🛡️ ${x.pass} πάσο · 🔁 ${dueCount()} ${dueCount()===1?"επανάληψη":"επαναλήψεις"}</small></div><button class="btn primary dbtn" id="dr">${t?"＋ Ακόμα":"▶ Ξεκίνα"}</button></div>`}
 function progressScreen(){setBg("kin");const stt=st.get("stat:"+P.code,{}),m=mget(),now=Date.now();
  $.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">📊</span></div><h1>Η πρόοδός μου</h1><p>Πόσο σταθερά απαντάς σε κάθε ενότητα και ποιες επαναλήψεις σε περιμένουν.</p>`+LEVELS.map(l=>{const e=stt[l.id],pc=e?Math.round(e.e*100):0,du=l.qs.filter(q=>{const y=m[hq(q)];return y&&y.d<=now}).length,lab=!e?"Δεν έχεις παίξει ακόμα":pc>=80?"Δυνατό σημείο ✅":pc>=60?"Σε εξέλιξη 📈":"Χρειάζεται εξάσκηση 🎯";
   return`<div class="ms"><div class="mh"><b>${esc(l.title)}</b><span>${lab}</span></div><div class="pbar"><i style="width:${pc}%"></i></div><small>${e?pc+"% σταθερότητα · ":""}${du?du+" ερωτήσεις για επανάληψη":"καμία επανάληψη τώρα"}</small></div>`}).join("");$$("bk").onclick=home}
@@ -779,12 +781,16 @@ function finish(){
   clearS();clearTimer();clearTimeout(S.fto);if(S.chal)return chalFinish();
   const n=S.qs.length,g=grade(S.ok,n),s=S.ok/n>=.9?3:S.ok/n>=.7?2:S.ok/n>=.4?1:0,lv=S.lv;sfx.done(s);
   if(!S.retry){const pk=lv.pk||lv.id,pr=prog(),o=pr[pk]||{best:0,stars:0,xp:0};
+    if(S.cmp===undefined)S.cmp=(S.quest||lv.id==="daily")?"":!pr[pk]?`Πρώτη φορά εδώ και ξεκίνησες με ${g}/20. Από εδώ και πέρα ανεβαίνεις!`:g>o.best?`🏅 Νέο προσωπικό ρεκόρ! ${g}/20 (πριν ${o.best}/20, δηλαδή +${g-o.best}).`:g===o.best?`Ίσο με το καλύτερό σου (${o.best}/20). Μια ακόμα και το ξεπερνάς!`:`Το καλύτερό σου εδώ είναι ${o.best}/20. Δες τα λάθη και ξαναδοκίμασε, είσαι κοντά!`;
     pr[pk]={best:Math.max(o.best,g),stars:Math.max(o.stars,s),xp:Math.max(o.xp,S.xp)};st.set("prog:"+P.code,pr);
     st.set("wrong:"+P.code+":"+pk,S.wrong.map(w=>w.q))}
+  const ni=LEVELS.findIndex(l=>unitOpen(l.id)&&(!prog()[l.id]||prog()[l.id].stars<3)),nl=ni>=0?LEVELS[ni]:null,nxBtn=nl&&nl.id!==lv.id?`<button class="btn primary" id="nx">▶ Έτοιμος για το επόμενο; ${esc(nl.title)}</button>`:"";
   const qrew=S.quest?(S.qrew||(S.qrew=questReward(s))):"";S.rep=S.rep??report({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:new Date().toISOString(),name:P.name,code:P.code,unit:lv.id,sub:lv.sub||undefined,mode:S.quest?"quest":lv.id==="daily"?"daily":S.retry?"mistakes":"round",stage:S.quest?S.quest.i+1:0,g,ok:S.ok,n,xp:S.xp,stars:s,failed:!!S.failed,wrong:S.wrong.map(w=>w.q&&!w.q.num?hq(w.q):"num").slice(0,20),v:APPV});S.dm=S.dm??((S.qs.length>=5&&S.i>=4)?dailyDone():"");$.innerHTML=`<h1>${s===3?"Τέλειο":"Τελείωσες"}, ${esc(P.name)}!</h1><div class="big">${g}<small style="font-size:22px;color:var(--mute)"> /20</small></div>
-   <p>${stars(s)} · ${S.ok} σωστές από ${n} · ${S.xp} XP</p>${S.dm?`<p class="good">${S.dm}</p>`:""}${S.rep?`<p style="color:var(--mute);font-size:14px">${S.rep}</p>`:""}${qrew}
+   <p>${stars(s)} · ${S.ok} σωστές από ${n} · ${S.xp} XP</p>${S.cmp?`<p class="good">${S.cmp}</p>`:""}${S.dm?`<p class="good">${S.dm}</p>`:""}${S.rep?`<p style="color:var(--mute);font-size:14px">${S.rep}</p>`:""}${qrew}
+   ${nxBtn}
    ${S.wrong.length?`<button class="btn" id="rv">Δες τα λάθη μου (${S.wrong.length})</button><button class="btn" id="ag">Ξαναπαίξε μόνο τα λάθη</button>`:""}
    <button class="btn ghost" id="rd">Παίξε ξανά ${lv.pk?"την καρτέλα":"την ενότητα"}</button>${lv.pk?`<button class="btn ghost" id="km">Άλλη καρτέλα Κινηματικής</button>`:""}<button class="btn ghost" id="hm">Αρχική</button>`;
+  if($$("nx"))$$("nx").onclick=()=>start(nl,null);
   if($$("rv"))$$("rv").onclick=()=>review(S.wrong,finish);
   if($$("ag"))$$("ag").onclick=()=>start(lv,S.wrong.map(w=>w.q));
   if($$("bw"))$$("bw").onclick=()=>world(S.quest.w);$$("rd").onclick=()=>start(lv,null);if($$("km"))$$("km").onclick=kinMenu;$$("hm").onclick=home;

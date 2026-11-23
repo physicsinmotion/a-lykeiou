@@ -1,5 +1,5 @@
-const CACHE = "pim-v75";
-const FILES = ["./", "index.html", "questions.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
+const CACHE = "pim-v87";
+const FILES = ["./", "index.html", "questions.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "img/kin.webp", "img/dyn1.webp"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
