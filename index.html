@@ -317,7 +317,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v97";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v98";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const voc=n=>{n=String(n||"").trim();if(!/^[Α-Ωα-ωΆ-Ώά-ώϊϋΐΰ]+$/.test(n))return n;const l=n.toLowerCase();
  if(/(ιος|ειος)$/.test(l)&&n.length>5)return n.slice(0,-2)+"ε";if(/ος$/.test(l))return n.slice(0,-1);if(/ης$/.test(l)||/ας$/.test(l))return n.slice(0,-1);return n};
@@ -1061,9 +1061,14 @@ const HSK="hostsel",HMAX=30;
 function hsLoad(){const d={u:[LEVELS[0].id],d:[1,2,3],t:["tf","mc"],q:"",sel:[],tl:20,mix:true};try{return Object.assign(d,JSON.parse(localStorage.getItem(HSK))||{})}catch(e){return d}}
 function hsSave(H){try{localStorage.setItem(HSK,JSON.stringify(H))}catch(e){}}
 function hostScreen(msg){rstop();document.body.classList.remove("hbig");setBg("kin");document.body.classList.add("sg");let sec="";try{sec=sessionStorage.getItem("hsec")||""}catch(e){}
+ const hb=()=>{try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}document.body.classList.remove("hbig");P?home():login()};
+ if(!sec){$.innerHTML=`<div class="top"><button class="ex" id="hbk">‹ Αρχική</button><span class="xp">👨‍🏫</span></div><h1>👨‍🏫 Λειτουργία καθηγητή</h1><p>Γράψε τον κωδικό καθηγητή για να φτιάξεις live αγώνα.</p>${msg?`<div class="why"><b>${esc(msg)}</b></div>`:""}<input id="hs" type="password" placeholder="Κωδικός καθηγητή" autocomplete="off" enterkeyhint="go"><button class="btn primary" id="hok">Συνέχεια ▶</button>`;
+  $$("hbk").onclick=hb;const go=async()=>{const v=$$("hs").value.trim();if(!v)return;$$("hok").disabled=true;$$("hok").textContent="Έλεγχος...";const r=await lrpc("host_check",{p_secret:v});
+   if(!r)return hostScreen("Δεν υπάρχει σύνδεση.");if(!r.ok)return hostScreen("Λάθος κωδικός.");try{sessionStorage.setItem("hsec",v)}catch(e){}hostScreen()};
+  $$("hok").onclick=go;$$("hs").onkeydown=e=>{if(e.key==="Enter")go()};setTimeout(()=>{try{$$("hs").focus()}catch(e){}},50);return}
  const H=hsLoad(),M=RQM(),U={};LEVELS.forEach((l,i)=>l.qs.forEach(q=>{if(!q.num)U[hq(q)]={l,i}}));H.sel=H.sel.filter(id=>M[id]);let lim=120;
  const short=l=>l.title.replace(/^Κεφ\.\s*/,"").replace(/ · /," ");
- $.innerHTML=`<div class="top"><button class="ex" id="hbk">‹ Αρχική</button><span class="xp">👨‍🏫</span></div><h1>🏁 Live αγώνας · Καθηγητής</h1>${msg?`<div class="why"><b>${esc(msg)}</b></div>`:""}${sec?"":`<input id="hs" type="password" placeholder="Κωδικός καθηγητή" autocomplete="off">`}
+ $.innerHTML=`<div class="top"><button class="ex" id="hbk">‹ Αρχική</button><span class="xp">👨‍🏫</span></div><h1>🏁 Live αγώνας · Καθηγητής</h1>${msg?`<div class="why"><b>${esc(msg)}</b></div>`:""}
  <label>Ενότητες</label><div class="hch" id="hu">${LEVELS.map(l=>`<button data-v="${l.id}">${esc(short(l))}</button>`).join("")}</div>
  <label>Δυσκολία</label><div class="hch" id="hd"><button data-v="1">⭐ Εύκολες</button><button data-v="2">⭐⭐ Μέτριες</button><button data-v="3">⭐⭐⭐ Δύσκολες</button></div>
  <label>Τύπος</label><div class="hch" id="ht"><button data-v="tf">Σωστό/Λάθος</button><button data-v="mc">Πολλαπλής επιλογής</button></div>
@@ -1079,18 +1084,18 @@ function hostScreen(msg){rstop();document.body.classList.remove("hbig");setBg("k
   $$("hl").innerHTML=`<small style="color:var(--mute)">${P.length} ερωτήσεις ταιριάζουν${H.sel.length?" · οι επιλεγμένες μένουν ακόμα κι αν αλλάξεις φίλτρα":""}</small>`+L.map(q=>{const id=hq(q),k=H.sel.indexOf(id),u=U[id];return`<div class="hqi${k>=0?" on":""}" data-id="${id}"><span class="hn">${k>=0?k+1:""}</span><span class="ht">${esc(q.q)}<small>Κεφ. ${u.i+1} · ${"⭐".repeat(+q.diff||2)} · ${q.tf?"Σ/Λ":"Πολλαπλής"}${q.svg?" · 📈 σχήμα":""}</small></span></div>`}).join("")+(P.length>lim?`<button class="btn ghost" id="hmore">Δείξε περισσότερες (${P.length-lim})</button>`:"");
   $$("hl").querySelectorAll(".hqi").forEach(d=>d.onclick=()=>{const id=+d.dataset.id,k=H.sel.indexOf(id);if(k>=0)H.sel.splice(k,1);else{if(H.sel.length>=HMAX){$$("hcnt").innerHTML="<b>Μέχρι "+HMAX+" ερωτήσεις ανά αγώνα</b>";return}H.sel.push(id)}draw()});
   const m=$$("hmore");if(m)m.onclick=()=>{lim+=150;draw()};cnt()}
- $$("hbk").onclick=()=>{try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}document.body.classList.remove("hbig");P?home():login()};
+ $$("hbk").onclick=hb;
  chips("hu","u");chips("hd","d",true);chips("ht","t");
  $$("hqs").oninput=e=>{H.q=e.target.value;lim=120;draw()};
  $$("hrnd").onclick=()=>{const P=pool().map(hq).filter(id=>H.sel.indexOf(id)<0),n=Math.min(HMAX-H.sel.length,P.length,H.sel.length?5:10);shuffle(P).slice(0,n).forEach(id=>H.sel.push(id));draw()};
  $$("hclr").onclick=()=>{H.sel=[];draw()};
  $$("htl").onchange=e=>{H.tl=+e.target.value;hsSave(H)};$$("hmix").onclick=e=>{H.mix=!H.mix;e.target.classList.toggle("on",H.mix);hsSave(H)};
  draw();
- $$("hg").onclick=async()=>{if(!H.sel.length)return;const s=sec||$$("hs").value.trim(),qids=H.mix?shuffle(H.sel.slice()):H.sel.slice(),us=[...new Set(qids.map(id=>U[id].l.id))];
+ $$("hg").onclick=async()=>{if(!H.sel.length)return;const s=sec,qids=H.mix?shuffle(H.sel.slice()):H.sel.slice(),us=[...new Set(qids.map(id=>U[id].l.id))];
   $$("hg").disabled=true;$$("hg").textContent="Δημιουργία...";
   const r=await lrpc("create_race",{p_secret:s,p_unit:us.length===1?us[0]:"mix",p_qids:qids,p_limit:H.tl});
-  if(!r)return hostScreen("Δεν υπάρχει σύνδεση.");if(!r.ok)return hostScreen(r.err==="secret"?"Λάθος κωδικός καθηγητή.":"Σφάλμα. Δοκίμασε ξανά.");
-  try{sessionStorage.setItem("hsec",s)}catch(e){}RC={role:"h",code:r.code,secret:s,key:""};try{navigator.wakeLock&&navigator.wakeLock.request("screen").then(w=>rstop.wl=w).catch(()=>{})}catch(e){}rstart()}}
+  if(!r)return hostScreen("Δεν υπάρχει σύνδεση.");if(!r.ok){if(r.err==="secret")try{sessionStorage.removeItem("hsec")}catch(e){}return hostScreen(r.err==="secret"?"Λάθος κωδικός καθηγητή.":"Σφάλμα. Δοκίμασε ξανά.")}
+  RC={role:"h",code:r.code,secret:s,key:""};try{navigator.wakeLock&&navigator.wakeLock.request("screen").then(w=>rstop.wl=w).catch(()=>{})}catch(e){}rstart()}}
 function hostRender(s){if(!RC)return;document.body.classList.toggle("hbig",s.status==="running"||s.status==="lobby");const ps=s.players||[],qi=s.q_index,q=s.status==="running"?RQM()[(s.qids||[])[qi]]:null;
  const key=s.status==="running"?"run|"+qi+"|"+s.closed:s.status;
  const ans=ps.filter(p=>p.answered).length,upd=()=>{const t=$$("rtr");if(t)t.innerHTML=rscene(ps,s.total,null,10);const p=$$("rpl");if(p)p.innerHTML=rpl(ps);const a=$$("ran");if(a)a.textContent=ans+"/"+ps.length+" απάντησαν";const b=$$("hgo");if(b)b.textContent="▶ Έναρξη ("+ps.length+" παίκτες)"};
