@@ -228,6 +228,13 @@ body.hbig main{max-width:1180px}.rtmr~#rtr .r3.h{width:min(80vw,calc(36vh*2))}bo
 .vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0 10px}.vcard{font:inherit;color:var(--text);background:rgba(23,40,63,.78);border:1.5px solid var(--line);border-radius:14px;padding:6px 4px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px}
 .vcard svg{width:100%;height:auto;max-height:46px;overflow:visible}.vcard b{font-size:11.5px;line-height:1.15;text-align:center}.vcard small{font-size:10px;color:var(--mute)}.vcard.on{border-color:var(--glow);box-shadow:0 0 0 2px #ffd34d55}.vcard img{height:50px;width:auto;max-width:100%;object-fit:contain;margin:2px 0}.vcard[disabled]{opacity:.72;cursor:default}.vcard[disabled] svg,.vcard[disabled] img{filter:saturate(.55) brightness(.8)}
 .pv.pv3s{position:relative;height:200px;border-radius:18px;overflow:hidden;padding:0!important;background:radial-gradient(110% 80% at 50% 0%,#5a4b8f 0%,#2a2350 45%,#130f26 100%)}.pv3s .g3c{position:absolute;inset:0;width:100%;height:100%;touch-action:none}.pv3s:not(.on) svg{margin-top:60px}
+.cbub{display:flex;gap:10px;align-items:flex-end;margin:12px 0 10px}.cbub .coi{object-fit:cover;object-position:50% 25%;width:62px;height:62px;flex:0 0 62px;border-radius:50%;background:radial-gradient(#5a4b8f,#2a2350);border:2px solid var(--line);animation:cbin .45s cubic-bezier(.3,1.6,.5,1)}
+.cbub>div{position:relative;flex:1;background:rgba(255,255,255,.96);color:#1b1d2a;border-radius:16px 16px 16px 4px;padding:10px 12px;font-size:14.5px;line-height:1.4;animation:cbin .35s ease-out .1s both}
+.cbub>div:before{content:"";position:absolute;left:-7px;bottom:10px;border:8px solid transparent;border-right-color:rgba(255,255,255,.96);border-left:0}
+.cbub b{color:#5a3fa0}.cbub.no b{color:#b2432f}.cbub span{display:block;margin-top:5px;color:#3a3d50;font-size:13.5px}
+@keyframes cbin{from{opacity:0;transform:translateY(10px) scale(.9)}to{opacity:1;transform:none}}
+.hintb{display:flex!important;align-items:center;gap:8px;margin:8px auto 0!important;font-size:14px}.hintb small{color:var(--mute)}.hni{object-fit:cover;object-position:50% 25%;width:30px;height:30px;border-radius:50%;background:#2a2350}.opt.gone{opacity:.28;text-decoration:line-through}
+.vci{object-fit:cover;object-position:50% 25%;height:54px;width:54px;border-radius:50%;background:radial-gradient(#5a4b8f,#2a2350)}
 .rwh,.rbd,.rwhy,.rnx,.rw>.btn,.rw>.ex{flex-shrink:0}.rwh{text-align:center;margin-bottom:8px}.rwh small{display:block;color:var(--mute);letter-spacing:.08em;font-size:12px;text-transform:uppercase}
 .rwh .res{font-size:22px;font-weight:800;margin-top:2px}.rwh .res.ok{color:#5dff9b}.rwh .res.no{color:#ff7b7b}.rwh .res.to{color:var(--mute)}
 .rtrk{--cw:104px;flex:1 0 auto;display:flex;flex-direction:column;justify-content:center;gap:6px}
@@ -326,7 +333,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v101";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v103";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const voc=n=>{n=String(n||"").trim();if(!/^[Α-Ωα-ωΆ-Ώά-ώϊϋΐΰ]+$/.test(n))return n;const l=n.toLowerCase();
  if(/(ιος|ειος)$/.test(l)&&n.length>5)return n.slice(0,-2)+"ε";if(/ος$/.test(l))return n.slice(0,-1);if(/ης$/.test(l)||/ας$/.test(l))return n.slice(0,-1);return n};
@@ -639,8 +646,8 @@ function enter(el,bg,cb){if(entering&&Date.now()-enterT<1500)return;entering=1;e
   setTimeout(()=>{done();z.style.opacity=0;setTimeout(()=>z.remove(),420)},520)}catch(e){done()}}
 const UG=id=>`linear-gradient(135deg,${WORLDS[id].g})`;
 const WK=()=>Object.keys(WORLDS),worldOpen=w=>{const k=WK(),i=k.indexOf(w);return unitOpen(w)&&(i<=0||!!qc(k[i-1]).b)};
-function quest(){setBg("kin");$.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">🃏 ${cardCount()}/16</span></div><h1>Αποστολή</h1><p>Οι κόσμοι ανοίγουν ένας-ένας: νίκησε τον αρχηγό για να περάσεις στον επόμενο. Σε κάθε κόσμο υπάρχουν 3 σημεία ελέγχου (10 ερωτήσεις το καθένα, χρειάζεσαι 2 αστέρια) και ένας αρχηγός.</p>`+
- Object.keys(WORLDS).map((w,i)=>{const W=WORLDS[w],n=cardsOn(w).filter(Boolean).length,op=worldOpen(w),pv=i>0?WORLDS[WK()[i-1]]:null;return `<button class="wcard${op?"":" lk"}" data-w="${w}" ${op?"":"disabled"} style="background:linear-gradient(135deg,${W.g});animation:up .5s both;animation-delay:${i*80}ms"><span class="wb">${op?W.e:"🔒"}</span><span><b>${W.n}</b><br><small>${op?`${"★".repeat(n)}${"☆".repeat(4-n)} · ${n}/4 κάρτες`:(unitOpen(w)?"Νίκησε πρώτα: "+esc(pv.boss):"Σύντομα")}</small></span></button>`}).join("")+`<button class="btn" id="cd">🃏 Οι κάρτες μου</button>`;
+function quest(){setBg("kin");$.innerHTML=`<div class="top"><button class="ex" id="bk">‹ Αρχική</button><span class="xp">🃏 ${cardCount()}/16</span></div><h1>Αποστολή</h1><p>Οι κόσμοι ανοίγουν ένας-ένας: νίκησε τον αρχηγό για να περάσεις στον επόμενο. Σε κάθε κόσμο υπάρχουν 3 σημεία ελέγχου (10 ερωτήσεις το καθένα, χρειάζεσαι 2 αστέρια) και ένας αρχηγός. Όποιος νικά τον αρχηγό κερδίζει και έναν μεγάλο φυσικό για συνοδηγό: μπαίνει στο όχημά σου και σε βοηθά στις ερωτήσεις, με δικές του ατάκες.</p>`+
+ Object.keys(WORLDS).map((w,i)=>{const W=WORLDS[w],n=cardsOn(w).filter(Boolean).length,op=worldOpen(w),pv=i>0?WORLDS[WK()[i-1]]:null;return `<button class="wcard${op?"":" lk"}" data-w="${w}" ${op?"":"disabled"} style="background:linear-gradient(135deg,${W.g});animation:up .5s both;animation-delay:${i*80}ms"><span class="wb">${op?W.e:"🔒"}</span><span><b>${W.n}</b><br><small>${op?`${"★".repeat(n)}${"☆".repeat(4-n)} · ${n}/4 κάρτες${coFor(w)?` · 🧑‍🔬 ${COMP[coFor(w)].n} ${coGot(coFor(w))?"✓":"(συνοδηγός)"}`:""}`:(unitOpen(w)?"Νίκησε πρώτα: "+esc(pv.boss):"Σύντομα")}</small></span></button>`}).join("")+`<button class="btn" id="cd">🃏 Οι κάρτες μου</button>`;
  $.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>enter(b,UG(b.dataset.w),()=>world(b.dataset.w)));$$("bk").onclick=home;$$("cd").onclick=cards}
 function world(w){if(!worldOpen(w))return quest();setBg(w);const W=WORLDS[w],c=qc(w),op=[1,c.s[0]>=2,c.s[1]>=2,c.s[2]>=2];
  const nodes=[0,1,2,3].map(k=>{const lock=!op[k],done=k<3?c.s[k]>=2:!!c.b,ic=lock?"🔒":done?"✅":(k===3?"👹":"🚩");return `<div class="nd"><button class="nb" data-k="${k}" ${lock?"disabled":""} style="--c:${W.c}">${ic}</button><div class="nl"><b>${k<3?"Σημείο ελέγχου "+(k+1):W.boss}</b><small>${k<3?["Εκκίνηση · βασικές · "+ruleTxt(0),"Μεσαίο σκέλος · "+ruleTxt(1),"Τελική ευθεία · "+ruleTxt(2)][k]+(c.s[k]?" · "+"★".repeat(c.s[k]):""):ruleTxt(3)+" · ερωτήσεις και από τα λάθη σου"}</small></div></div>`}).join("");
@@ -658,7 +665,7 @@ function qpool(lv,k){const D=d=>shuffle(lv.qs.filter(q=>q.diff===d&&!q.num));let
  return keep.concat(skip).slice(0,10-nn).concat(nn?NUMQ(lv.id,nn,k):[])}
 function qgo(w,k){const lv=LEVELS.find(l=>l.id===w),R=RULES[k];start(lv,qpool(lv,k));S.retry=k===3;S.quest={w,i:k,boss:k===3};S.hearts=R.h;S.hmax=R.h;S.tl=pget().nt?0:R.t;S.left=S.tl;S.tqi=-1;quiz()}
 function questReward(s){const{w,i,boss}=S.quest,W=WORLDS[w],qp=qget(),c=qp[w]||(qp[w]={s:[0,0,0],b:0});let h="";
- if(boss){if(!S.failed&&S.hearts>0){const f=!c.b;c.b=1;h=f?"<p class=\"good\">Νίκησες τον αρχηγό!</p>"+cardHTML(W.cards[3],1,w,3):"<p class=\"good\">Νίκησες ξανά τον αρχηγό!</p>"}else h="<p class=\"bad\">Ο αρχηγός κέρδισε αυτή τη φορά. Δοκίμασε ξανά!</p>"}
+ if(boss){if(!S.failed&&S.hearts>0){const f=!c.b;c.b=1;const cid=f?coFor(w):"";if(cid){const pp=pget();if(!pp.co){pp.co=cid;st.set("prof:"+P.code,pp)}}h=f?"<p class=\"good\">Νίκησες τον αρχηγό!</p>"+cardHTML(W.cards[3],1,w,3)+(cid?`<div class="cbub ok newco">${coImg(cid)}<div><b>Νέος συνοδηγός: ${COMP[cid].n}!</b> Μπήκε στο όχημά σου και θα σε βοηθά όταν τον χρειαστείς. Τον βλέπεις στο Προφίλ → Το όχημά μου.</div></div>`:""):"<p class=\"good\">Νίκησες ξανά τον αρχηγό!</p>"}else h="<p class=\"bad\">Ο αρχηγός κέρδισε αυτή τη φορά. Δοκίμασε ξανά!</p>"}
  else if(s>=2&&!S.failed){const f=c.s[i]<2;c.s[i]=Math.max(c.s[i],s);h=f?"<p class=\"good\">Σημείο ελέγχου περασμένο!</p>"+cardHTML(W.cards[i],1,w,i):"<p class=\"good\">Σημείο ελέγχου περασμένο.</p>"}
  else{c.s[i]=Math.max(c.s[i],s);h=S.failed?"<p class=\"bad\">Οι ζωές σου τελείωσαν. Δοκίμασε ξανά!</p>":"<p class=\"bad\">Χρειάζεσαι τουλάχιστον 2 αστέρια για να περάσεις. Δοκίμασε ξανά!</p>"}
  qset(qp);const win=(boss&&!S.failed&&S.hearts>0)||(!boss&&s>=2&&!S.failed);return gd(w,win?STORY[w].o[i]:"Δεν πειράζει! Δες τα λάθη σου και ξαναδοκίμασε, θα τα καταφέρεις.")+h+'<button class="btn primary" id="bw">Πίσω στον κόσμο</button>'}
@@ -727,10 +734,10 @@ function sheet(title,body,bind,after){const old=$$("pov");let sc=0;if(old){sc=ol
  const re=()=>sheet(title,body,bind,after);bind(d,re)}
 function avatarSheet(){const xp=totXP();
  const body=()=>{const p=pget(),bgs=["kin","dyn1","dyn2","en"].filter(w=>w==="kin"||cardsOn(w).some(Boolean));setBg(p.bg);
- return `<div class="pv pv3s">${CAR(carC(),1)}</div><h3 class="ph">Ο τυχερός μου αριθμός</h3><div class="chips"><input class="chn" id="pnum" inputmode="numeric" maxlength="2" style="width:90px;text-align:center;font-size:22px" value="${esc(carNum())}" aria-label="Τυχερός αριθμός 0 έως 99"><span style="color:var(--mute);font-size:13px">0–99, φαίνεται στο όχημά σου</span></div><h3 class="ph">Χρώμα οχήματος</h3><div class="chips">${COLS.map(c=>`<button class="chip${p.col===c[0]?" on":""}" data-col="${c[0]}" ${xp<c[2]?"disabled":""}><i style="background:${c[1]}"></i>${xp<c[2]?"🔒 "+c[2]+" XP":c[3]}</button>`).join("")}</div><h3 class="ph">Όχημα</h3><div class="vgrid">${CAR_TYPES.map(t=>`<button class="vcard${carSel().t===t[0]?" on":""}" data-car="${t[0]}" ${xp<t[2]?"disabled":""}>${GLBA[t[0]]?`<img src="cars/thumb/${t[0]}-${GLBR.indexOf(t[0])<0?"x":(COLS.find(z=>z[1]===carC())||COLS[0])[0]}.webp" alt="" loading="lazy">`:CAR(carC(),false,{t:t[0],a:[]})}<b>${t[1]}</b><small>${xp<t[2]?"🔒 "+t[2]+" XP":t[2]?"✓ ξεκλείδωτο":"δωρεάν"}</small></button>`).join("")}</div><h3 class="ph">Αξεσουάρ</h3><div class="chips">${CAR_ACC.map(a=>`<button class="chip${carSel().a.indexOf(a[0])>=0?" on":""}" data-acc="${a[0]}" ${xp<a[2]?"disabled":""}>${xp<a[2]?"🔒 "+a[1]+" · "+a[2]+" XP":a[3]+" "+a[1]}</button>`).join("")}</div><h3 class="ph">Σκηνικό αρχικής</h3><div class="chips">${["kin","dyn1","dyn2","en"].map(w=>`<button class="chip${p.bg===w?" on":""}" data-bg="${w}" ${bgs.includes(w)?"":"disabled"}>${bgs.includes(w)?WORLDS[w].e+" "+WORLDS[w].n:"🔒 Κέρδισε μια κάρτα"}</button>`).join("")}</div>`};
+ return `<div class="pv pv3s">${CAR(carC(),1)}</div><h3 class="ph">Ο τυχερός μου αριθμός</h3><div class="chips"><input class="chn" id="pnum" inputmode="numeric" maxlength="2" style="width:90px;text-align:center;font-size:22px" value="${esc(carNum())}" aria-label="Τυχερός αριθμός 0 έως 99"><span style="color:var(--mute);font-size:13px">0–99, φαίνεται στο όχημά σου</span></div><h3 class="ph">Χρώμα οχήματος</h3><div class="chips">${COLS.map(c=>`<button class="chip${p.col===c[0]?" on":""}" data-col="${c[0]}" ${xp<c[2]?"disabled":""}><i style="background:${c[1]}"></i>${xp<c[2]?"🔒 "+c[2]+" XP":c[3]}</button>`).join("")}</div><h3 class="ph">Όχημα</h3><div class="vgrid">${CAR_TYPES.map(t=>`<button class="vcard${carSel().t===t[0]?" on":""}" data-car="${t[0]}" ${xp<t[2]?"disabled":""}>${GLBA[t[0]]?`<img src="cars/thumb/${t[0]}-${GLBR.indexOf(t[0])<0?"x":(COLS.find(z=>z[1]===carC())||COLS[0])[0]}.webp" alt="" loading="lazy">`:CAR(carC(),false,{t:t[0],a:[]})}<b>${t[1]}</b><small>${xp<t[2]?"🔒 "+t[2]+" XP":t[2]?"✓ ξεκλείδωτο":"δωρεάν"}</small></button>`).join("")}</div><h3 class="ph">Συνοδηγός</h3><div class="vgrid">${[["","Κανένας"]].concat(Object.keys(COMP).map(k=>[k,COMP[k].n])).map(([k,n])=>{const got=!k||coGot(k),on=(p.co||"")===k&&got;return`<button class="vcard${on?" on":""}" data-co="${k}" ${got?"":"disabled"}>${k?coImg(k,"vci"):'<span style="font-size:34px;line-height:50px">🚫</span>'}<b>${n}</b><small>${got?(k?"✓ διαθέσιμος":"μόνος στο τιμόνι"):"🔒 νίκησε τον αρχηγό: "+esc(WORLDS[COMP[k].card[0]].n)}</small></button>`}).join("")}</div><h3 class="ph">Αξεσουάρ</h3><div class="chips">${CAR_ACC.map(a=>`<button class="chip${carSel().a.indexOf(a[0])>=0?" on":""}" data-acc="${a[0]}" ${xp<a[2]?"disabled":""}>${xp<a[2]?"🔒 "+a[1]+" · "+a[2]+" XP":a[3]+" "+a[1]}</button>`).join("")}</div><h3 class="ph">Σκηνικό αρχικής</h3><div class="chips">${["kin","dyn1","dyn2","en"].map(w=>`<button class="chip${p.bg===w?" on":""}" data-bg="${w}" ${bgs.includes(w)?"":"disabled"}>${bgs.includes(w)?WORLDS[w].e+" "+WORLDS[w].n:"🔒 Κέρδισε μια κάρτα"}</button>`).join("")}</div>`};
  const bind=(d,re)=>{const sv=(k,v)=>{const q=pget();q[k]=v;st.set("prof:"+P.code,q);re()};
   {const n=$$("pnum");n.oninput=()=>{const v=n.value.replace(/\D/g,"").slice(0,2);n.value=v;if(v!==""){const q=pget();q.num=v;st.set("prof:"+P.code,q);const pv=d.querySelector(".pv");pv.classList.remove("on");pv.innerHTML=CAR(carC(),1);g3Into(pv)}};n.onblur=()=>{if(n.value==="")n.value=carNum()}}
-  d.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>sv("col",b.dataset.col));d.querySelectorAll("[data-car]").forEach(b=>b.onclick=()=>sv("car",b.dataset.car));d.querySelectorAll("[data-acc]").forEach(b=>b.onclick=()=>{const a=carSel().a.slice(),i=a.indexOf(b.dataset.acc);i>=0?a.splice(i,1):a.push(b.dataset.acc);sv("acc",a)});d.querySelectorAll("[data-bg]").forEach(b=>b.onclick=()=>sv("bg",b.dataset.bg));g3Into(d.querySelector(".pv"))};
+  d.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>sv("col",b.dataset.col));d.querySelectorAll("[data-car]").forEach(b=>b.onclick=()=>sv("car",b.dataset.car));d.querySelectorAll("[data-acc]").forEach(b=>b.onclick=()=>{const a=carSel().a.slice(),i=a.indexOf(b.dataset.acc);i>=0?a.splice(i,1):a.push(b.dataset.acc);sv("acc",a)});d.querySelectorAll("[data-bg]").forEach(b=>b.onclick=()=>sv("bg",b.dataset.bg));d.querySelectorAll("[data-co]").forEach(b=>b.onclick=()=>sv("co",b.dataset.co));g3Into(d.querySelector(".pv"))};
  sheet("🚗 Το όχημά μου",body,bind,profile)}
 function settingsSheet(){
  const body=()=>{const p=pget();return `<h3 class="ph">Χρονόμετρο στην Αποστολή</h3><div class="chips"><button class="chip${!p.nt?" on":""}" data-nt="0">⏱ Με χρονόμετρο</button><button class="chip${p.nt?" on":""}" data-nt="1">🌿 Χωρίς χρόνο</button></div><h3 class="ph">Ανώνυμα δεδομένα για έρευνα</h3><div class="chips"><button class="chip${consGet()&&consGet().a?" on":""}" data-cs="1">✅ Συμφωνώ</button><button class="chip${consGet()&&!consGet().a?" on":""}" data-cs="0">Όχι</button></div><h3 class="ph">Σχολείο (προαιρετικό)</h3><input class="chn" id="psc" list="scl" maxlength="30" placeholder="Γράψε ή άφησε κενό" autocomplete="off" value="${esc(P.school||"")}"><datalist id="scl">${SCHOOLS.map(s=>`<option value="${esc(s)}">`).join("")}</datalist>`};
@@ -767,6 +774,40 @@ function prism(g,pts2,z0,z1,col,k,place){/* extrude 2D polygon (convex-ish fan) 
  const P=pts2.map(([x,y])=>[x,y]),n=P.length,cx=P.reduce((s,p)=>s+p[0],0)/n,cy=P.reduce((s,p)=>s+p[1],0)/n;
  [z0,z1].forEach((z,si)=>{const nn=place([0,0,si?1:-1],1);const o=g.p.length/3;g.v(place([cx,cy,z]),nn,col,k);P.forEach(p=>g.v(place([p[0],p[1],z]),nn,col,k));for(let j=0;j<n;j++)g.i.push(o,o+1+j,o+1+(j+1)%n)});
  for(let j=0;j<n;j++){const a=P[j],b=P[(j+1)%n],e=nrm([b[1]-a[1],-(b[0]-a[0]),0]),nn=place(e,1);quad(g,place([a[0],a[1],z0]),place([b[0],b[1],z0]),place([b[0],b[1],z1]),place([a[0],a[1],z1]),nn,col,k)}}
+/* ---------- 3D συνοδηγοί (καρτούν, low-poly, ίδιο στυλ με τα οχήματα) ---------- */
+function cyl(g,a,b,r0,r1,col,k,seg){seg=seg||10;const d=nrm(sub(b,a)),u=nrm(crs(d,Math.abs(d[1])<.9?[0,1,0]:[1,0,0])),w=crs(d,u),R=[];
+ [[a,r0],[b,r1]].forEach(([c,r])=>{const ring=[];for(let j=0;j<seg;j++){const t=2*Math.PI*j/seg,cs=Math.cos(t),sn=Math.sin(t);ring.push([c[0]+r*(u[0]*cs+w[0]*sn),c[1]+r*(u[1]*cs+w[1]*sn),c[2]+r*(u[2]*cs+w[2]*sn)])}R.push(ring)});grid(g,R,true,()=>[k,col])}
+const FIG={
+ galileo:{skin:"#f1bf9b",robe:"#4a2431",hair:"#cfc9bd",
+  build(B,H,C,PB,PH){
+   /* κεφάλι: γενειάδα, μουστάκι, μαλλιά στα πλάγια, καπέλο */
+   sphere(H,.15,.52,0,.17,.2,.21,C("#d6d1c6"),2,10);sphere(H,.27,.62,.07,.07,.04,.06,C("#d6d1c6"),2,8);sphere(H,.27,.62,-.07,.07,.04,.06,C("#d6d1c6"),2,8);
+   sphere(H,-.04,.72,.26,.1,.14,.08,C("#cfc9bd"),2,8);sphere(H,-.04,.72,-.26,.1,.14,.08,C("#cfc9bd"),2,8);sphere(H,-.16,.7,0,.12,.16,.2,C("#cfc9bd"),2,8);
+   sphere(H,-.02,.99,0,.31,.1,.31,C("#6a1f30"),2,12);sphere(H,-.04,1.07,.03,.2,.06,.2,C("#6a1f30"),2,10);cyl(PH,[-.12,1.08,-.12],[-.3,1.34,-.3],.012,.012,C("#f3efe6"),2,5);sphere(PH,-.3,1.35,-.3,.04,.05,.04,C("#f3efe6"),2,6);
+   /* τηλεσκόπιο στο χέρι */
+   cyl(PB,[.12,.2,.3],[.3,.5,.46],.07,.06,C("#4a2431"),2,8);sphere(PB,.3,.5,.46,.07,.07,.07,C("#f1bf9b"),2,8);
+   cyl(PB,[.22,.42,.46],[.62,1.18,.62],.06,.085,C("#8a5a2b"),2,10);cyl(PB,[.58,1.1,.6],[.66,1.26,.64],.09,.1,C("#e0b441"),3,10);cyl(PB,[.2,.38,.45],[.26,.48,.47],.065,.065,C("#e0b441"),3,10)}},
+ newton:{skin:"#f4c7a6",robe:"#27345a",hair:"#f2f2f6",
+  build(B,H,C,PB,PH){
+   const W=C("#f4f4f8");
+   sphere(H,-.12,.7,0,.27,.34,.36,W,2,12);sphere(H,0,.95,0,.27,.13,.27,W,2,10);sphere(H,.1,.88,.2,.1,.12,.1,W,2,8);sphere(H,.1,.88,-.2,.1,.12,.1,W,2,8);
+   [[.0,.6,.3],[-.1,.45,.31],[-.2,.34,.28],[.0,.6,-.3],[-.1,.45,-.31],[-.2,.34,-.28],[-.28,.5,0],[-.26,.34,.12],[-.26,.34,-.12]].forEach(p=>sphere(H,p[0],p[1],p[2],.13,.13,.13,W,2,8));
+   sphere(B,.12,.4,0,.1,.09,.13,C("#ffffff"),2,8);sphere(B,.2,.3,0,.05,.12,.07,C("#ffffff"),2,6);
+   [.22,.1].forEach(y=>sphere(B,.22,y,0,.03,.03,.03,C("#e0b441"),3,6));
+   /* μήλο στο υψωμένο χέρι */
+   cyl(PB,[.1,.2,-.3],[.3,.5,-.44],.07,.06,C("#27345a"),2,8);sphere(PB,.3,.52,-.44,.07,.07,.07,C("#f4c7a6"),2,8);
+   sphere(PB,.34,.72,-.48,.12,.11,.12,C("#e23b3b"),2,10);sphere(PB,.31,.68,-.42,.04,.04,.04,C("#ff9a9a"),2,6);cyl(PB,[.34,.82,-.48],[.35,.9,-.48],.012,.012,C("#6b3d1f"),2,5);sphere(PB,.4,.87,-.44,.06,.015,.035,C("#4caf50"),2,6)}}
+};
+function figure(id){const F=FIG[id];if(!F)return null;const B=new Geo(),H=new Geo(),PB=new Geo(),PH=new Geo(),C=hex,sk=C(F.skin);
+ /* σώμα: ρόμπα/παλτό + λαιμός + χέρι + καταπακτή οροφής */
+ sphere(PB,0,0,0,.4,.04,.42,[.03,.03,.035],1,12);
+ sphere(B,0,.1,0,.25,.34,.36,C(F.robe),2,12);sphere(B,0,.42,0,.17,.07,.2,C("#fbfaf6"),2,10);cyl(B,[0,.38,0],[0,.5,0],.1,.1,sk,2,8);
+ /* κεφάλι */
+ sphere(H,0,.72,0,.26,.29,.27,sk,2,14);
+ [-1,1].forEach(s=>{sphere(H,.2,.76,s*.1,.07,.075,.07,[1,1,1],2,8);sphere(H,.26,.76,s*.1,.04,.045,.04,[.04,.03,.03],1,8);sphere(H,.29,.78,s*.105,.012,.012,.012,[1,1,1],2,4);
+  box(H,.24,.87,s*.1,.03,.025,.11,C(id==="newton"?"#8a8f9a":"#b9b4aa"),2);sphere(H,.2,.64,s*.17,.05,.03,.05,C("#f19a8a"),2,6);sphere(H,-.02,.72,s*.26,.05,.08,.03,sk,2,6)});
+ sphere(H,.27,.69,0,.045,.05,.045,C("#e6a07e"),2,6);box(H,.265,.6,0,.02,.016,.09,C("#9c4a3c"),2);
+ F.build(B,H,C,PB,PH);return{B,H,PB,PH}}
 /* ---------- αυτοκίνητα ---------- */
 const TY={
  rally:{L:4.0,W:1.78,yb:.36,belt:1.0,nose:.74,tail:.88,roof:1.47,cf:.62,cr:-1.42,wf:.78,wr:.42,R:.36,wx:1.3,n:4.5,tb:.12},
@@ -817,7 +858,7 @@ function build(sel){const T=TY[sel.t]||TY.rally,g=new Geo(),has=a=>(sel.a||[]).i
  if(sel.t==="hover"){[[1.2,1],[1.2,-1],[-1.2,1],[-1.2,-1]].forEach(([x,s])=>{sphere(g,x,T.yb-.04,s*.55,.32,.08,.32,[.3,.95,1],4,12)});
   [1,-1].forEach(s=>box(g,-hl+.55,T.tail+.12,s*.45,.7,.28,.04,null,0))}
  /* αριθμός στις πόρτες */
- [1,-1].forEach(s=>{const x=(sel.t==="pickup"?cf-.55:xm+.05),y=(T.belt+T.yb)/2+.03,z=s*(T.W/2*plan(x)+.006),r=.2;quad(g,[x-r,y-r,z],[x+r,y-r,z],[x+r,y+r,z],[x-r,y+r,z],[0,0,s],WHT,6,s>0?[[0,1],[1,1],[1,0],[0,0]]:[[1,1],[0,1],[0,0],[1,0]])});
+ [1,-1].forEach(s=>{const x=(sel.t==="pickup"?cf-.55:xm+.05),y=(T.belt+T.yb)/2+.03,z=s*(T.W/2*plan(x)+.006),r=.2;quad(g,[x-r,y-r,z],[x+r,y-r,z],[x+r,y+r,z],[x-r,y+r,z],[0,0,s],WHT,6,s>0?[[0,1],[.25,1],[.25,0],[0,0]]:[[.25,1],[0,1],[0,0],[.25,0]])});
  /* αξεσουάρ */
  if(has("stripe")){[.16,-.16].forEach(z0=>{const P=[];for(let i=0;i<=60;i++){const x=hl-.05-(L-.1)*i/60;let y=top(x);if(x<cf&&x>cr){const r=rp(x);if(r>y)y=r}P.push([x,y+.012])}
   for(let i=0;i<P.length-1;i++){const a=P[i],b=P[i+1],za=z0-.06,zb=z0+.06,n=nrm(crs([b[0]-a[0],b[1]-a[1],0],[0,0,1]));const nn=n[1]<0?[-n[0],-n[1],0]:n;quad(g,[a[0],a[1],za],[b[0],b[1],za],[b[0],b[1],zb],[a[0],a[1],zb],nn,WHT,0.5)}})}
@@ -848,11 +889,12 @@ function loadGLB(id){if(GLBC[id])return GLBC[id];return GLBC[id]=fetch(GLB_BASE+
   (nd.children||[]).forEach(c=>W(J.nodes[c],M))};
  const sc=J.scenes[J.scene||0];sc.nodes.forEach(i=>W(J.nodes[i],M4.ry(Math.PI/2)));return parts})}
 const tp=(M,p)=>[M[0]*p[0]+M[4]*p[1]+M[8]*p[2]+M[12],M[1]*p[0]+M[5]*p[1]+M[9]*p[2]+M[13],M[2]*p[0]+M[6]*p[1]+M[10]*p[2]+M[14]];
-function glbAcc(parts,sel,SC){const has=a=>(sel.a||[]).indexOf(a)>=0,V=[];parts.forEach(pt=>{if(pt.wheel)return;for(let k=0;k<pt.g.p.length;k+=3){const q=tp(pt.M,[pt.g.p[k],pt.g.p[k+1],pt.g.p[k+2]]);V.push([q[0]*SC,q[1]*SC,q[2]*SC])}});
+const WADJ={firetruck:.28};
+function glbAcc(parts,sel,SC,cm){const has=a=>(sel.a||[]).indexOf(a)>=0,V=[];parts.forEach(pt=>{if(pt.wheel)return;for(let k=0;k<pt.g.p.length;k+=3){const q=tp(pt.M,[pt.g.p[k],pt.g.p[k+1],pt.g.p[k+2]]);V.push([q[0]*SC,q[1]*SC,q[2]*SC])}});
  const bb={x0:1e9,x1:-1e9,y0:1e9,y1:-1e9,z1:-1e9};V.forEach(v=>{bb.x0=Math.min(bb.x0,v[0]);bb.x1=Math.max(bb.x1,v[0]);bb.y0=Math.min(bb.y0,v[1]);bb.y1=Math.max(bb.y1,v[1]);bb.z1=Math.max(bb.z1,v[2])});
  const L=bb.x1-bb.x0,H=bb.y1-bb.y0,side=(x,y,r)=>{let z=0;V.forEach(v=>{if(Math.abs(v[0]-x)<r&&Math.abs(v[1]-y)<r)z=Math.max(z,v[2])});return z||bb.z1},topAt=x=>{let y=bb.y0;V.forEach(v=>{if(Math.abs(v[0]-x)<.25)y=Math.max(y,v[1])});return y};
  const g=new Geo(),fx={},ny=bb.y0+H*.42,nx=bb.x0+L*.47,nz=side(nx,ny,.18);
- if(!sel.nonum)[1,-1].forEach(s=>{const z=s*(nz+.012),r=Math.min(.24,H*.15);quad(g,[nx-r,ny-r,z],[nx+r,ny-r,z],[nx+r,ny+r,z],[nx-r,ny+r,z],[0,0,s],WHT,6,s>0?[[0,1],[1,1],[1,0],[0,0]]:[[1,1],[0,1],[0,0],[1,0]])});
+ if(!sel.nonum)[1,-1].forEach(s=>{const z=s*(nz+.012),r=Math.min(.24,H*.15);quad(g,[nx-r,ny-r,z],[nx+r,ny-r,z],[nx+r,ny+r,z],[nx-r,ny+r,z],[0,0,s],WHT,6,s>0?[[0,1],[.25,1],[.25,0],[0,0]]:[[.25,1],[0,1],[0,0],[.25,0]])});
  if(has("star")){const x=bb.x0+L*.25,cy=ny,zz=side(x,cy,.18);[1,-1].forEach(s=>{const z=s*(zz+.012),o=g.p.length/3;g.v([x,cy,z],[0,0,s],[1,.8,.15],3);for(let k=0;k<10;k++){const an=Math.PI/2+Math.PI*k/5,r=k%2?.07:.17;g.v([x+r*Math.cos(an),cy+r*Math.sin(an),z],[0,0,s],[1,.8,.15],3)}for(let k=0;k<10;k++)g.i.push(o,o+1+k,o+1+(k+1)%10)})}
  if(has("spoiler")){const x=bb.x0+.3,y=topAt(bb.x0+.3)+.3,Wd=bb.z1*2;box(g,x,y,0,.32,.05,Wd*.92,DARK,5);[1,-1].forEach(s=>box(g,x+.02,y-.16,s*Wd*.3,.08,.3,.05,DARK,5))}
  if(has("stripe")){const N=34,P=[];for(let i=0;i<=N;i++){const x=bb.x1-.08-(L-.16)*i/N;let y=-1e9;V.forEach(v=>{if(Math.abs(v[0]-x)<.2&&Math.abs(v[2])<.45)y=Math.max(y,v[1])});P.push([x,y])}
@@ -861,23 +903,27 @@ function glbAcc(parts,sel,SC){const has=a=>(sel.a||[]).indexOf(a)>=0,V=[];parts.
   const y=bb.y0+H*.6;return{g:w,x:bb.x0+L*.5,y,z:s*(side(bb.x0+L*.5,y,.2)+.03),s}});
  if(has("flames"))fx.flames=[0,1,2].map(q=>{const f=new Geo();sphere(f,0,0,0,.35-q*.09,.09-q*.02,.09-q*.02,q===0?[1,.45,.05]:q===1?[1,.75,.2]:[1,.95,.7],4,10);return{g:f,x:bb.x0-.25+q*.06,y:bb.y0+.2,z:-bb.z1*.5}});
  if(has("spark")){fx.spark=[];for(let k=0;k<26;k++){const s=new Geo(),r=.035+Math.random()*.03;sphere(s,0,0,0,r,r,r,[1,.95,.6],4,4);fx.spark.push({g:s,a:Math.random()*6.28,r:2.2+Math.random()*.9,h:.3+Math.random()*1.8,sp:.2+Math.random()*.5,ph:Math.random()*6})}}
- return{g,fx,bb}}
+ const OPEN=/^(kart|race)/.test(sel.t||"");let sx=bb.x0+L*(/^kart/.test(sel.t)?.12:.22),sy=topAt(sx);if(!OPEN){let by=-1e9;for(let k=2;k<=18;k++){const x=bb.x0+L*k/20,y=topAt(x);if(y>by+.04){by=y;sx=x}}sy=by}
+ let win=null;if(!OPEN&&cm){const gy=[],gx=[];parts.forEach(pt=>{if(pt.wheel)return;for(let k=0;k<pt.g.p.length/3;k++){const u=pt.g.t[2*k],v=pt.g.t[2*k+1],px=Math.min(cm.w-1,Math.max(0,Math.floor(u*cm.w))),py=Math.min(cm.h-1,Math.max(0,Math.floor(v*cm.h))),o=(py*cm.w+px)*4,r=cm.d[o],g2=cm.d[o+1],b=cm.d[o+2];
+   if(Math.min(g2,b)>=217&&r<=b){const q=tp(pt.M,[pt.g.p[3*k],pt.g.p[3*k+1],pt.g.p[3*k+2]]);if(Math.abs(q[2]*SC)>bb.z1*.5){gy.push(q[1]*SC);gx.push(q[0]*SC)}}}});
+  if(gy.length>6){gy.sort((a,b)=>a-b);gx.sort((a,b)=>a-b);const pc=(A,p)=>A[Math.floor((A.length-1)*p)];win={y0:pc(gy,.04),y1:pc(gy,.97),x0:pc(gx,.04),x1:pc(gx,.96)};win.xc=(win.x0+win.x1)/2;if(win.y1-win.y0<.15)win=null}}
+ return{g,fx,bb,win,seat:[sx,sy-(OPEN?(/^kart/.test(sel.t)?.32:.12):.3)]}}
 let CMAP=null;const cmapImg=()=>CMAP||(CMAP=new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=GLB_BASE+"colormap.png"}));
 /* ---------- WebGL ---------- */
 const VS=`attribute vec3 aP,aN,aC;attribute float aK;attribute vec2 aT;uniform mat4 uM,uVP;varying vec3 vW,vN,vC;varying float vK;varying vec2 vT;
 void main(){vec4 w=uM*vec4(aP,1.);vW=w.xyz;vN=mat3(uM)*aN;vC=aC;vK=aK;vT=aT;gl_Position=uVP*w;}`;
-const FS=`precision mediump float;varying vec3 vW,vN,vC;varying float vK;varying vec2 vT;uniform vec3 uPaint,uEye;uniform float uRefl,uTime,uGlow;uniform sampler2D uTex,uCm;uniform vec2 uKey;
+const FS=`precision mediump float;varying vec3 vW,vN,vC;varying float vK;varying vec2 vT;uniform vec3 uPaint,uEye;uniform float uRefl,uTime,uGlow,uGl;uniform sampler2D uTex,uCm;uniform vec2 uKey;
 vec3 lin(vec3 c){return pow(c,vec3(2.2));}
 vec3 env(vec3 r){float y=r.y;vec3 c=mix(vec3(.025,.022,.035),vec3(.06,.055,.09),smoothstep(-.2,.3,y));
  c+=vec3(1.6)*smoothstep(.82,.9,y);float a=atan(r.z,r.x);c+=vec3(.9,.85,1.)*smoothstep(.93,.99,abs(sin(a*2.+.4)))*smoothstep(.05,.45,y)*(1.-smoothstep(.75,.85,y));
  c+=vec3(.55,.3,.65)*exp(-abs(y)*9.)*.6;return c;}
 void main(){float k=vK;vec3 N=normalize(vN);if(!gl_FrontFacing)N=-N;vec3 V=normalize(uEye-vW);if(dot(N,V)<0.)N=-N;
- if(k>9.5){vec3 t=texture2D(uCm,vT).rgb;if(uKey.y>.5){float mx=max(t.r,max(t.g,t.b)),mn=min(t.r,min(t.g,t.b)),dl=mx-mn,s=mx>0.?dl/mx:0.,h=0.;
+ if(k>9.5){vec3 t=texture2D(uCm,vT).rgb;float gl0=step(.85,min(t.b,t.g))*step(t.r,t.b);if(uKey.y>.5){float mx=max(t.r,max(t.g,t.b)),mn=min(t.r,min(t.g,t.b)),dl=mx-mn,s=mx>0.?dl/mx:0.,h=0.;
    if(dl>0.){if(mx==t.r)h=mod((t.g-t.b)/dl,6.);else if(mx==t.g)h=(t.b-t.r)/dl+2.;else h=(t.r-t.g)/dl+4.;h/=6.;}float hd=abs(h-uKey.x);hd=min(hd,1.-hd);
    if(s>.35&&mx>.3&&hd<.05)t=uPaint*clamp(mx/.9,.45,1.12);}
   vec3 b=lin(t);float gq=step(.85,min(t.b,t.g))*step(t.r,t.b);vec3 L1=normalize(vec3(.4,1.,.55)),L2=normalize(vec3(-.7,.45,-.4));vec3 amb=mix(vec3(.09,.08,.11),vec3(.34,.33,.4),N.y*.5+.5);
   float d=max(dot(N,L1),0.)*1.2+max(dot(N,L2),0.)*.35;vec3 H=normalize(L1+V);float sp=pow(max(dot(N,H),0.),mix(60.,180.,gq))*mix(.35,1.,gq);float fr=.05+.95*pow(1.-max(dot(N,V),0.),5.);
-  vec3 col=b*(amb+d)+env(reflect(-V,N))*fr*mix(.7,1.4,gq)+vec3(sp);col=col/(1.+col)*1.25;col=pow(col,vec3(1./2.2));float a=1.;if(uRefl>.5)a=.32*smoothstep(-1.3,-.02,vW.y);gl_FragColor=vec4(col,a);return;}
+  vec3 col=b*(amb+d)+env(reflect(-V,N))*fr*mix(.7,1.4,gq)+vec3(sp);col=col/(1.+col)*1.25;col=pow(col,vec3(1./2.2));float a=(uGl>.5&&gl0>.5)?.4:1.;if(uRefl>.5)a*=.32*smoothstep(-1.3,-.02,vW.y);gl_FragColor=vec4(col,a);return;}
  if(k>7.5){float r=length(vW.xz);float ring=.5+.5*smoothstep(.0,.02,abs(fract(r*1.4)-.5)-.47);vec3 c=lin(vec3(.075,.07,.1))*mix(.75,1.,ring)+vec3(.05,.045,.07)*smoothstep(3.2,2.,r);
   float a=.78*(1.-smoothstep(3.3,3.6,r));c+=vec3(.035)*smoothstep(3.25,3.35,r)*(1.-smoothstep(3.35,3.45,r));gl_FragColor=vec4(pow(c,vec3(1./2.2)),a);return;}
  if(k>6.5){float d=length(vT*2.-1.);gl_FragColor=vec4(0.,0.,0.,.62*(1.-smoothstep(.15,1.,d)));return;}
@@ -895,7 +941,7 @@ void main(){float k=vK;vec3 N=normalize(vN);if(!gl_FrontFacing)N=-N;vec3 V=norma
  vec3 col=base*(amb+d)*(1.-met)+env(R)*mix(vec3(1.),base*2.,met)*fr*env_s+vec3(sp);
  if(k>3.5&&k<4.5)col=base*(1.6+uGlow*1.5)+env(R)*.2;
  col=col/(1.+col)*1.25;col=pow(col,vec3(1./2.2));
- float a=1.;if(uRefl>.5){a=.32*smoothstep(-1.3,-.02,vW.y);}
+ float a=(uGl>.5&&k>.75&&k<1.5)?.2:1.;if(uRefl>.5){a*=.32*smoothstep(-1.3,-.02,vW.y);}
  gl_FragColor=vec4(col,a);}`;
 const M4={per(f,a,n,fa){const t=1/Math.tan(f/2);return[t/a,0,0,0,0,t,0,0,0,0,(fa+n)/(n-fa),-1,0,0,2*fa*n/(n-fa),0]},
  mul(a,b){const o=new Array(16);for(let i=0;i<4;i++)for(let j=0;j<4;j++){let s=0;for(let k=0;k<4;k++)s+=a[k*4+j]*b[i*4+k];o[i*4+j]=s}return o},
@@ -906,21 +952,22 @@ function mount(host,sel,color,num,opt){opt=opt||{};let cv=document.createElement
  gl.getExtension("OES_element_index_uint");
  const sh=(t,s)=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o};
  const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);gl.useProgram(pr);
- const A={};["aP","aN","aC","aK","aT"].forEach(n=>A[n]=gl.getAttribLocation(pr,n));const U={};["uM","uVP","uPaint","uEye","uRefl","uTime","uTex","uGlow","uCm","uKey"].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
+ const A={};["aP","aN","aC","aK","aT"].forEach(n=>A[n]=gl.getAttribLocation(pr,n));const U={};["uM","uVP","uPaint","uEye","uRefl","uTime","uTex","uGlow","uCm","uKey","uGl"].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
  const up=g=>{const mk=(d,T)=>{const b=gl.createBuffer();gl.bindBuffer(T||gl.ARRAY_BUFFER,b);gl.bufferData(T||gl.ARRAY_BUFFER,d,gl.STATIC_DRAW);return b};
   return{p:mk(new Float32Array(g.p)),n:mk(new Float32Array(g.n)),c:mk(new Float32Array(g.c.map(x=>x==null?0:x))),k:mk(new Float32Array(g.k)),t:mk(new Float32Array(g.t)),i:mk(new Uint16Array(g.i),gl.ELEMENT_ARRAY_BUFFER),n_:g.i.length}};
  const draw=(m,M)=>{gl.uniformMatrix4fv(U.uM,false,M);[["aP",m.p,3],["aN",m.n,3],["aC",m.c,3],["aK",m.k,1],["aT",m.t,2]].forEach(([a,b,s])=>{gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.enableVertexAttribArray(A[a]);gl.vertexAttribPointer(A[a],s,gl.FLOAT,false,0,0)});
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,m.i);gl.drawElements(gl.TRIANGLES,m.n_,gl.UNSIGNED_SHORT,0)};
- /* υφή αριθμού */
- const tc=document.createElement("canvas");tc.width=tc.height=128;const x2=tc.getContext("2d");x2.fillStyle="#fff";x2.beginPath();x2.arc(64,64,60,0,7);x2.fill();x2.lineWidth=7;x2.strokeStyle="#111";x2.stroke();x2.fillStyle="#111";x2.font="bold 78px system-ui,Arial";x2.textAlign="center";x2.textBaseline="middle";x2.fillText(String(num||"7"),64,70);
- const tx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tx);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,tc);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.uniform1i(U.uTex,0);
+ /* υφή: αριθμός (κελί 0) + συνοδηγός (κελί 3) */
+ const tc=document.createElement("canvas");tc.width=1024;tc.height=256;const x2=tc.getContext("2d");x2.fillStyle="#fff";x2.beginPath();x2.arc(128,128,120,0,7);x2.fill();x2.lineWidth=14;x2.strokeStyle="#111";x2.stroke();x2.fillStyle="#111";x2.font="bold 156px system-ui,Arial";x2.textAlign="center";x2.textBaseline="middle";x2.fillText(String(num||"7"),128,140);
+ const tx=gl.createTexture(),upT=()=>{gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tx);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,tc);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)};upT();gl.uniform1i(U.uTex,0);
+ let CO=null,seat=null,hy=0,win=null;if(opt.co){const F=figure(opt.co);if(F)CO={b:up(F.B),h:up(F.H),pb:up(F.PB),ph:up(F.PH)}}
  const isG=GLBT[sel.t]!=null,SC=2.1,FX={},st={live:true};let ready=!isG,GP=[];
- const car=isG?{g:new Geo(),wheels:[],fx:{},T:{L:4.2,W:1.9},hover:false}:build(sel);let body=up(car.g);const wh=car.wheels.map(w=>({m:up(w.g),w})),fl=new Geo();
+ const car=isG?{g:new Geo(),wheels:[],fx:{},T:{L:4.2,W:1.9},hover:false}:build(sel);if(!isG){seat=[(car.T.cf+car.T.cr)/2,car.T.roof-.3];win={y0:car.T.belt+.02,y1:car.T.roof-.03,xc:(car.T.cf+car.T.cr)/2}}let body=up(car.g);const wh=car.wheels.map(w=>({m:up(w.g),w})),fl=new Geo();
  gl.uniform1i(U.uCm,1);gl.uniform2f(U.uKey,0,0);
  if(isG)Promise.all([loadGLB(sel.t),cmapImg()]).then(([parts,im])=>{if(!st.live)return;const ct=gl.createTexture();gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,ct);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.activeTexture(gl.TEXTURE0);
-  GP=parts.map(pt=>({m:up(pt.g),M:M4.mul(M4.sc(SC,SC,SC),pt.M),wheel:pt.wheel}));const ac=glbAcc(parts,opt.sprite?{a:[],nonum:1}:sel,SC);body=up(ac.g);Object.keys(ac.fx).forEach(k=>FX[k]=ac.fx[k].map(o=>Object.assign({m:up(o.g)},o)));
-  car.T.L=ac.bb.x1-ac.bb.x0;car.T.W=ac.bb.z1*2;car.bb=ac.bb;ready=true;if(!opt.dist)st.dist*=Math.max(.95,car.T.L/4.9,(ac.bb.y1-ac.bb.y0)/2.3);try{opt.onReady&&opt.onReady(ac.bb)}catch(e){}}).catch(()=>{try{opt.onFail&&opt.onFail()}catch(e){}});
+  GP=parts.map(pt=>({m:up(pt.g),M:M4.mul(M4.sc(SC,SC,SC),pt.M),wheel:pt.wheel}));let cm=null;try{const cc=document.createElement('canvas');cc.width=im.naturalWidth;cc.height=im.naturalHeight;const c2=cc.getContext('2d');c2.drawImage(im,0,0);cm={w:cc.width,h:cc.height,d:c2.getImageData(0,0,cc.width,cc.height).data}}catch(e){}const ac=glbAcc(parts,opt.sprite?{a:[],nonum:1}:sel,SC,opt.co?cm:null);win=ac.win;body=up(ac.g);Object.keys(ac.fx).forEach(k=>FX[k]=ac.fx[k].map(o=>Object.assign({m:up(o.g)},o)));
+  seat=ac.seat;car.T.L=ac.bb.x1-ac.bb.x0;car.T.W=ac.bb.z1*2;car.bb=ac.bb;ready=true;if(!opt.dist)st.dist*=Math.max(.95,car.T.L/4.9,(ac.bb.y1-ac.bb.y0)/2.3);try{opt.onReady&&opt.onReady(ac.bb)}catch(e){}}).catch(()=>{try{opt.onFail&&opt.onFail()}catch(e){}});
  const S=3.6;quad(fl,[-S,0,-S],[S,0,-S],[S,0,S],[-S,0,S],[0,1,0],[0,0,0],8);const floor=up(fl);
  const bl=new Geo(),bw=2.6,bd=1.35;quad(bl,[-bw,.004,-bd],[bw,.004,-bd],[bw,.004,bd],[-bw,.004,bd],[0,1,0],[0,0,0],7,[[0,0],[1,0],[1,1],[0,1]]);const blob=up(bl);
  Object.keys(car.fx).forEach(k=>FX[k]=car.fx[k].map(o=>Object.assign({m:up(o.g)},o)));
@@ -934,18 +981,21 @@ function mount(host,sel,color,num,opt){opt=opt||{};let cv=document.createElement
  const pu=e=>{P.delete(e.pointerId);st.pd=0;if(st.drag&&st.drag.m<6&&performance.now()-st.drag.t<350){st.glow=1;st.spin=1;try{opt.onTap&&opt.onTap()}catch(x){}}st.drag=null};
  cv.addEventListener("pointerdown",pd);cv.addEventListener("pointermove",pm);cv.addEventListener("pointerup",pu);cv.addEventListener("pointercancel",pu);
  cv.addEventListener("wheel",e=>{e.preventDefault();st.dist=Math.max(5.2,Math.min(12,st.dist*(1+Math.sign(e.deltaY)*.08)))},{passive:false});
- let last=performance.now(),wa=0;
+ let last=performance.now(),wa=0;const fs=()=>opt.co?(win&&!opt.portrait?Math.min(.85,(win.y1-win.y0)*(win.xc!==undefined&&!win.x0?1.9:1.2)):opt.fsc||(car.bb?Math.max(.9,Math.min(1.5,(car.bb.x1-car.bb.x0)/4.2)):Math.max(.9,Math.min(1.25,car.T.L/4.4)))):1;
  function frame(now){if(!st.live)return;if(!opt.sprite&&!document.body.contains(cv)){destroy();return}
-  const dt=Math.min(.05,(now-last)/1000);last=now;const t=now/1000;
+  const dt=Math.min(.05,(now-last)/1000);last=now;const t=now/1000;if(CO){let tg=opt.sprite?(opt.hyS||.2):st.yaw-Math.PI/2;tg=Math.atan2(Math.sin(tg),Math.cos(tg));tg=Math.max(-1.25,Math.min(1.25,tg));hy+=(tg-hy)*Math.min(1,dt*6)}
   const dpr=Math.min(2,window.devicePixelRatio||1),W=cv.clientWidth,H=cv.clientHeight;if(cv.width!==Math.round(W*dpr)||cv.height!==Math.round(H*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)}
   if(!st.drag){st.idle+=dt;st.yaw+=st.vy;st.vy*=.92;if(st.idle>2.2&&!opt.still)st.yaw+=dt*.32*Math.min(1,(st.idle-2.2))}
   st.glow=Math.max(0,st.glow-dt*.8);st.spin=Math.max(0,st.spin-dt*.45);wa+=dt*(.6+st.spin*14);
   gl.viewport(0,0,cv.width,cv.height);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
   if(opt.sprite){st.yaw=opt.yawS||0;st.pitch=opt.pitchS||.04;st.dist=40}
-  const tg=[0,opt.sprite?(opt.ty||.9):.62,0],e=[tg[0]+st.dist*Math.cos(st.pitch)*Math.sin(st.yaw),tg[1]+st.dist*Math.sin(st.pitch)+.25,tg[2]+st.dist*Math.cos(st.pitch)*Math.cos(st.yaw)];
-  const VP=M4.mul(M4.per(opt.sprite?(opt.fov||.16):.62,W/Math.max(H,1),.1,60),M4.look(e,tg,[0,1,0]));gl.uniformMatrix4fv(U.uVP,false,VP);gl.uniform3fv(U.uEye,e);gl.uniform1f(U.uTime,t);gl.uniform1f(U.uGlow,st.glow);
+  if(CO&&seat&&!st.fr&&ready){st.fr=1;const top=win?0:seat[1]+.3+1.25*fs();if(top>2.3){st.ty=Math.min(top/2,1.6);if(!opt.dist)st.dist*=Math.min(1.35,top/2.4)}}
+  const tg=opt.portrait&&seat?[seat[0],seat[1]+.3+(opt.pty||.72),0]:[0,opt.sprite?(opt.ty||.9):(st.ty||.62),0],e=[tg[0]+st.dist*Math.cos(st.pitch)*Math.sin(st.yaw),tg[1]+st.dist*Math.sin(st.pitch)+.25,tg[2]+st.dist*Math.cos(st.pitch)*Math.cos(st.yaw)];
+  const VP=M4.mul(M4.per(opt.sprite?(opt.fov||.16):.62,W/Math.max(H,1),.1,60),M4.look(e,tg,[0,1,0]));gl.uniformMatrix4fv(U.uVP,false,VP);gl.uniform3fv(U.uEye,e);gl.uniform1f(U.uTime,t);gl.uniform1f(U.uGlow,st.glow);gl.uniform1f(U.uGl,CO&&win&&!opt.portrait?1:0);
   const lift=car.hover?.32+Math.sin(t*2)*.07:0,ROOT=M4.tr(0,lift,0);
   const scene=(mir)=>{const B=mir?M4.mul(M4.sc(1,-1,1),ROOT):ROOT;
+   if(CO&&seat&&ready){const F=fs(),ins=!!win&&!opt.portrait,jy=Math.sin(t*2.6)*.015+(st.glow>0?Math.sin((1-st.glow)*Math.PI*3)*(ins?.05:.16)*st.glow:0),ox=ins?win.xc:seat[0],oy=ins?(win.y0+win.y1)/2-.785*F+(WADJ[sel.t]||0):seat[1]+.3,Mo=M4.mul(B,M4.mul(M4.tr(ox,oy+jy,0),M4.sc(F,F,F))),Mh=M4.mul(Mo,M4.mul(M4.tr(0,.42,0),M4.mul(M4.ry(hy),M4.tr(0,-.42,0))));draw(CO.b,Mo);draw(CO.h,Mh);if(!ins){draw(CO.pb,Mo);draw(CO.ph,Mh)}}
+   if(opt.portrait)return;
    GP.forEach(p=>{gl.uniform2f(U.uKey,GLBT[sel.t]>=0?GLBT[sel.t]:0,!p.wheel&&GLBT[sel.t]>=0?1:0);draw(p.m,M4.mul(B,p.wheel?M4.mul(p.M,M4.rx(wa)):p.M))});draw(body,B);
    wh.forEach(({m,w})=>draw(m,M4.mul(B,M4.mul(M4.tr(w.x,w.y,w.z),M4.rz(-wa)))));
    if(FX.wings)FX.wings.forEach(o=>draw(o.m,M4.mul(B,M4.mul(M4.tr(o.x,o.y,o.z),M4.mul(M4.rx(-(1.0+Math.sin(t*5)*.35)),o.s<0?M4.sc(1,1,-1):M4.sc(1,1,1))))));
@@ -962,8 +1012,23 @@ function mount(host,sel,color,num,opt){opt=opt||{};let cv=document.createElement
  requestAnimationFrame(frame);return{destroy,st,cv}}
 return{mount,GLBT}})();
 
+
+/* ---- Συνοδηγοί φυσικοί ---- */
+const COMP={galileo:{n:"Γαλιλαίος",g:"Γαλιλαίο",card:["kin",3],
+  ok:["Eppur si muove! Κι εσύ κινείσαι σωστά!","Μπράβο! Το πείραμα επιβεβαιώθηκε!","Ούτε από τον Πύργο της Πίζας δεν θα το έλεγα καλύτερα!","Σωστό! Τόσο καθαρό όσο οι δορυφόροι του Δία στο τηλεσκόπιό μου."],
+  bad:["Μην ανησυχείς, κι εγώ επαναλάμβανα τα πειράματα ξανά και ξανά.","Ας το κοιτάξουμε μαζί, βήμα βήμα.","Η φύση δεν βιάζεται· ούτε εμείς. Δες αυτό:"],
+  st:["{n} σωστές στη σειρά! Κινείσαι σαν βολίδα!","{n} στη σειρά! Ούτε ο Αριστοτέλης δεν θα σε σταματούσε!"]},
+ newton:{n:"Νεύτωνας",g:"Νεύτωνα",card:["dyn1",3],
+  ok:["Εξαιρετικά! Ούτε το μήλο δεν έπεσε τόσο σωστά!","Σωστό! Αυτό θα το έβαζα στα Principia.","Μπράβο! Λογική σταθερή σαν τον πρώτο μου νόμο."],
+  bad:["Κάθε δράση έχει αντίδραση: ξαναπροσπάθησε!","Ας δούμε προσεκτικά τι συμβαίνει:","Ακόμα κι εγώ πάτησα σε ώμους γιγάντων. Δες αυτό:"],
+  st:["{n} σωστές! Η πρόοδός σου επιταχύνεται!","{n} στη σειρά! Σαν να μη σε σταματά καμία δύναμη!"]}};
+const coGot=id=>{const c=COMP[id];if(!c)return false;try{const q=qget()[c.card[0]];return!!q&&!!q.b}catch(e){return false}};
+const coFor=w=>Object.keys(COMP).find(k=>COMP[k].card[0]===w)||"";
+const carCo=()=>{try{const p=pget();return p.co&&coGot(p.co)?p.co:""}catch(e){return""}};
+const coImg=(id,cls)=>`<img class="${cls||"coi"}" src="cars/co/${id}.webp" alt="">`;
+const coLine=(id,k,n)=>{const a=COMP[id][k];return a[Math.floor(Math.random()*a.length)].replace("{n}",n)};
 let G3Y=-.65;function g3Into(h,still){if(!h)return;try{let m=null;const done=()=>{h.classList.add("on");const sv=h.querySelector(":scope>svg");if(sv)sv.remove()};
- m=G3.mount(h,carSel(),carC(),carNum(),{yaw:G3Y,onTap:()=>{try{sfx.rev();buzz(40)}catch(e){}},onReady:done});if(!m)return;if(G3.GLBT[carSel().t]==null)done();
+ m=G3.mount(h,carSel(),carC(),carNum(),{co:carCo()||null,yaw:G3Y,onTap:()=>{try{sfx.rev();buzz(40)}catch(e){}},onReady:done});if(!m)return;if(G3.GLBT[carSel().t]==null)done();
  const iv=setInterval(()=>{if(!document.body.contains(m.cv)){clearInterval(iv);return}G3Y=m.st.yaw},500)}catch(e){}}
 function g3Mount(){g3Into($$("pv3"))}
 function profile(){const p=pget();setBg(p.bg);
@@ -1054,15 +1119,16 @@ function quiz(){
   clearTimer();if(S.tl&&S.tqi!==S.i){S.tqi=S.i;S.left=S.tl}
   saveS();
   const q=S.qs[S.i],n=S.qs.length,pos=S.ok/n*100,right=S.state==="right",wr=S.state==="wrong",tm=S.state==="time",dead=S.hearts!=null&&S.hearts<=0;setBg(S.lv.id);
+  const CO=S.quest||S.chal?"":carCo();if(!S.hid)S.hid=new Set();
   const sk=q.sc||auto(q.q)||S.lv.sc;if(S.sndI!==S.i&&!right&&!wr){S.sndI=S.i;sfx.scene(sk)}
   $.innerHTML=`<div class="top">${S.failed?"":`<button class="ex" id="ex">✕ Έξοδος</button>`}<button class="ex" id="sn" aria-label="Ήχοι και δόνηση">${sndOn()?"🔊":"🔇"}</button><span class="xp">${S.xp} XP</span></div>
    <div class="track"><div class="dot" id="dot" style="left:calc(${pos}% - ${pos*0.2}px)"><span style="display:inline-block;${vh(S.lv.id)[1]}">${vh(S.lv.id)[0]}</span></div><em>🏁</em></div>
    <div class="combo">${S.hearts!=null?(S.quest&&S.quest.boss?"👹 ":"")+"❤️".repeat(Math.max(S.hearts,0))+"🖤".repeat(Math.max(S.hmax-Math.max(S.hearts,0),0))+(S.streak>1?"  🔥 "+S.streak:""):(S.streak>1?"🔥 Σερί "+S.streak:"")}</div>${scene(q,S.lv)}
    ${S.tl?`<div class="tmr"><i id="tf" class="${S.left<=10?"low":""}" style="width:${S.left/S.tl*100}%"></i><b id="tt">${Math.ceil(S.left)}″</b></div>`:""}${q.tr?`<div class="tr">Τράπεζα Θεμάτων · ${esc(q.tr)}</div>`:""}<div class="q">${esc(q.q)}</div>${q.svg?`<div class="fig">${q.svg}</div>`:""}`+
-   (q.num?NUMUI(q,right,wr,tm):q.opts.map((o,k)=>`<button class="btn opt${(right||tm)&&k===q.ans?" right":S.dis.has(k)?" wrong":""}" data-k="${k}" ${right||tm||S.dis.has(k)?"disabled":""}>${esc(o)}</button>`).join(""))+
-   (right?`<div class="why"><b>Σωστό!</b> ${S.quest?GUIDE[S.quest.w][0]+" "+OKL[S.i%3]+" ":""}${fm(q.why||"")}</div><button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="nx">${S.i+1<n?"Επόμενη":"Δες το αποτέλεσμα"}</button>`:
+   (q.num?NUMUI(q,right,wr,tm):q.opts.map((o,k)=>`<button class="btn opt${(right||tm)&&k===q.ans?" right":S.dis.has(k)?" wrong":S.hid.has(k)?" gone":""}" data-k="${k}" ${right||tm||S.dis.has(k)||S.hid.has(k)?"disabled":""}>${esc(o)}</button>`).join("")+(CO&&!right&&!wr&&!tm&&q.opts.length>=3&&!S.missed&&!S.hid.size?`<button class="ex hintb" id="hn">${coImg(CO,"hni")} Ρώτα τον ${COMP[CO].g} <small>(−5 XP, ${2-(S.hn||0)} έμειναν)</small></button>`:""))+
+   (right?(CO?`<div class="cbub ok">${coImg(CO)}<div><b>${COMP[CO].n}:</b> ${S.streak>=3&&[3,5,8,10,15,20].indexOf(S.streak)>=0&&!S.missed?coLine(CO,"st",S.streak):coLine(CO,"ok")}<span>${fm(q.why||"")}</span></div></div>`:`<div class="why"><b>Σωστό!</b> ${S.quest?GUIDE[S.quest.w][0]+" "+OKL[S.i%3]+" ":""}${fm(q.why||"")}</div>`)+`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="nx">${S.i+1<n?"Επόμενη":"Δες το αποτέλεσμα"}</button>`:
     tm?`<div class="why"><b>⏱ Ο χρόνος τελείωσε.</b> ${dead?"Οι ζωές σου τελείωσαν. ":""}Σωστό: ${esc(q.opts[q.ans])}. ${fm(q.why||"")}</div>${dead?"":`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="nx">${S.i+1<n?"Επόμενη":"Δες το αποτέλεσμα"}</button>`}`:
-    wr?`<div class="why"><b>Λάθος.</b> ${S.quest?GUIDE[S.quest.w][0]+" "+BADL[S.i%3]+" ":""}${dead?"Οι ζωές σου τελείωσαν!":"Βοήθεια: "+fm(q.tip||S.lv.tip)}</div>${dead?"":`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="rt">Προσπάθησε ξανά</button><button class="btn" id="nx">Επόμενη</button>`}`:"");
+    wr?(CO&&!dead?`<div class="cbub no">${coImg(CO)}<div><b>${COMP[CO].n}:</b> ${coLine(CO,"bad")}<span>${fm(q.tip||S.lv.tip)}</span></div></div>`:`<div class="why"><b>Λάθος.</b> ${S.quest?GUIDE[S.quest.w][0]+" "+BADL[S.i%3]+" ":""}${dead?"Οι ζωές σου τελείωσαν!":"Βοήθεια: "+fm(q.tip||S.lv.tip)}</div>`)+`${dead?"":`<button class="ex fb" id="fb">Διαφωνείς με την απάντηση; Στείλε σχόλιο</button><button class="btn primary" id="rt">Προσπάθησε ξανά</button><button class="btn" id="nx">Επόμενη</button>`}`:"");
   if(!right&&!wr||wr)$.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{const k=+b.dataset.k;
     if(k===q.ans){if(!S.missed){S.ok++;S.streak++;if(S.chal)cpt();S.xp+=10+Math.min(S.streak-1,5)*2;mist(q,0,S.lv&&S.lv.id==="mist")}else S.xp+=5;S.state="right";quiz();confetti();sfx.right(S.missed?0:S.streak)}
     else{if(!S.missed){S.missed=true;S.streak=0;mist(q,1);S.wrong.push({q:q.orig,mine:q.opts[k],right:q.opts[q.ans]});loseLife()}
@@ -1072,10 +1138,11 @@ function quiz(){
     else{if(!S.missed){S.missed=true;S.streak=0;S.wrong.push({q:q.orig,mine:raw+" "+(q.unit||""),right:q.opts[q.ans]});loseLife()}S.state="wrong";quiz();const d=$$("dot");if(d)d.classList.add("miss");sfx.wrong()}};
    $$("ck").onclick=go;$$("ni").onkeydown=e=>{if(e.key==="Enter")go()};try{$$("ni").focus()}catch(e){}}
   if($$("rt"))$$("rt").onclick=()=>{S.state=null;quiz()};
+  if($$("hn")){if((S.hn||0)>=2)$$("hn").remove();else $$("hn").onclick=()=>{const w=q.opts.map((_,k)=>k).filter(k=>k!==q.ans&&!S.dis.has(k)&&!S.hid.has(k));if(!w.length)return;S.hid.add(w[Math.floor(Math.random()*w.length)]);S.hn=(S.hn||0)+1;S.xp=Math.max(0,S.xp-5);try{buzz(20)}catch(e){}quiz()}}
   if($$("fb"))$$("fb").onclick=()=>feedback(q);
   if($$("sn"))$$("sn").onclick=()=>{st.set("snd",!sndOn());quiz()};
   if($$("ex"))$$("ex").onclick=exitAsk;
-  if($$("nx"))$$("nx").onclick=()=>{S.state=null;S.dis=new Set();S.missed=false;S.i++;S.i<n?quiz():finish()};
+  if($$("nx"))$$("nx").onclick=()=>{S.state=null;S.dis=new Set();S.hid=new Set();S.missed=false;S.i++;S.i<n?quiz():finish()};
   startTimer();
 }
 
