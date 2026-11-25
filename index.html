@@ -279,6 +279,12 @@ body.hbig main{max-width:1180px}.rtmr~#rtr .r3.h{width:min(80vw,calc(36vh*2))}bo
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
 .tile.lkd{filter:grayscale(.85) brightness(.75);cursor:default;opacity:.8}
 .tgrid .tile{min-height:112px;margin:0;padding:10px 12px;border-radius:18px}.tgrid .tw{font-size:34px;right:8px;top:2px;transform:rotate(-6deg)}.tgrid .tw svg{width:56px!important}.tgrid .tb b{font-size:15px;line-height:1.2}.tgrid .tb small{font-size:12.5px}.tgrid .ts{left:12px;top:8px;font-size:14px}
+.frb{display:none;margin-left:8px;min-width:20px;padding:1px 6px;border-radius:10px;background:#e0475b;color:#fff;font-size:12px}
+.frme{background:rgba(255,255,255,.07);border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center}.frme small{display:block;color:var(--mute);font-size:12px}.frme b{display:block;font-size:30px;letter-spacing:6px;margin:2px 0 6px}
+.fri{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;margin:6px 0;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line)}.fri.col{display:block}
+.frt{display:flex;align-items:center;gap:8px}.frx{margin-left:auto;font-size:12.5px;color:var(--mute)}.frs{margin-top:4px;font-size:14px}.frm{color:var(--mute);font-size:12.5px}.frmsg{margin:8px 0;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.1);font-size:13.5px}
+.dot{width:9px;height:9px;border-radius:50%;background:#6b7a90;flex:none}.dot.on{background:#3ddc84;box-shadow:0 0 6px #3ddc84}
+.frd{border:0;background:none;color:var(--mute);font:inherit;font-size:14px;cursor:pointer;padding:2px 6px}.frd.sure{color:#ff7b8a;font-size:12px}
 .mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 10px}
 .mb{font:inherit;font-size:12.5px;color:var(--text);background:rgba(23,40,63,.78);border:1.5px solid var(--line);border-radius:14px;padding:9px 2px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.15;text-align:center}.mb span{font-size:22px}.mb:active{transform:scale(.96)}.mb:focus-visible{outline:3px solid var(--glow)}
 .brow{display:flex;gap:8px;margin:0 0 8px}.brow .btn{margin:0;flex:1;padding:10px 6px;font-size:14px;text-align:center}
@@ -354,7 +360,7 @@ const $=document.getElementById("app"),$$=i=>document.getElementById(i);
 /* ---- Αποστολή αποτελεσμάτων στον καθηγητή (προαιρετική) ----
    Βάλε εδώ τη διεύθυνση του Google Apps Script (βλέπε ΟΔΗΓΙΕΣ) και το ίδιο κλειδί με του script.
    Αν η RESULTS_URL είναι κενή, δεν στέλνεται τίποτα. */
-const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v109";
+const RESULTS_URL="https://script.google.com/macros/s/AKfycbxTsRypouAOHG01jLq_i8qeU2p6K-JSeNS60VXb19GWERRxxVUR2OQvTGKXgUkpKmDlsw/exec",RESULTS_KEY="pim-2026-xyz",APPV="pim-v113";
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const voc=n=>{n=String(n||"").trim();if(!/^[Α-Ωα-ωΆ-Ώά-ώϊϋΐΰ]+$/.test(n))return n;const l=n.toLowerCase();
  if(/(ιος|ειος)$/.test(l)&&n.length>5)return n.slice(0,-2)+"ε";if(/ος$/.test(l))return n.slice(0,-1);if(/ης$/.test(l)||/ας$/.test(l))return n.slice(0,-1);return n};
@@ -369,6 +375,7 @@ const SCHOOLS=[];/* προτάσεις που εμφανίζονται στο π
 const schClean=s=>String(s||"").replace(/\s+/g," ").trim().slice(0,30);
 const BADW=["μαλακ","πουτ","γαμ","σκατ","αρχιδ","πουστ","fuck","shit","bitch","nazi","ναζι"],badNick=s=>{const t=String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zα-ω0-9]/g,"");return BADW.some(w=>t.indexOf(w.normalize("NFD").replace(/[\u0300-\u036f]/g,""))>=0)};
 let P=st.get("profile",null),S=null;
+{const _s=st.set;st.set=(k,v)=>{_s(k,v);try{syncMark(k)}catch(e){}}}
 const prog=()=>st.get("prog:"+P.code,{});
 
 function login(){setBg("kin");document.body.classList.add("sg");
@@ -398,7 +405,7 @@ function login(){setBg("kin");document.body.classList.add("sg");
       g.disabled=false;g.textContent="▶ Ξεκίνα";
       if(s==="taken"){e.textContent="Αυτός ο κωδικός υπάρχει ήδη με άλλο όνομα. Διάλεξε διαφορετικό κωδικό. Αν είναι δικός σου, γράψε το ίδιο όνομα που είχες βάλει την πρώτη φορά.";return}
       if(s==="badcode"){e.textContent="Έλεγξε το όνομα και τον κωδικό (3–16 γράμματα ή αριθμοί).";return}}
-    P={name,code,school:sch};st.set("profile",P);home()};
+    P={name,code,school:sch};st.set("profile",P);g.disabled=true;g.textContent="Φόρτωση προόδου…";try{await syncPull()}catch(x){}home()};
 }
 
 const PHOTOS=["kin","dyn1"];
@@ -520,11 +527,11 @@ function home(){clearS();clearTimer();U.q=0;rstop();{const c=consGet();if(!c||(c
   (nx<0?`<p class="good">Πήρες όλα τα αστέρια! Παίξε ξανά για περισσότερα XP.</p>`:"")+
   `<div class="tgrid">`+LEVELS.map((l,i)=>{const r=pr[l.id],lk=!unitOpen(l.id);return `<button class="tile${PHOTOS.includes(l.id)?" pho":""}${i===nx?" nx":""}${lk?" lkd":""}" ${lk?"disabled":`data-i="${i}"`} style="--g:linear-gradient(135deg,${WORLDS[l.id].g});--i:${i};--p:url(img/${l.id}.webp)"><span class="tw">${ICONS[l.id]}</span><span class="ts">${lk?"🔒":stars(r?r.stars:0)}</span><span class="tb"><b>${esc(l.title)}</b><small>${lk?"Σύντομα":i===nx?"▶ "+(got?"Συνέχισε":"Ξεκίνα"):(r?"Καλύτερο "+r.best+"/20":"Νέο")}</small></span></button>`}).join("")+`</div>`+
   chBanner()+`<div class="mgrid"><button class="mb" id="qm"><span>🗺️</span>Αποστολή</button><button class="mb" id="cd"><span>🃏</span>Κάρτες ${cardCount()}/16</button><button class="mb" id="pf"><span>🎨</span>Προφίλ</button><button class="mb" id="pg"><span>📊</span>Πρόοδος</button></div>`+
-  `<div class="brow">${mc?`<button class="btn ghost" id="ms">🎯 Λάθη μου (${mc})</button>`:""}<button class="btn ghost" id="sn" aria-label="Ήχοι και δόνηση">${sndOn()?"🔊 Ήχοι":"🔇 Ήχοι"}</button><button class="btn ghost" id="out">👤 Αλλαγή</button></div><button class="btn ghost" id="sgx">💬 Πρόταση ή πρόβλημα</button>`;
+  `<button class="btn ghost" id="fr">👥 Φίλοι<b id="frb" class="frb"></b></button><div class="brow">${mc?`<button class="btn ghost" id="ms">🎯 Λάθη μου (${mc})</button>`:""}<button class="btn ghost" id="sn" aria-label="Ήχοι και δόνηση">${sndOn()?"🔊 Ήχοι":"🔇 Ήχοι"}</button><button class="btn ghost" id="out">👤 Αλλαγή</button></div><button class="btn ghost" id="sgx">💬 Πρόταση ή πρόβλημα</button>`;
   $.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const l=LEVELS[+b.dataset.i];enter(b,UG(l.id),()=>l.id==="kin"?kinMenu():start(l,null))});
   if($$("go"))$$("go").onclick=()=>enter($$("go"),UG(LEVELS[nx].id),()=>LEVELS[nx].id==="kin"?kinMenu():start(LEVELS[nx],null));
   if($$("ms"))$$("ms").onclick=practice;if($$("dr"))$$("dr").onclick=dailyRound;if($$("pf"))$$("pf").onclick=profile;if($$("pg"))$$("pg").onclick=progressScreen;if($$("sgx"))$$("sgx").onclick=suggest;if($$("qm"))$$("qm").onclick=()=>enter($$("qm"),"linear-gradient(135deg,#2a1b5a,#7a3da8)",quest);if($$("cd"))$$("cd").onclick=()=>enter($$("cd"),"linear-gradient(135deg,#4a2c8a,#c9a227)",cards);
-  pushBind();pushTouch();
+  pushBind();pushTouch();frBind();
   {const wl=()=>{if(P&&!st.get("tour:"+P.code,0))showWelcome()};
    if((isIos()&&!isStd()&&!st.get("ios:seen",0))||location.hash==="#ios")showIosHint(0,wl);else wl()}
   if($$("ch"))$$("ch").onclick=()=>enter($$("ch"),"linear-gradient(135deg,#7a3da8,#e0679a)",chOpen()?chalScreen:chalSoon);
@@ -725,7 +732,7 @@ const dset=x=>st.set("daily:"+P.code,x);
 function dailyAlive(x){if(!x.last)return 0;const g=dnum(ymd())-dnum(x.last);return g<=1||(g===2&&x.pass>0)?x.streak:0}
 function dailyDone(){const x=dget(),t=ymd();if(x.last===t)return"";const g=x.last?dnum(t)-dnum(x.last):99;let m="";
  if(g===1)x.streak++;else if(g===2&&x.pass>0){x.pass--;x.streak++;m=" (χρησιμοποιήθηκε το πάσο 🛡️)"}else x.streak=1;
- x.last=t;x.best=Math.max(x.best,x.streak);dset(x);const bn=20+Math.min(x.streak,10)*5;st.set("bonus:"+P.code,bonusXP()+bn);setTimeout(()=>{try{sfx.streak()}catch(e){}},900);return`🔥 Σερί ${x.streak} ${x.streak===1?"ημέρα":"ημέρες"}${m}<br>🎁 Μπόνους ημερήσιου στόχου: <b>+${bn} XP</b>`}
+ x.last=t;x.best=Math.max(x.best,x.streak);dset(x);const bn=20+Math.min(x.streak,10)*5;st.set("bonus:"+P.code,bonusXP()+bn);setTimeout(()=>{try{sfx.streak()}catch(e){}},900);setTimeout(()=>{try{frSync(1)}catch(e){}},1500);return`🔥 Σερί ${x.streak} ${x.streak===1?"ημέρα":"ημέρες"}${m}<br>🎁 Μπόνους ημερήσιου στόχου: <b>+${bn} XP</b>`}
 const DAY=864e5,SCH=[1,3,7],mget=()=>st.get("msr:"+P.code,{});
 const dueCount=()=>{const m=mget(),n=Date.now();return Object.values(m).filter(e=>e.d<=n).length};
 const UM=()=>{if(!UM.m){UM.m={};LEVELS.forEach(l=>l.qs.forEach(q=>UM.m[hq(q)]=l.id))}return UM.m};
@@ -762,6 +769,26 @@ function avatarSheet(){const xp=totXP();
   {const n=$$("pnum");n.oninput=()=>{const v=n.value.replace(/\D/g,"").slice(0,2);n.value=v;if(v!==""){const q=pget();q.num=v;st.set("prof:"+P.code,q);const pv=d.querySelector(".pv");pv.classList.remove("on");pv.innerHTML=CAR(carC(),1);g3Into(pv)}};n.onblur=()=>{if(n.value==="")n.value=carNum()}}
   d.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>sv("col",b.dataset.col));d.querySelectorAll("[data-car]").forEach(b=>b.onclick=()=>sv("car",b.dataset.car));d.querySelectorAll("[data-acc]").forEach(b=>b.onclick=()=>{const a=carSel().a.slice(),i=a.indexOf(b.dataset.acc);i>=0?a.splice(i,1):a.push(b.dataset.acc);sv("acc",a)});d.querySelectorAll("[data-bg]").forEach(b=>b.onclick=()=>sv("bg",b.dataset.bg));d.querySelectorAll("[data-co]").forEach(b=>b.onclick=()=>sv("co",b.dataset.co));g3Into(d.querySelector(".pv"))};
  sheet("🚗 Το όχημά μου",body,bind,profile)}
+/* ---- Συγχρονισμός προόδου (νέα συσκευή) ---- */
+const SYNCK=["prog","quest","prof","bonus","stat","daily","seenq","mist","msr","chb","chal","cons","tour","wel"];
+const syncKey=k=>{if(!P)return null;const c=":"+P.code;for(const b of SYNCK){if(k===b+c||k.indexOf(b+c+":")===0)return b+k.slice(b.length+c.length)}return null};
+const DATE_RE=/^\d{4}-\d\d-\d\d/;
+function mrg(a,b){if(a===undefined||a===null)return b;if(b===undefined||b===null)return a;
+ if(typeof a==="number"&&typeof b==="number")return Math.max(a,b);
+ if(typeof a==="boolean"&&typeof b==="boolean")return a||b;
+ if(typeof a==="string"&&typeof b==="string")return(DATE_RE.test(a)&&DATE_RE.test(b))?(a>b?a:b):(a||b);
+ if(Array.isArray(a)&&Array.isArray(b)){if(a.every(x=>typeof x==="number")&&b.every(x=>typeof x==="number")){const n=Math.max(a.length,b.length);return Array.from({length:n},(_,i)=>Math.max(a[i]||0,b[i]||0))}
+  const seen=new Set(a.map(x=>JSON.stringify(x))),o=a.slice();b.forEach(x=>{const j=JSON.stringify(x);if(!seen.has(j)){seen.add(j);o.push(x)}});return o.slice(-600)}
+ if(typeof a==="object"&&typeof b==="object"&&!Array.isArray(a)&&!Array.isArray(b)){const o={...b};for(const k in a)o[k]=mrg(a[k],b[k]);return o}
+ return a}
+function syncPack(){const d={},pre=Object.keys(localStorage);pre.forEach(k=>{const b=syncKey(k);if(b){try{d[b]=JSON.parse(localStorage.getItem(k))}catch(e){}}});return d}
+let SY={t:0,ts:0,busy:0,msg:""};
+async function syncPush(){if(!P||!navigator.onLine)return false;try{if(!SY.pulled){const q=await syncPull();if(!q.ok)return false}const r=await lrpc("progress_save",{p_app:"a-lykeiou",p_code:P.code,p_name:P.name,p_data:syncPack()});if(r&&r.ok){SY.ts=Date.now();st.set("syncts:"+P.code,SY.ts);return true}}catch(e){}return false}
+function syncMark(k){if(!syncKey(k))return;clearTimeout(SY.t);SY.t=setTimeout(syncPush,6000)}
+async function syncPull(){if(!P)return{ok:false,ch:false};let r=null;try{r=await Promise.race([lrpc("progress_load",{p_app:"a-lykeiou",p_code:P.code,p_name:P.name}),new Promise(x=>setTimeout(()=>x(null),4000))])}catch(e){}
+ if(!r||!r.ok)return{ok:false,ch:false,err:r&&r.err};let ch=false;
+ if(r.data){const loc=syncPack();for(const b in r.data){const m=mrg(loc[b],r.data[b]);if(JSON.stringify(m)!==JSON.stringify(loc[b])){ch=true;try{const i=b.indexOf(":");const kk=i<0?b+":"+P.code:b.slice(0,i)+":"+P.code+b.slice(i);localStorage.setItem(kk,JSON.stringify(m))}catch(e){}}}}
+ SY.pulled=1;return{ok:true,ch}}
 /* ---- Ειδοποιήσεις (Web Push) ---- */
 const VAPID="BB24QHfV2JHbvGcRb6ynbt8JrTC8cROmUwZOzoNcED-Jrfb6aX6SG4ssOX41mboz5wd0Drk2zQPBnMd3NwfPVbM",PUSH_FN="https://uyfyuxztspxazfmxkpkm.supabase.co/functions/v1/push";let PM="";
 const pushOK=()=>"serviceWorker"in navigator&&"PushManager"in window&&"Notification"in window&&(!isIos()||isStd());
@@ -769,6 +796,7 @@ const pushPref=()=>st.get("push:"+P.code,{on:false,remind:true,race:true});
 const b64u=t=>{const r=atob((t+"=".repeat((4-t.length%4)%4)).replace(/-/g,"+").replace(/_/g,"/"));return Uint8Array.from(r,c=>c.charCodeAt(0))};
 const pushGet=async()=>{try{const reg=await navigator.serviceWorker.ready;return await reg.pushManager.getSubscription()}catch(e){return null}};
 const pushRow=(sub,o)=>{const j=sub.toJSON(),x=dget();return lrpc("push_save",{p_app:"a-lykeiou",p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth,p_code:P.code,p_remind:o.remind,p_race:o.race,p_streak:dailyAlive(x),p_last:x.last||null})};
+const syncHTML=()=>{const t=st.get("syncts:"+P.code,0),w=t?new Date(t).toLocaleString("el-GR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";return`<p class="pnt" style="margin-top:0">☁️ Η πρόοδός σου (XP, κάρτες, σερί) αποθηκεύεται με το όνομα και τον κωδικό σου. Αν αλλάξεις κινητό, βάζεις τα ίδια και τα βρίσκεις όλα.</p><div class="chips"><button class="chip" id="syn">${SY.busy?"⏳ Συγχρονισμός…":"🔄 Συγχρονισμός τώρα"}</button></div>`+(SY.msg?`<p class="pnt">${esc(SY.msg)}</p>`:t?`<p class="pnt">Τελευταίος συγχρονισμός: ${esc(w)}</p>`:"")};
 async function pushOn(o){PM="";if(!pushOK()){PM="Ο browser σου δεν υποστηρίζει ειδοποιήσεις.";return false}
  let pm=Notification.permission;if(pm==="default")try{pm=await Notification.requestPermission()}catch(e){}
  if(pm!=="granted"){PM="Δεν δόθηκε άδεια. Μπορείς να την αλλάξεις από τις ρυθμίσεις του browser.";return false}
@@ -784,8 +812,9 @@ const pushHTML=()=>{if(!P)return"";if(!pushOK())return`<p class="pnt">${isIos()&
  if(Notification.permission==="denied")return`<p class="pnt">Οι ειδοποιήσεις είναι μπλοκαρισμένες για αυτή την εφαρμογή. Ξεμπλόκαρέ τες από τις ρυθμίσεις του browser ή του κινητού σου.</p>`;
  const p=pushPref();return`<div class="chips"><button class="chip${p.on?" on":""}" id="pnon">${p.on?"🔔 Ενεργές · πάτα για απενεργοποίηση":"🔕 Ενεργοποίηση ειδοποιήσεων"}</button></div>`+(p.on?`<div class="chips"><button class="chip${p.remind?" on":""}" data-pn="remind">🔥 Υπενθύμιση σερί (18:30)</button><button class="chip${p.race?" on":""}" data-pn="race">🏁 Live αγώνες</button><button class="chip" id="pntest">📨 Δοκιμή</button></div>`:`<p class="pnt">Θα σου θυμίζουμε το σερί σου και θα σε ειδοποιούμε όταν ο καθηγητής ανοίγει live αγώνα.</p>`)+(PM?`<p class="pnt">${esc(PM)}</p>`:"")};
 function settingsSheet(){
- const body=()=>{const p=pget();return `<h3 class="ph">Χρονόμετρο στην Αποστολή</h3><div class="chips"><button class="chip${!p.nt?" on":""}" data-nt="0">⏱ Με χρονόμετρο</button><button class="chip${p.nt?" on":""}" data-nt="1">🌿 Χωρίς χρόνο</button></div><h3 class="ph">Ανώνυμα δεδομένα για έρευνα</h3><div class="chips"><button class="chip${consGet()&&consGet().a?" on":""}" data-cs="1">✅ Συμφωνώ</button><button class="chip${consGet()&&!consGet().a?" on":""}" data-cs="0">Όχι</button></div><h3 class="ph">Ειδοποιήσεις</h3>${pushHTML()}<h3 class="ph">Σχολείο (προαιρετικό)</h3><input class="chn" id="psc" list="scl" maxlength="30" placeholder="Γράψε ή άφησε κενό" autocomplete="off" value="${esc(P.school||"")}"><datalist id="scl">${SCHOOLS.map(s=>`<option value="${esc(s)}">`).join("")}</datalist>`};
+ const body=()=>{const p=pget();return `<h3 class="ph">Χρονόμετρο στην Αποστολή</h3><div class="chips"><button class="chip${!p.nt?" on":""}" data-nt="0">⏱ Με χρονόμετρο</button><button class="chip${p.nt?" on":""}" data-nt="1">🌿 Χωρίς χρόνο</button></div><h3 class="ph">Ανώνυμα δεδομένα για έρευνα</h3><div class="chips"><button class="chip${consGet()&&consGet().a?" on":""}" data-cs="1">✅ Συμφωνώ</button><button class="chip${consGet()&&!consGet().a?" on":""}" data-cs="0">Όχι</button></div><h3 class="ph">Πρόοδος</h3>${syncHTML()}<h3 class="ph">Ειδοποιήσεις</h3>${pushHTML()}<h3 class="ph">Σχολείο (προαιρετικό)</h3><input class="chn" id="psc" list="scl" maxlength="30" placeholder="Γράψε ή άφησε κενό" autocomplete="off" value="${esc(P.school||"")}"><datalist id="scl">${SCHOOLS.map(s=>`<option value="${esc(s)}">`).join("")}</datalist>`};
  const bind=(d,re)=>{d.querySelectorAll("[data-nt]").forEach(b=>b.onclick=()=>{const q=pget();q.nt=b.dataset.nt==="1";st.set("prof:"+P.code,q);re()});d.querySelectorAll("[data-cs]").forEach(b=>b.onclick=()=>{consSet(b.dataset.cs==="1");re()});d.querySelectorAll("[data-pn]").forEach(b=>b.onclick=async()=>{const p=pushPref();p[b.dataset.pn]=!p[b.dataset.pn];if(!p.remind&&!p.race){await pushOff()}else{st.set("push:"+P.code,p);await pushOn(p)}re()});
+  if($$("syn"))$$("syn").onclick=async()=>{SY.busy=1;SY.msg="";re();const r=await syncPull();let ok=false;if(r.ok)ok=await syncPush();SY.busy=0;SY.msg=r.ok&&ok?"Έγινε! Η πρόοδός σου είναι αποθηκευμένη."+(r.ch?" Βρέθηκε και προστέθηκε πρόοδος από άλλη συσκευή.":""):r.err==="name"?"Ο κωδικός αυτός ανήκει σε άλλο όνομα. Γράψε το ίδιο όνομα που είχες βάλει στην αρχή.":"Δεν έγινε συγχρονισμός. Έλεγξε το internet.";re()};
   if($$("pnon"))$$("pnon").onclick=async()=>{const p=pushPref();if(p.on){await pushOff();PM=""}else await pushOn({remind:p.remind!==false,race:p.race!==false});re()};
   if($$("pntest"))$$("pntest").onclick=async()=>{const b=$$("pntest");b.textContent="⏳ Στέλνω…";const ok=await pushTest();PM=ok?"Στάλθηκε! Αν δεν το δεις σε λίγα δευτερόλεπτα, έλεγξε τις ρυθμίσεις ειδοποιήσεων του κινητού σου.":"Δεν στάλθηκε. Δοκίμασε να τις απενεργοποιήσεις και να τις ενεργοποιήσεις ξανά.";re()};
   const i=$$("psc");i.onchange=()=>{P.school=schClean(i.value);i.value=P.school;st.set("profile",P)}};
@@ -843,7 +872,54 @@ const FIG={
    [.22,.1].forEach(y=>sphere(B,.22,y,0,.03,.03,.03,C("#e0b441"),3,6));
    /* μήλο στο υψωμένο χέρι */
    cyl(PB,[.1,.2,-.3],[.3,.5,-.44],.07,.06,C("#27345a"),2,8);sphere(PB,.3,.52,-.44,.07,.07,.07,C("#f4c7a6"),2,8);
-   sphere(PB,.34,.72,-.48,.12,.11,.12,C("#e23b3b"),2,10);sphere(PB,.31,.68,-.42,.04,.04,.04,C("#ff9a9a"),2,6);cyl(PB,[.34,.82,-.48],[.35,.9,-.48],.012,.012,C("#6b3d1f"),2,5);sphere(PB,.4,.87,-.44,.06,.015,.035,C("#4caf50"),2,6)}}
+   sphere(PB,.34,.72,-.48,.12,.11,.12,C("#e23b3b"),2,10);sphere(PB,.31,.68,-.42,.04,.04,.04,C("#ff9a9a"),2,6);cyl(PB,[.34,.82,-.48],[.35,.9,-.48],.012,.012,C("#6b3d1f"),2,5);sphere(PB,.4,.87,-.44,.06,.015,.035,C("#4caf50"),2,6)}},
+ archimedes:{skin:"#e8b78e",robe:"#efe8d2",hair:"#e6e3dc",
+  build(B,H,C,PB,PH){
+   const W=C("#e6e3dc");
+   /* γενειάδα, μουστάκι, μαλλιά στα πλάγια (φαλακρή κορφή) */
+   sphere(H,.14,.5,0,.18,.22,.22,W,2,10);sphere(H,.27,.62,.07,.07,.04,.06,W,2,8);sphere(H,.27,.62,-.07,.07,.04,.06,W,2,8);
+   sphere(H,-.04,.74,.25,.1,.15,.09,W,2,8);sphere(H,-.04,.74,-.25,.1,.15,.09,W,2,8);sphere(H,-.17,.7,0,.12,.17,.21,W,2,8);
+   /* γαλάζια ζώνη στο χιτώνα */
+   sphere(B,0,.2,0,.265,.06,.375,C("#3a6ea5"),2,12);sphere(B,.0,.36,.22,.12,.05,.12,C("#3a6ea5"),2,8);
+   /* χρυσό στεφάνι (η περίφημη κορώνα) στο υψωμένο χέρι */
+   cyl(PB,[.1,.2,-.3],[.3,.5,-.44],.07,.06,C("#efe8d2"),2,8);sphere(PB,.3,.52,-.44,.07,.07,.07,C("#e8b78e"),2,8);
+   for(let k=0;k<12;k++){const a=Math.PI*2*k/12,z=-.48+.14*Math.cos(a),y=.8+.14*Math.sin(a);sphere(PB,.34,y,z,.05,.05,.05,C("#e8b923"),3,6);
+    if(k%2===0){sphere(PB,.34,.8+.22*Math.sin(a),-.48+.22*Math.cos(a),.034,.034,.034,C("#d6303a"),3,5)}}}},
+ joule:{skin:"#f0c4a0",robe:"#2d2a36",hair:"#6b4423",brow:"#6b4423",
+  build(B,H,C,PB,PH){
+   const Hr=C("#6b4423"),Sb=C("#7a5230");
+   /* μαλλιά με χωρίστρα + φαβορίτες (βικτωριανό στυλ) */
+   sphere(H,-.06,.9,0,.27,.15,.29,Hr,2,12);sphere(H,.05,.97,.1,.15,.08,.14,Hr,2,8);sphere(H,-.17,.74,0,.13,.19,.25,Hr,2,8);
+   [-1,1].forEach(z=>{sphere(H,.08,.62,z*.22,.1,.18,.055,Sb,2,8);sphere(H,.17,.55,z*.2,.07,.07,.05,Sb,2,8);sphere(H,.27,.62,z*.07,.07,.04,.06,Sb,2,8)});
+   /* παπιγιόν */
+   box(B,.2,.4,0,.035,.035,.1,C("#9b2335"),2);sphere(B,.2,.4,0,.03,.03,.03,C("#7a1c2a"),2,6);
+   /* θερμόμετρο στο υψωμένο χέρι (πείραμα Joule) */
+   cyl(PB,[.1,.2,-.3],[.3,.5,-.44],.07,.06,C("#2d2a36"),2,8);sphere(PB,.3,.52,-.44,.07,.07,.07,C("#f0c4a0"),2,8);
+   cyl(PB,[.32,.58,-.46],[.36,1.1,-.5],.048,.048,C("#dff0ff"),3,8);cyl(PB,[.32,.6,-.46],[.35,.92,-.49],.026,.026,C("#e23b3b"),3,6);sphere(PB,.32,.58,-.46,.075,.075,.075,C("#e23b3b"),3,8);sphere(PB,.36,1.11,-.5,.048,.048,.048,C("#dff0ff"),3,6)}}
+};
+/* έξτρα λεπτομέρειες ανά φυσικό */
+const FXB=(B,C,ys,col)=>ys.forEach(y=>{const k=Math.sqrt(Math.max(0,1-Math.pow((y-.1)/.34,2)));sphere(B,.25*k+.005,y,0,.03,.03,.03,C(col),3,6)});
+const FX={
+ galileo:(B,H,C)=>{FXB(B,C,[.3,.2,.1,0],"#e0b441");
+  for(let k=0;k<14;k++){const a=Math.PI*2*k/14;sphere(B,.2*Math.cos(a),.44,.24*Math.sin(a),.06,.04,.06,C("#fbfaf6"),2,6)}
+  sphere(B,0,-.02,0,.26,.035,.37,C("#2a1319"),2,12);box(B,.25,-.02,0,.02,.05,.06,C("#e0b441"),3);
+  sphere(H,.2,.4,.06,.07,.1,.06,C("#d6d1c6"),2,8);sphere(H,.2,.4,-.06,.07,.1,.06,C("#d6d1c6"),2,8);sphere(H,.22,.3,0,.07,.08,.08,C("#d6d1c6"),2,8);
+  [-1,1].forEach(z=>sphere(H,.2,.9,z*.1,.03,.03,.08,C("#bdb7ab"),2,6))},
+ newton:(B,H,C)=>{sphere(B,.08,.12,0,.2,.29,.27,C("#d8b65a"),2,10);FXB(B,C,[.3,.2,.1,0,-.1],"#e0b441");
+  [.62,.5,.38,.26].forEach(y=>[-1,1].forEach(z=>sphere(H,-.1,y,z*.34,.1,.1,.09,C("#f4f4f8"),2,8)));
+  sphere(B,.2,.34,0,.07,.1,.1,C("#ffffff"),2,8);
+  [-1,1].forEach(z=>box(B,.21,.12,z*.18,.015,.26,.03,C("#e0b441"),3))},
+ archimedes:(B,H,C)=>{
+  for(let k=0;k<16;k++){const a=Math.PI*2*k/16;sphere(H,.255*Math.cos(a),.9+(k%2)*.02,.265*Math.sin(a),.06,.025,.045,C("#5d9b3a"),2,6)}
+  [0,4,8,12].forEach(k=>{const a=Math.PI*2*(k+.5)/16;sphere(H,.27*Math.cos(a),.93,.28*Math.sin(a),.025,.025,.025,C("#d6303a"),3,5)});
+  sphere(H,.2,.4,.07,.07,.1,.06,C("#e6e3dc"),2,8);sphere(H,.2,.4,-.07,.07,.1,.06,C("#e6e3dc"),2,8);sphere(H,.22,.3,0,.07,.09,.08,C("#e6e3dc"),2,8);
+  sphere(B,0,.36,-.2,.17,.1,.17,C("#3a6ea5"),2,10);sphere(B,.08,.36,-.28,.035,.035,.035,C("#e8b923"),3,6);
+  sphere(B,0,-.05,0,.26,.04,.37,C("#e8b923"),3,12)},
+ joule:(B,H,C)=>{sphere(B,.13,.26,0,.11,.17,.14,C("#fbfaf6"),2,8);
+  [-1,1].forEach(z=>box(B,.2,.24,z*.11,.03,.2,.07,C("#3d3947"),2));
+  FXB(B,C,[.14,.04,-.06],"#8a8794");
+  cyl(B,[.22,.12,-.15],[.25,.0,-.02],.012,.012,C("#e0b441"),3,5);sphere(B,.255,-.01,-.02,.045,.045,.02,C("#e0b441"),3,8);
+  [-1,1].forEach(z=>sphere(H,.22,.84,z*.1,.075,.03,.05,C("#6b4423"),2,6))}
 };
 function figure(id){const F=FIG[id];if(!F)return null;const B=new Geo(),H=new Geo(),PB=new Geo(),PH=new Geo(),C=hex,sk=C(F.skin);
  /* σώμα: ρόμπα/παλτό + λαιμός + χέρι + καταπακτή οροφής */
@@ -852,9 +928,9 @@ function figure(id){const F=FIG[id];if(!F)return null;const B=new Geo(),H=new Ge
  /* κεφάλι */
  sphere(H,0,.72,0,.26,.29,.27,sk,2,14);
  [-1,1].forEach(s=>{sphere(H,.2,.76,s*.1,.07,.075,.07,[1,1,1],2,8);sphere(H,.26,.76,s*.1,.04,.045,.04,[.04,.03,.03],1,8);sphere(H,.29,.78,s*.105,.012,.012,.012,[1,1,1],2,4);
-  box(H,.24,.87,s*.1,.03,.025,.11,C(id==="newton"?"#8a8f9a":"#b9b4aa"),2);sphere(H,.2,.64,s*.17,.05,.03,.05,C("#f19a8a"),2,6);sphere(H,-.02,.72,s*.26,.05,.08,.03,sk,2,6)});
+  box(H,.24,.87,s*.1,.03,.025,.11,C(F.brow||(id==="newton"?"#8a8f9a":"#b9b4aa")),2);sphere(H,.2,.64,s*.17,.05,.03,.05,C("#f19a8a"),2,6);sphere(H,-.02,.72,s*.26,.05,.08,.03,sk,2,6)});
  sphere(H,.27,.69,0,.045,.05,.045,C("#e6a07e"),2,6);box(H,.265,.6,0,.02,.016,.09,C("#9c4a3c"),2);
- F.build(B,H,C,PB,PH);return{B,H,PB,PH}}
+ F.build(B,H,C,PB,PH);if(FX[id])FX[id](B,H,C,PB,PH);return{B,H,PB,PH}}
 /* ---------- αυτοκίνητα ---------- */
 const TY={
  rally:{L:4.0,W:1.78,yb:.36,belt:1.0,nose:.74,tail:.88,roof:1.47,cf:.62,cr:-1.42,wf:.78,wr:.42,R:.36,wx:1.3,n:4.5,tb:.12},
@@ -1061,15 +1137,24 @@ return{mount,GLBT}})();
 
 
 /* ---- Συνοδηγοί φυσικοί ---- */
-const COMP={galileo:{n:"Γαλιλαίος",g:"Γαλιλαίο",card:["kin",3],
+const COMP={archimedes:{n:"Αρχιμήδης",g:"Αρχιμήδη",card:["kin",3],
+  ok:["Εύρηκα! Σωστό!","Μπράβο! Η σπείρα μου δημιουργείται από ομαλή κίνηση, και εσύ την κατάλαβες!","Σωστό! Πιο καθαρό κι από τη μέθοδο της εξάντλησης!","Σωστό! Ούτε ο βασιλιάς Ιέρων δεν θα το αμφισβητούσε!"],
+  bad:["Μην ανησυχείς, κι εγώ έκανα λάθη πριν φωνάξω «Εύρηκα»!","Ας το σκεφτούμε ήρεμα, όπως στο λουτρό:","Μη μου χαλάς τους κύκλους! Δες αυτό:"],
+  st:["{n} σωστές στη σειρά! Εύρηκα, είσαι ασταμάτητος!","{n} στη σειρά! Θα σε σήκωνα με μοχλό, αλλά τρέχεις πιο γρήγορα!"]},
+ galileo:{n:"Γαλιλαίος",g:"Γαλιλαίο",card:["dyn1",3],
   ok:["Eppur si muove! Κι εσύ κινείσαι σωστά!","Μπράβο! Το πείραμα επιβεβαιώθηκε!","Ούτε από τον Πύργο της Πίζας δεν θα το έλεγα καλύτερα!","Σωστό! Τόσο καθαρό όσο οι δορυφόροι του Δία στο τηλεσκόπιό μου."],
   bad:["Μην ανησυχείς, κι εγώ επαναλάμβανα τα πειράματα ξανά και ξανά.","Ας το κοιτάξουμε μαζί, βήμα βήμα.","Η φύση δεν βιάζεται· ούτε εμείς. Δες αυτό:"],
   st:["{n} σωστές στη σειρά! Κινείσαι σαν βολίδα!","{n} στη σειρά! Ούτε ο Αριστοτέλης δεν θα σε σταματούσε!"]},
- newton:{n:"Νεύτωνας",g:"Νεύτωνα",card:["dyn1",3],
+ newton:{n:"Νεύτωνας",g:"Νεύτωνα",card:["dyn2",3],
   ok:["Εξαιρετικά! Ούτε το μήλο δεν έπεσε τόσο σωστά!","Σωστό! Αυτό θα το έβαζα στα Principia.","Μπράβο! Λογική σταθερή σαν τον πρώτο μου νόμο."],
   bad:["Κάθε δράση έχει αντίδραση: ξαναπροσπάθησε!","Ας δούμε προσεκτικά τι συμβαίνει:","Ακόμα κι εγώ πάτησα σε ώμους γιγάντων. Δες αυτό:"],
-  st:["{n} σωστές! Η πρόοδός σου επιταχύνεται!","{n} στη σειρά! Σαν να μη σε σταματά καμία δύναμη!"]}};
-const coGot=id=>{const c=COMP[id];if(!c)return false;try{const q=qget()[c.card[0]];return!!q&&!!q.b}catch(e){return false}};
+  st:["{n} σωστές! Η πρόοδός σου επιταχύνεται!","{n} στη σειρά! Σαν να μη σε σταματά καμία δύναμη!"]},
+ joule:{n:"Τζάουλ",g:"Τζάουλ",card:["en",3],
+  ok:["Σωστό! Η ενέργεια δεν χάνεται, απλώς μετατρέπεται!","Μπράβο! Θερμόμετρο στο χέρι και το αποτέλεσμα βγαίνει ακριβώς!","Εξαιρετικά! Ένα Τζάουλ για σένα!","Σωστό! Κάθε J μετράει!"],
+  bad:["Μην ανησυχείς, τα πειράματά μου με το νερό και το βαρίδι χρειάστηκαν χρόνια. Δες αυτό:","Η ενέργεια δεν εξαφανίζεται· ούτε η λύση. Ας ψάξουμε:","Ας το μετρήσουμε μαζί, βήμα βήμα:"],
+  st:["{n} σωστές στη σειρά! Η ενέργειά σου μεγαλώνει!","{n} στη σειρά! Δεν χάνεται τίποτα, μόνο κερδίζεις!"]}};
+const COLEG={galileo:"kin",newton:"dyn1"};
+const coGot=id=>{const c=COMP[id];if(!c)return false;try{const q=qget(),a=q[c.card[0]],l=COLEG[id]&&q[COLEG[id]];return!!(a&&a.b)||!!(l&&l.b)}catch(e){return false}};
 const coFor=w=>Object.keys(COMP).find(k=>COMP[k].card[0]===w)||"";
 const carCo=()=>{try{const p=pget();return p.co&&coGot(p.co)?p.co:""}catch(e){return""}};
 const coImg=(id,cls)=>`<img class="${cls||"coi"}" src="cars/co/${id}.webp" alt="">`;
@@ -1513,7 +1598,54 @@ function consentScreen(){setBg("kin");
    <button class="btn primary" id="cy">✅ Ναι, βοηθάω</button><button class="btn" id="cn">Όχι, ευχαριστώ</button>`;
   $$("cy").onclick=()=>{consSet(true);home()};$$("cn").onclick=()=>{consSet(false);home()}}
 flush();
+/* ---- Φίλοι & κοινό σερί ---- */
+let FR={d:null,t:0,busy:0};
+const frKey=()=>"frc:"+P.code,frOk=()=>!!(P&&navigator.onLine);
+function frLoad(){if(!P)return null;if(!FR.d){try{FR.d=JSON.parse(localStorage.getItem(frKey())||"null")}catch(e){}}return FR.d}
+async function frSync(force){if(!frOk()||FR.busy)return FR.d;if(!force&&Date.now()-FR.t<20000)return FR.d;FR.busy=1;
+ try{const x=dget(),al=dailyAlive(x)||0,r=await lrpc("friend_sync",{p_app:"a-lykeiou",p_code:P.code,p_name:P.name,p_xp:totXP(),p_streak:al,p_last:x.last||null});
+  if(r&&r.fcode){FR.d=r;FR.t=Date.now();try{localStorage.setItem(frKey(),JSON.stringify(r))}catch(e){}}}catch(e){}
+ FR.busy=0;frBadge();return FR.d}
+function frBadge(){const b=$$("frb");if(!b)return;const d=FR.d,n=d?d.incoming.length:0;b.textContent=n?String(n):"";b.style.display=n?"inline-block":"none"}
+const frLink=()=>location.origin+location.pathname+"#f="+(FR.d?FR.d.fcode:"");
+function frList(){const d=FR.d;if(!d)return`<p class="frm">${navigator.onLine?"Φόρτωση…":"Χρειάζεται σύνδεση στο ίντερνετ."}</p>`;
+ let h="";
+ if(d.incoming.length)h+=`<h3 class="ph">Προσκλήσεις</h3>`+d.incoming.map(f=>`<div class="fri"><b>${esc(f.name)}</b><span class="fra"><button class="chip on" data-fy="${esc(f.fcode)}">✓ Δέχομαι</button><button class="chip" data-fn="${esc(f.fcode)}">✕</button></span></div>`).join("");
+ h+=`<h3 class="ph">Οι φίλοι μου (${d.friends.length})</h3>`;
+ h+=d.friends.length?d.friends.map(f=>{const ss=f.ss>0?`🤝 Κοινό σερί <b>${f.ss}</b>${f.sdone?" ✓":""}`:"🤝 Παίξτε και οι δύο σήμερα για κοινό σερί";
+  const st2=f.sdone?"Και οι δύο παίξατε σήμερα!":(f.today?"Έπαιξε σήμερα — σειρά σου!":(dget().last===ymd()?"Εσύ έπαιξες — περιμένεις τον φίλο":"Δεν έχετε παίξει ακόμα σήμερα"));
+  return`<div class="fri col"><div class="frt"><span class="dot${f.online?" on":""}"></span><b>${esc(f.name)}</b><span class="frx">${f.xp} XP · 🔥${f.streak||0}</span><button class="frd" data-fd="${esc(f.fcode)}" aria-label="Αφαίρεση">✕</button></div><div class="frs">${ss}</div><small class="frm">${st2}</small></div>`}).join(""):`<p class="frm">Δεν έχεις φίλους ακόμα. Στείλε τον κωδικό σου ή πρόσθεσε τον κωδικό ενός φίλου.</p>`;
+ if(d.outgoing.length)h+=`<h3 class="ph">Σε αναμονή</h3>`+d.outgoing.map(f=>`<div class="fri"><span>${esc(f.name)}</span><small class="frm">περιμένει αποδοχή</small></div>`).join("");
+ return h}
+function frBindList(d){d.querySelectorAll("[data-fy]").forEach(b=>b.onclick=async()=>{b.disabled=true;const r=await lrpc("friend_reply",{p_app:"a-lykeiou",p_code:P.code,p_name:P.name,p_fcode:b.dataset.fy,p_accept:true});if(r&&r.fcode)FR.d=r;frRefresh()});
+ d.querySelectorAll("[data-fn]").forEach(b=>b.onclick=async()=>{b.disabled=true;const r=await lrpc("friend_reply",{p_app:"a-lykeiou",p_code:P.code,p_name:P.name,p_fcode:b.dataset.fn,p_accept:false});if(r&&r.fcode)FR.d=r;frRefresh()});
+ d.querySelectorAll("[data-fd]").forEach(b=>b.onclick=async()=>{if(b.dataset.s!=="1"){b.dataset.s="1";b.textContent="Αφαίρεση;";b.classList.add("sure");setTimeout(()=>{try{b.dataset.s="";b.textContent="✕";b.classList.remove("sure")}catch(e){}},3000);return}
+  const r=await lrpc("friend_remove",{p_app:"a-lykeiou",p_code:P.code,p_name:P.name,p_fcode:b.dataset.fd});if(r&&r.fcode)FR.d=r;frRefresh()})}
+function frRefresh(){frBadge();const e=$$("frl");if(e){e.innerHTML=frList();frBindList(e)}}
+function frMsg(t){const e=$$("frmsg");if(e){e.textContent=t;e.style.display=t?"block":"none"}}
+const FRM={sent:"Η πρόσκληση στάλθηκε ✓",accepted:"Είστε πια φίλοι! 🎉",already:"Είστε ήδη φίλοι.",waiting:"Περιμένει ήδη αποδοχή.",self:"Αυτός είναι ο δικός σου κωδικός 🙂",notfound:"Δεν βρέθηκε αυτός ο κωδικός. Έλεγξέ τον."};
+async function frAdd(code){code=(code||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6);if(code.length<6){frMsg("Ο κωδικός φίλου έχει 6 γράμματα/αριθμούς.");return}
+ frMsg("Στέλνω…");const r=await lrpc("friend_add",{p_app:"a-lykeiou",p_code:P.code,p_name:P.name,p_fcode:code});
+ if(!r){frMsg("Δεν έγινε σύνδεση. Δοκίμασε ξανά.");return}
+ frMsg(FRM[r.res]||"Έγινε.");await frSync(1);frRefresh();return r.res}
+let FRT=0;
+function friendsSheet(){frLoad();
+ const body=()=>`<p class="frm" style="margin-top:0">Παίξτε και οι δύο κάθε μέρα και χτίστε <b>κοινό σερί</b> 🤝</p><div class="frme"><small>Ο δικός μου κωδικός φίλου</small><b id="frc">${FR.d?esc(FR.d.fcode):"······"}</b><div class="chips"><button class="chip on" id="frsh">📤 Στείλε πρόσκληση</button><button class="chip" id="frcp">📋 Αντιγραφή</button></div></div><h3 class="ph">Πρόσθεσε φίλο</h3><div class="chips"><input class="chn" id="fri" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="Κωδικός" style="width:150px;text-align:center;letter-spacing:3px;margin:0"><button class="chip on" id="fra2">Προσθήκη</button></div><div id="frmsg" class="frmsg" style="display:none"></div><div id="frl">${frList()}</div><p class="frm" style="margin-top:12px">Βλέπουν μόνο το όνομά σου, τα XP και το σερί σου. Δεν υπάρχει συνομιλία με κείμενο.</p>`;
+ const bind=(d)=>{frBindList(d);
+  const lk=()=>FR.d?frLink():"";
+  $$("frsh").onclick=async()=>{if(!FR.d)await frSync(1);const u=lk();if(!u)return frMsg("Χρειάζεται σύνδεση.");const t="Έλα να παίξουμε Physics in Motion και να χτίσουμε κοινό σερί! 🔥 "+u;try{if(navigator.share){await navigator.share({text:t});return}}catch(e){if(e&&e.name==="AbortError")return}
+   try{await navigator.clipboard.writeText(t);frMsg("Το link αντιγράφηκε ✓ — στείλ' το στον φίλο σου.")}catch(e){frMsg(u)}};
+  $$("frcp").onclick=async()=>{if(!FR.d)return;try{await navigator.clipboard.writeText(FR.d.fcode);frMsg("Ο κωδικός αντιγράφηκε ✓")}catch(e){frMsg("Κωδικός: "+FR.d.fcode)}};
+  $$("fra2").onclick=()=>frAdd($$("fri").value);$$("fri").oninput=e=>{e.target.value=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,"")};$$("fri").onkeydown=e=>{if(e.key==="Enter")frAdd(e.target.value)}};
+ sheet("👥 Φίλοι",body,bind,()=>{clearInterval(FRT);FRT=0;const b=$$("fr");frBadge()});
+ clearInterval(FRT);frSync(1).then(()=>{const c=$$("frc");if(c&&FR.d)c.textContent=FR.d.fcode;frRefresh()});
+ FRT=setInterval(()=>{if(!$$("frl")){clearInterval(FRT);FRT=0;return}frSync(1).then(frRefresh)},15000)}
+function frBind(){const b=$$("fr");if(b)b.onclick=friendsSheet;frLoad();frBadge();setTimeout(()=>{if(P&&$$("fr"))frSync().then(()=>{frBadge()})},800);frPend()}
+function frPend(){let c=null;try{c=localStorage.getItem("pim_pendf")}catch(e){}if(!c||!P)return;try{localStorage.removeItem("pim_pendf")}catch(e){}
+ setTimeout(async()=>{await frSync(1);friendsSheet();setTimeout(()=>frAdd(c),500)},1200)}
+try{const m=/[#&]f=([A-Za-z0-9]{6})/.exec(location.hash);if(m){localStorage.setItem("pim_pendf",m[1].toUpperCase());history.replaceState(null,"",location.pathname+location.search)}}catch(e){}
 if(location.hash==="#host")hostScreen();else P?(restoreS()||home()):login();
+if(P){syncPull().then(r=>{if(r.ok&&r.ch&&document.querySelector(".tgrid"))home();if(r.ok)syncPush()});document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&SY.t){clearTimeout(SY.t);SY.t=0;syncPush()}})}
 if(P&&location.hash==="#race")setTimeout(()=>{try{raceJoinScreen()}catch(e){}},900);
 if("serviceWorker"in navigator)navigator.serviceWorker.addEventListener("message",e=>{try{if(P&&e.data&&e.data.go==="race"&&!RC)raceJoinScreen()}catch(x){}});
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
